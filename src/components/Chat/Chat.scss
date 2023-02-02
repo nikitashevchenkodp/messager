@@ -1,0 +1,25 @@
+$chat-header-height: 60px;
+$chat-controls-height: 60px;
+
+.chat {
+  flex-grow: 1;
+  max-height: 100vh;
+  position: relative;
+  &__header {
+    height: $chat-header-height;
+    background-color: #fff;
+  }
+  &__area {
+    background-image: url('../../assets/bg-chat.jpg');
+    background-size: auto;
+    height: calc(100% - $chat-header-height - $chat-controls-height);
+  }
+  &__controls {
+    height: $chat-controls-height;
+    background-color: #fff;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+}
