@@ -1,0 +1,16 @@
+.resizer {
+  height: 100vh;
+  width: 1px;
+  background-color: transparent;
+  cursor: col-resize;
+  transition: 0.4s;
+  &:hover {
+    width: 5px;
+    background-color: grey;
+    opacity: 0.5;
+    transition: 0.4s;
+  }
+  &:active {
+    cursor: col-resize;
+  }
+}
