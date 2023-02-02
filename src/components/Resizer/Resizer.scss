@@ -1,9 +1,12 @@
 .resizer {
-  height: 100vh;
+  height: 100%;
   width: 1px;
   background-color: transparent;
   cursor: col-resize;
   transition: 0.4s;
+  position: absolute;
+  top: 0;
+  right: 0;
   &:hover {
     width: 5px;
     background-color: grey;

@@ -10,7 +10,6 @@ const MainLayout = () => {
     <div className="main-layout">
       <Folders />
       <ChatList />
-      <Resizer minWidth={300} edgeCaseWidth={70} />
       <Chat />
     </div>
   );

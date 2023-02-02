@@ -1,10 +1,22 @@
 $chat-header-height: 60px;
-$chat-controls-height: 60px;
+$chat-controls-height: 50px;
 
 .chat {
   flex-grow: 1;
   max-height: 100vh;
   position: relative;
+  overflow-x: hidden;
+  min-width: 420px;
+  max-width: 100vw;
+  transition: 0.2s;
+
+  &--hide {
+    width: 0px;
+    min-width: 0;
+    max-width: 0;
+    transition: 0.2s;
+  }
+
   &__header {
     height: $chat-header-height;
     background-color: #fff;

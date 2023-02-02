@@ -12,9 +12,9 @@ const Resizer: FC<ResizerProps> = ({ minWidth, edgeCaseWidth, withDelay = true }
 
   const resizableElem = useRef<ChildNode | null>(null);
   const resizerRef = useRef<HTMLElement | null>(null);
+  const root = useRef<HTMLElement | null>(document.querySelector('#root'));
   const [initWidth, setInitWidth] = useState<number | null>(null);
   const [initiPosition, setInitPosition] = useState<number | null>(null);
-  const [isDecrese, setIsDecrease] = useState(false);
 
   const handleClick = (e: React.MouseEvent<HTMLSpanElement>) => {
     console.log('mouse down');
@@ -41,8 +41,13 @@ const Resizer: FC<ResizerProps> = ({ minWidth, edgeCaseWidth, withDelay = true }
       if (minWidth - newWidth < 50 && minWidth - newWidth >= 0) return;
       if (newWidth < 0) return;
       if (newWidth < minWidth) {
+        console.log('this case');
         if (!edgeCaseWidth) return;
-        (resizableElem.current as HTMLElement).style.width = `${edgeCaseWidth}px`;
+        if (newWidth > initWidth) {
+          (resizableElem.current as HTMLElement).style.width = `${minWidth}px`;
+        } else {
+          (resizableElem.current as HTMLElement).style.width = `${edgeCaseWidth}px`;
+        }
       } else {
         (resizableElem.current as HTMLElement).style.width = `${
           initWidth + e.clientX - initiPosition
@@ -52,21 +57,19 @@ const Resizer: FC<ResizerProps> = ({ minWidth, edgeCaseWidth, withDelay = true }
 
     const onMouseUp = () => {
       console.log('work');
-      document.querySelector('#root')!.removeEventListener('mousemove', handleMouseMove);
+      if (root.current) root.current.removeEventListener('mousemove', handleMouseMove);
     };
-
-    const secondListener = () => {
-      console.log('secondListener');
-    };
-
-    document.querySelector('#root')!.addEventListener('mousemove', handleMouseMove);
-    document.querySelector('#root')!.addEventListener('mousemove', secondListener);
-    document.querySelector('#root')!.addEventListener('mouseup', onMouseUp);
-    document.querySelector('#root')!.addEventListener('mouseleave', onMouseUp);
+    if (root.current) {
+      root.current.addEventListener('mousemove', handleMouseMove);
+      root.current.addEventListener('mouseup', onMouseUp);
+      root.current.addEventListener('mouseleave', onMouseUp);
+    }
     return () => {
-      document.querySelector('#root')!.removeEventListener('mousemove', handleMouseMove);
-      document.querySelector('#root')!.removeEventListener('mouseup', onMouseUp);
-      document.querySelector('#root')!.removeEventListener('mouseleave', onMouseUp);
+      if (root.current) {
+        root.current.removeEventListener('mousemove', handleMouseMove);
+        root.current.removeEventListener('mouseup', onMouseUp);
+        root.current.removeEventListener('mouseleave', onMouseUp);
+      }
     };
   }, [initWidth, initiPosition]);
 
