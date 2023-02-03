@@ -1,8 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-const initialState = {
+interface UIInitState {
+  windowWidth: number;
+  isHideChatList: boolean;
+  chatListState: 'expanded' | 'colapsed';
+  chatListWidth: number;
+}
+
+const initialState: UIInitState = {
   windowWidth: window.innerWidth,
-  isHideChatList: window.innerWidth < 756
+  isHideChatList: window.innerWidth < 756,
+  chatListState: 'expanded',
+  chatListWidth: 300
 };
 
 export const UISlice = createSlice({
@@ -13,14 +22,16 @@ export const UISlice = createSlice({
       state.windowWidth = window.innerWidth;
     },
     hideChatList: (state) => {
-      console.log('hide');
-
       state.isHideChatList = true;
     },
     showChatList: (state) => {
-      console.log('show');
-
       state.isHideChatList = false;
+    },
+    setChatListState: (state, action: PayloadAction<'expanded' | 'colapsed'>) => {
+      state.chatListState = action.payload;
+    },
+    setChatListWidth: (state, action: PayloadAction<number>) => {
+      state.chatListWidth = action.payload;
     }
   }
 });

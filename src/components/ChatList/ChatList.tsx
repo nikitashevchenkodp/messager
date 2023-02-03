@@ -1,23 +1,56 @@
-import classNames from 'classnames';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { SearchIcon } from '../icons';
 import Resizer from '../Resizer/Resizer';
-import './ChatList.scss';
-const ChatList = () => {
-  const windowWidth = useSelector((state: any) => state.ui.windowWidth);
-  const isHideChatList = useSelector((state: any) => state.ui.isHideChatList);
-  console.log(isHideChatList);
+import ChatListItem from './ChatListItem/ChatListItem';
+import SearchInput from './SearchInput/SearchInput';
+import { ChatListContainer, ChatListHeader, ChatListStyled, List } from './srtyled';
 
-  const chatListClasses = classNames({
-    'chat-list__container': true,
-    'chat-list__container--hide': isHideChatList
-  });
+const ChatList = () => {
+  const dispatch = useAppDispatch();
+  const isHideChatList = useAppSelector((state) => state.ui.isHideChatList);
+  const windowWidth = useAppSelector((state) => state.ui.windowWidth);
+  const chatListState = useAppSelector((state) => state.ui.chatListState);
+  const chatListWidth = useAppSelector((state) => state.ui.chatListWidth);
+  const [val, setVal] = useState('');
 
   return (
-    <div className={chatListClasses}>
-      <div className="chat-list">ChatList</div>
+    <ChatListContainer isHideChatList={isHideChatList} withTransition={windowWidth < 756}>
+      <ChatListStyled
+        isHideChatList={isHideChatList}
+        withTransition={windowWidth < 756}
+        defaultWidth={chatListWidth}>
+        <ChatListHeader>
+          {chatListState === 'expanded' ? (
+            <SearchInput value={val} onChange={(e) => setVal(e.target.value)} label="Search" />
+          ) : (
+            <SearchIcon onClick={() => console.log('expand')} cursor="pointer" />
+          )}
+        </ChatListHeader>
+        <List>
+          <ChatListItem />
+          <ChatListItem />
+          <ChatListItem />
+          <ChatListItem />
+          <ChatListItem />
+          <ChatListItem />
+          <ChatListItem />
+          <ChatListItem />
+          <ChatListItem />
+          <ChatListItem />
+          <ChatListItem />
+          <ChatListItem />
+          <ChatListItem />
+          <ChatListItem />
+          <ChatListItem />
+          <ChatListItem />
+          <ChatListItem />
+          <ChatListItem />
+          <ChatListItem />
+        </List>
+      </ChatListStyled>
       <Resizer minWidth={300} edgeCaseWidth={70} />
-    </div>
+    </ChatListContainer>
   );
 };
 
