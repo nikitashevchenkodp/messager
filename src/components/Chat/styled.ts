@@ -1,36 +1,29 @@
 import styled from 'styled-components';
-import chatBg from '../../assets/bg-chat.jpg';
+import { CHAT_CONTROLS_HEIGHT, SM_SCREEN_WIDTH } from '../../consts';
 
 interface ChatStyledProps {
   readonly isHideChatList: boolean;
   readonly littleScreen?: boolean;
 }
 
-const chatHeadersHeight = 60;
-const chatControlsHeight = 50;
-
 export const ChatStyled = styled.div<ChatStyledProps>`
   flex-grow: 1;
   max-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  min-width: ${(props) => (!props.isHideChatList && props.littleScreen ? '0' : '420px')};
-  width: ${(props) => (!props.isHideChatList && props.littleScreen ? '0' : 'auto')};
-  max-width: ${(props) => (!props.isHideChatList && props.littleScreen ? '0' : '100vw')};
-  transition: ${(props) => (props.littleScreen ? '0.2s' : '0')};
+  min-width: 420px;
+  max-width: 100%;
+  /* transition: ${(props) => (props.littleScreen ? '0.2s' : '0')}; */
+
+  @media screen and (max-width: ${SM_SCREEN_WIDTH}px) {
+    min-width: ${(props) => !props.isHideChatList && '0'};
+    width: ${(props) => (!props.isHideChatList ? '0' : '100%')};
+    max-width: ${(props) => (!props.isHideChatList ? '50%' : '100vw')};
+  }
 `;
 
-export const ChatHeaderStyled = styled.div`
-  height: ${chatHeadersHeight}px;
-  background-color: #fff;
-`;
-export const ChatAreaStyled = styled.div`
-  background-image: url(${chatBg});
-  background-size: auto;
-  height: calc(100% - ${chatHeadersHeight}px - ${chatControlsHeight}px);
-`;
 export const ChatControlsStyled = styled.div`
-  height: ${chatControlsHeight}px;
+  height: ${CHAT_CONTROLS_HEIGHT}px;
   background-color: #fff;
   position: absolute;
   bottom: 0;

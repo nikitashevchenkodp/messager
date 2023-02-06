@@ -5,6 +5,7 @@ export const ChatListItemContainer = styled.div`
   padding: 10px;
   gap: 15px;
   position: relative;
+  overflow: hidden;
 `;
 export const Avatar = styled.div`
   border-radius: 50%;

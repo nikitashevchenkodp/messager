@@ -6,23 +6,27 @@ import './Resizer.scss';
 interface ResizerProps {
   minWidth: number;
   edgeCaseWidth?: number;
-  withDelay?: boolean;
-  onResize?: (...args: any[]) => any;
+  delayInPixels?: number;
 }
 
-const Resizer: FC<ResizerProps> = ({ minWidth, edgeCaseWidth, onResize, withDelay = true }) => {
-  console.log('render');
-  const initWidthR = useAppSelector((state) => state.ui.chatListWidth);
+const Resizer: FC<ResizerProps> = ({ minWidth, edgeCaseWidth = 0, delayInPixels = 0 }) => {
+  const chatListState = useAppSelector((state) => state.ui.chatListState);
   const resizableElem = useRef<ChildNode | null>(null);
   const resizerRef = useRef<HTMLElement | null>(null);
   const root = useRef<HTMLElement | null>(document.querySelector('#root'));
-  const [initWidth, setInitWidth] = useState<number | null>(initWidthR);
+  const [initWidth, setInitWidth] = useState<number | null>(null);
   const [initiPosition, setInitPosition] = useState<number | null>(null);
   const dispatch = useAppDispatch();
+  // const chatListS = useRef<'colapsed' | 'expanded'>(chatListState);
 
-  const handleClick = (e: React.MouseEvent<HTMLSpanElement>) => {
-    console.log('mouse down');
+  const resetAll = () => {
+    resizableElem.current = null;
+    setInitPosition(null);
+    setInitWidth(null);
+  };
 
+  const handleMouseDown = (e: React.MouseEvent<HTMLSpanElement>) => {
+    console.log('click');
     const target = e.target as HTMLElement;
     resizableElem.current = target.previousSibling;
     if (resizableElem.current) {
@@ -31,44 +35,50 @@ const Resizer: FC<ResizerProps> = ({ minWidth, edgeCaseWidth, onResize, withDela
     setInitPosition(e.clientX);
   };
 
-  const handleMouseUp = (e: React.MouseEvent<HTMLSpanElement>) => {
-    console.log('mouse up');
+  const handleMouseUp = () => {
     dispatch(
       uiActions.setChatListWidth(
         parseInt(window.getComputedStyle(resizableElem.current as HTMLElement).width)
       )
     );
-    resizableElem.current = null;
-    setInitPosition(null);
-    setInitWidth(null);
+    resetAll();
   };
 
   useEffect(() => {
     const handleMouseMove = (e: any) => {
+      // console.log('resizer', resizerRef.current);
+      // console.log('resizable', resizableElem.current);
+      // console.log('initPosition', initiPosition);
+      // console.log('initWidth', initWidth);
+      // console.log('===================================');
+
       if (!resizerRef.current || !resizableElem.current || !initiPosition || !initWidth) return;
+      const resizableElement = resizableElem.current as HTMLElement;
       const newWidth = initWidth + e.clientX - initiPosition;
-      if (minWidth - newWidth < 50 && minWidth - newWidth >= 0) return;
+      // It is some kind of delay. When you are riched minWidth and try increase width more, you will have "delay" during 50px,
+      //and when you move more then 50px you will gate edgeCase width.
+      if (minWidth - newWidth < delayInPixels && minWidth - newWidth >= 0) return;
+      if (newWidth < minWidth && newWidth > initWidth && newWidth - edgeCaseWidth < delayInPixels)
+        return;
+
+      //When you finish move, last newWidth always less than zero, we need to avoid this case.
       if (newWidth < 0) return;
+
       if (newWidth < minWidth) {
-        if (!edgeCaseWidth) return;
         if (newWidth > initWidth) {
-          (resizableElem.current as HTMLElement).style.width = `${minWidth}px`;
-          dispatch(uiActions.setChatListState('expanded'));
+          resizableElement.style.width = `${minWidth}px`;
+          if (chatListState === 'colapsed') dispatch(uiActions.setChatListState('expanded'));
         } else {
-          (resizableElem.current as HTMLElement).style.width = `${edgeCaseWidth}px`;
-          dispatch(uiActions.setChatListState('colapsed'));
+          resizableElement.style.width = `${edgeCaseWidth}px`;
+          if (chatListState === 'expanded') dispatch(uiActions.setChatListState('colapsed'));
         }
       } else {
-        onResize?.();
-        (resizableElem.current as HTMLElement).style.width = `${
-          initWidth + e.clientX - initiPosition
-        }px`;
-        dispatch(uiActions.setChatListState('expanded'));
+        resizableElement.style.width = `${newWidth}px`;
+        if (chatListState === 'colapsed') dispatch(uiActions.setChatListState('expanded'));
       }
     };
 
     const onMouseUp = () => {
-      console.log('work');
       if (resizableElem.current) {
         dispatch(
           uiActions.setChatListWidth(
@@ -76,33 +86,56 @@ const Resizer: FC<ResizerProps> = ({ minWidth, edgeCaseWidth, onResize, withDela
           )
         );
       }
-      if (root.current) root.current.removeEventListener('mousemove', handleMouseMove);
+      resetAll();
+      root.current?.removeEventListener('mousemove', handleMouseMove);
     };
 
-    if (root.current) {
-      root.current.addEventListener('mousemove', handleMouseMove);
-      root.current.addEventListener('mouseup', onMouseUp);
-      root.current.addEventListener('mouseleave', onMouseUp);
-    }
+    root.current?.addEventListener('mousemove', handleMouseMove);
+    root.current?.addEventListener('mouseup', onMouseUp);
+    root.current?.addEventListener('mouseleave', onMouseUp);
 
     return () => {
-      if (root.current) {
-        root.current.removeEventListener('mousemove', handleMouseMove);
-        root.current.removeEventListener('mouseup', onMouseUp);
-        root.current.removeEventListener('mouseleave', onMouseUp);
-      }
+      root.current?.removeEventListener('mousemove', handleMouseMove);
+      root.current?.removeEventListener('mouseup', onMouseUp);
+      root.current?.removeEventListener('mouseleave', onMouseUp);
     };
-  }, [initWidth, initiPosition]);
+  }, [initWidth, initiPosition, chatListState]);
 
   return (
     <span
       ref={resizerRef}
       className="resizer"
-      // draggable={true}
-      onMouseDown={handleClick}
-      // onDrag={handleMouseMove}
+      onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}></span>
   );
 };
 
 export default Resizer;
+
+//  const handleMouseMove = (e: any) => {
+//    e.stopPropagation();
+//    if (!resizerRef.current || !resizableElem.current || !initiPosition || !initWidth) return;
+//    const resizableElement = resizableElem.current as HTMLElement;
+//    const newWidth = initWidth + e.clientX - initiPosition;
+//    // // It is some kind of delay. When you are riched minWidth and try increase width more, you will have "delay" during 50px,
+//    // //and when you move more then 50px you will gate edgeCase width.
+//    // if (minWidth - newWidth < delayInPixels && minWidth - newWidth >= 0) return;
+//    // if (newWidth < minWidth && newWidth > initWidth && newWidth - edgeCaseWidth < delayInPixels)
+//    //   return;
+
+//    // //When you finish move, last newWidth always less than zero, we need ti avoid this case.
+//    // if (newWidth < 0) return;
+
+//    // if (newWidth < minWidth) {
+//    //   if (newWidth > initWidth) {
+//    //     resizableElement.style.width = `${minWidth}px`;
+//    //     dispatch(uiActions.setChatListState('expanded'));
+//    //   } else {
+//    //     resizableElement.style.width = `${edgeCaseWidth}px`;
+//    //     dispatch(uiActions.setChatListState('colapsed'));
+//    //   }
+//    // } else {
+//    resizableElement.style.width = `${newWidth}px`;
+//    // dispatch(uiActions.setChatListState('expanded'));
+//    // }
+//  };
