@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { useAppSelector } from '../../../store/hooks';
 import {
   Avatar,
@@ -11,12 +11,31 @@ import {
   Title
 } from './styled';
 
-const ChatListItem = () => {
+interface ChatListItemProps {
+  chatItem: {
+    title: string;
+    lastMessage: {
+      messageMediaThumb?: string;
+      text: string;
+      time: string;
+    };
+    avatar: string;
+  };
+  active: boolean;
+  onClick: (...args: any[]) => void;
+}
+
+const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
   const chatListState = useAppSelector((state) => state.ui.chatListState);
 
   return (
-    <ChatListItemContainer>
-      <Avatar />
+    <ChatListItemContainer
+      style={{
+        backgroundColor: active ? ' rgb(65,159,217)' : '#fff',
+        color: active ? '#fff' : 'black'
+      }}
+      onClick={onClick}>
+      <Avatar src={chatItem.avatar} />
       <ChatListItemInfoContainer>
         <div
           style={{
@@ -24,17 +43,14 @@ const ChatListItem = () => {
             justifyContent: 'space-between',
             width: '100%'
           }}>
-          <Title>Dasha Yefimova</Title>
+          <Title>{chatItem.title}</Title>
         </div>
         <ExtraInformation>
-          <LastMessage>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, perspiciatis. Pariatur
-            animi magni deleniti et magnam saepe nihil incidunt repellat! Hic animi placeat velit
-            est accusantium temporibus unde eveniet quidem aut provident, amet fuga odit blanditiis
-            impedit, et, quis ab!
-          </LastMessage>
+          <LastMessage>{chatItem.lastMessage.text}</LastMessage>
         </ExtraInformation>
-        <LastMessageTime hide={chatListState === 'colapsed'}>13:46</LastMessageTime>
+        <LastMessageTime hide={chatListState === 'colapsed'}>
+          {chatItem.lastMessage.time}
+        </LastMessageTime>
         <NotifficationQuantity>2</NotifficationQuantity>
       </ChatListItemInfoContainer>
     </ChatListItemContainer>
