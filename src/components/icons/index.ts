@@ -7,6 +7,10 @@ import { ReactComponent as SideBarIcon } from '../../assets/sidebar-right.svg';
 import { ReactComponent as MessageSentTail } from '../../assets/messageSentTail.svg';
 import { ReactComponent as MessageRecieveTail } from '../../assets/messageRecieveTail.svg';
 import { ReactComponent as DoubleCheck } from '../../assets/doubleCheck.svg';
+import { ReactComponent as PaperclipIcon } from '../../assets/paperclip.svg';
+import { ReactComponent as EmojiIcon } from '../../assets/emoji.svg';
+import { ReactComponent as MicrophoneIcon } from '../../assets/microphone.svg';
+import { ReactComponent as SendIcon } from '../../assets/send.svg';
 
 export {
   AllChats,
@@ -17,5 +21,9 @@ export {
   SideBarIcon,
   MessageSentTail,
   MessageRecieveTail,
-  DoubleCheck
+  DoubleCheck,
+  PaperclipIcon,
+  EmojiIcon,
+  MicrophoneIcon,
+  SendIcon
 };

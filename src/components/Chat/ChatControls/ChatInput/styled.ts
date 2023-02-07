@@ -4,23 +4,9 @@ const inputOffsetLeft = 8;
 const inputOffsetRight = 14;
 
 export const InputContainer = styled.div`
-  height: 38px;
+  height: 100%;
   width: 100%;
   position: relative;
-`;
-export const InputIconEnd = styled.div<{ hideLabel: boolean }>`
-  display: 'flex';
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 50%;
-  transition: 0.3s;
-  transform: translateY(-50%) rotate(0) scale(0.1);
-  right: ${inputOffsetRight}px;
-  cursor: pointer;
-  overflow: 'hidden';
-  transform: ${(props) => (props.hideLabel ? 'translateY(-50%) rotate(360deg) scale(1)' : '0')};
-  opacity: ${(props) => (props.hideLabel ? '1' : '0')};
 `;
 
 export const InputLabel = styled.label<{ hideLabel: boolean }>`
@@ -44,15 +30,10 @@ export const Input = styled.input`
   border: none;
   outline: none;
   border-radius: 3px;
-  background-color: rgb(241, 241, 241);
-  border: 2px solid rgb(241, 241, 241);
+  background-color: transparent;
   padding-left: ${inputOffsetLeft}px;
   font-size: 18px;
   transition: 0.2s;
   position: relative;
   z-index: 1;
-  &:focus {
-    border: 2px solid rgb(84, 195, 243);
-    background-color: transparent;
-  }
 `;

@@ -8,4 +8,7 @@ export const ChatControlsContainer = styled.div`
   bottom: 0;
   left: 0;
   width: 100%;
+  display: grid;
+  grid-template-columns: 50px 1fr 50px 50px;
+  align-items: center;
 `;
