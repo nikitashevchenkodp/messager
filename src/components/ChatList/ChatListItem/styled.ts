@@ -30,11 +30,16 @@ export const Title = styled.p`
   font-size: 14px;
 `;
 export const LastMessage = styled.p`
-  width: 100%;
-  white-space: nowrap;
+  max-width: 100%;
+  /* white-space: nowrap; */
   font-size: 15px;
   color: rgb(154, 154, 154);
-  padding-right: 30px;
+  padding-right: 85px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  /* width: 100px; */
+  flex-grow: 1;
 `;
 
 export const ExtraInformation = styled.div`

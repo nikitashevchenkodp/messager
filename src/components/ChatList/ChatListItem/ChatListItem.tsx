@@ -28,7 +28,10 @@ const ChatListItem = () => {
         </div>
         <ExtraInformation>
           <LastMessage>
-            Hsdfsd ываываыыва аываыываава s df ыва ывыва выsd sdds f dsв ы в
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, perspiciatis. Pariatur
+            animi magni deleniti et magnam saepe nihil incidunt repellat! Hic animi placeat velit
+            est accusantium temporibus unde eveniet quidem aut provident, amet fuga odit blanditiis
+            impedit, et, quis ab!
           </LastMessage>
         </ExtraInformation>
         <LastMessageTime hide={chatListState === 'colapsed'}>13:46</LastMessageTime>

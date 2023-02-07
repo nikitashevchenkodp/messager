@@ -21,12 +21,3 @@ export const ChatStyled = styled.div<ChatStyledProps>`
     max-width: ${(props) => (!props.isHideChatList ? '50%' : '100vw')};
   }
 `;
-
-export const ChatControlsStyled = styled.div`
-  height: ${CHAT_CONTROLS_HEIGHT}px;
-  background-color: #fff;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-`;

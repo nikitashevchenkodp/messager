@@ -2,9 +2,10 @@ import React from 'react';
 import { SM_SCREEN_WIDTH } from '../../consts';
 import { useAppSelector } from '../../store/hooks';
 import ChatArea from './ChatArea/ChatArea';
+import ChatControls from './ChatControls/ChatControls';
 import ChatHeader from './ChatHeader/ChatHeader';
 
-import { ChatControlsStyled, ChatStyled } from './styled';
+import { ChatStyled } from './styled';
 
 const Chat = () => {
   const windowWidth = useAppSelector((state) => state.ui.windowWidth);
@@ -14,7 +15,7 @@ const Chat = () => {
     <ChatStyled isHideChatList={isHideChatList} littleScreen={windowWidth < SM_SCREEN_WIDTH}>
       <ChatHeader />
       <ChatArea />
-      <ChatControlsStyled> Caht controls</ChatControlsStyled>
+      <ChatControls />
     </ChatStyled>
   );
 };
