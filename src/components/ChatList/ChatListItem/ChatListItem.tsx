@@ -29,12 +29,7 @@ const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
   const chatListState = useAppSelector((state) => state.ui.chatListState);
 
   return (
-    <ChatListItemContainer
-      style={{
-        backgroundColor: active ? ' rgb(65,159,217)' : '#fff',
-        color: active ? '#fff' : 'black'
-      }}
-      onClick={onClick}>
+    <ChatListItemContainer isActive={active} onClick={onClick}>
       <Avatar src={chatItem.avatar} />
       <ChatListItemInfoContainer>
         <div

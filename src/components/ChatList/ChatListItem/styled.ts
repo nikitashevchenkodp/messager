@@ -1,12 +1,37 @@
 import styled from 'styled-components';
 
-export const ChatListItemContainer = styled.div`
+export const NotifficationQuantity = styled.p`
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-block;
+  border-radius: 50%;
+  background-color: grey;
+  color: #fff;
+`;
+
+export const ChatListItemContainer = styled.div<{ isActive: boolean }>`
   display: flex;
   padding: 10px;
   gap: 15px;
   position: relative;
   overflow: hidden;
   cursor: pointer;
+  background-color: ${(props) => (props.isActive ? ' rgb(65,159,217)' : '#fff')};
+  color: ${(props) => (props.isActive ? '#fff' : 'black')};
+  ${NotifficationQuantity} {
+    background-color: ${(props) => props.isActive && '#fff'};
+    color: ${(props) => (props.isActive ? 'rgb(65,159,217)' : '#fff')};
+  }
+  div,
+  p,
+  span {
+    color: ${(props) => (props.isActive ? '#fff' : 'black')};
+    background-color: ${(props) => props.isActive && ' rgb(65,159,217)'};
+  }
 `;
 export const Avatar = styled.img`
   border-radius: 50%;
@@ -58,17 +83,4 @@ export const LastMessageTime = styled.p<{ hide: boolean }>`
   top: 10px;
   background-color: transparent;
   display: ${(props) => (props.hide ? 'none' : 'block')};
-`;
-
-export const NotifficationQuantity = styled.p`
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-  padding: 2px 6px;
-  font-size: 12px;
-  font-weight: 700;
-  display: inline-block;
-  border-radius: 50%;
-  background-color: grey;
-  color: #fff;
 `;
