@@ -6,8 +6,9 @@ export const ChatListItemContainer = styled.div`
   gap: 15px;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 `;
-export const Avatar = styled.div`
+export const Avatar = styled.img`
   border-radius: 50%;
   width: 47px;
   min-width: 47px;
@@ -55,7 +56,7 @@ export const LastMessageTime = styled.p<{ hide: boolean }>`
   position: absolute;
   right: 10px;
   top: 10px;
-  background-color: #fff;
+  background-color: transparent;
   display: ${(props) => (props.hide ? 'none' : 'block')};
 `;
 
