@@ -2,8 +2,8 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import persistStore from 'redux-persist/es/persistStore';
 import persistReducer from 'redux-persist/lib/persistReducer';
 import storage from 'redux-persist/lib/storage';
-import { chatsReducer } from './slices/chats';
-import { foldersReducer } from './slices/folders';
+import { chatsReducer } from 'features/chat-list';
+import { foldersReducer } from 'features/folders';
 
 import { uiReducer } from './slices/UI';
 

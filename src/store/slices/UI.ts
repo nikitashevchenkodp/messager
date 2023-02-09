@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CHAT_LIST_MIN_WIDTH } from '../../consts';
+import { CHAT_LIST_MIN_WIDTH } from 'consts';
 
 interface UIInitState {
   windowWidth: number;
