@@ -1,5 +1,4 @@
 import React, { forwardRef } from 'react';
-import { TypeReferenceType } from 'typescript';
 import { ButtonBase } from './styled';
 
 const Button = forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(
