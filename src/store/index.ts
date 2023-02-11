@@ -6,11 +6,15 @@ import { chatsReducer } from 'features/chat-list';
 import { foldersReducer } from 'features/folders';
 
 import { uiReducer } from './slices/UI';
+import { chatAreaReducer } from 'features/chat/redux/chatArea';
+import { authenticationReducer } from './slices/authentication';
 
 const rootReducer = combineReducers({
   ui: uiReducer,
   folders: foldersReducer,
-  chats: chatsReducer
+  chats: chatsReducer,
+  chatArea: chatAreaReducer,
+  authentication: authenticationReducer
 });
 
 const persistConfig = {

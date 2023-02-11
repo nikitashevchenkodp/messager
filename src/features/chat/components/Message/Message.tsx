@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
   MessageAuthor,
   MessageContainer,
@@ -12,23 +12,46 @@ import {
 } from './styled';
 import messagePhoto from '../../../../assets/mockmessagePhoto.jpg';
 import { DoubleCheck, MessageRecieveTail, MessageSentTail } from 'components/icons';
+import axios from 'axios';
+import { useAppSelector } from 'store/hooks';
 
 interface Message {
   type: 'recieve' | 'sent';
+  message: any;
 }
 
-const Message: FC<Message> = ({ type }) => {
+const Message: FC<Message> = ({ type, message }) => {
+  const [messageOwner, setMessageOwner] = useState<any>();
+  const { _id } = useAppSelector((state) => state.authentication.user);
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5002/api/users/${message.from}`, {
+        headers: {
+          Authorization: '63e4f9faa0449d3d809f39f6'
+        }
+      })
+      .then((res) => {
+        setMessageOwner(res.data);
+      });
+  }, [message]);
+
   return (
-    <MessageContainer type={type}>
+    <MessageContainer
+      type={type}
+      style={{
+        alignSelf: messageOwner?._id === `${_id}` ? 'flex-end' : 'flex-start',
+        borderRadius:
+          messageOwner?._id === '63e4f9faa0449d3d809f39f6' ? '10px 10px 0 10px' : '10px 10px 10px 0'
+      }}>
       <MessageHeader>
-        <MessageAuthor>Shevchenko Nikita</MessageAuthor>
+        <MessageAuthor>{messageOwner?.fullName}</MessageAuthor>
       </MessageHeader>
       {/* <MessageMedia>
         <MessageImage src={messagePhoto} />
       </MessageMedia> */}
       <MessageText>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium nobis recusandae
-        reprehenderit ipsum molestiae excepturi tempora culpa consequuntur ea cupiditate?
+        {message?.messageText}
         <MessageMeta>
           <span>12:34</span>
           <span>
@@ -36,7 +59,7 @@ const Message: FC<Message> = ({ type }) => {
           </span>
         </MessageMeta>
       </MessageText>
-      {type === 'recieve' ? (
+      {messageOwner?._id !== '63e4f9faa0449d3d809f39f6' ? (
         <RecieveTailContainer>
           <MessageRecieveTail />
         </RecieveTailContainer>

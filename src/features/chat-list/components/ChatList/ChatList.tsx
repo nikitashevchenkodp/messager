@@ -1,7 +1,7 @@
+import axios from 'axios';
 import { SearchIcon } from 'components/icons';
 import Resizer from 'components/Resizer/Resizer';
 import { CHAT_LIST_MIN_WIDTH, CHAT_LIST_WIDTH_COLAPSED } from 'consts';
-import { chatsDasha, chatsMykyta, chatsOther } from 'features/chat-list/mockLists';
 import { chatsActions } from 'features/chat-list/redux/chats';
 import WindowEvent from 'helpers/WindowEventWrapper';
 import React, { useEffect, useState } from 'react';
@@ -19,6 +19,7 @@ const ChatList = () => {
   const chatList = useAppSelector((state) => state.chats.chats);
   const activeChat = useAppSelector((state) => state.chats.activeChat);
   const activeFolder = useAppSelector((state) => state.folders.activeFolder);
+  const { _id } = useAppSelector((state) => state.authentication.user);
   const [val, setVal] = useState('');
 
   const resizeHandler = () => {
@@ -37,14 +38,23 @@ const ChatList = () => {
   };
 
   useEffect(() => {
-    if (activeFolder === 'All chats') {
-      dispatch(chatsActions.setChats(chatsDasha));
-    } else if (activeFolder === 'Bots') {
-      dispatch(chatsActions.setChats(chatsMykyta));
-    } else {
-      dispatch(chatsActions.setChats(chatsOther));
-    }
-  }, [activeFolder]);
+    axios
+      .get('http://localhost:5002/api/chats', {
+        headers: {
+          Authorization: `${_id}`
+        }
+      })
+      .then((res) => {
+        dispatch(chatsActions.setChats(res.data));
+      });
+  }, []);
+
+  const setupActiveChat = (id: string) => {
+    const activeChat = chatList.filter((chat) => chat.chatId === id)[0];
+    dispatch(
+      chatsActions.setActiveChat({ id: activeChat.chatId, withWhom: activeChat.withWhomChat })
+    );
+  };
 
   return (
     <>
@@ -65,8 +75,8 @@ const ChatList = () => {
                   <ChatListItem
                     chatItem={chatItem}
                     key={chatItem.chatId}
-                    active={chatItem.chatId === activeChat}
-                    onClick={() => dispatch(chatsActions.setActiveChat(chatItem.chatId))}
+                    active={chatItem._id === activeChat}
+                    onClick={() => setupActiveChat(chatItem.chatId)}
                   />
                 );
               })

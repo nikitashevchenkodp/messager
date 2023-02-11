@@ -18,7 +18,7 @@ const folders = [
 ];
 
 const initialState: UIInitState = {
-  folders,
+  folders: [],
   isLoading: false,
   isError: false,
   activeFolder: 'All chats'

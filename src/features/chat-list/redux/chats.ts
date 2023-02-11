@@ -12,8 +12,11 @@ interface ChatInfo {
 }
 
 interface UIInitState {
-  activeChat: number | null;
-  chats: Array<ChatInfo>;
+  activeChat: {
+    id: string;
+    withWhom: string;
+  } | null;
+  chats: Array<any>;
   isLoading: boolean;
   isError: boolean;
 }
@@ -38,7 +41,8 @@ export const chatsSlice = createSlice({
     setChats: (state, action: PayloadAction<ChatInfo[]>) => {
       state.chats = action.payload;
     },
-    setActiveChat: (state, action: PayloadAction<number>) => {
+    setActiveChat: (state, action: PayloadAction<any>) => {
+      console.log(action.payload);
       state.activeChat = action.payload;
     }
   }

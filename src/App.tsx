@@ -1,14 +1,12 @@
 import React from 'react';
-import { MainLayout } from 'layouts';
+import { AuthenticationLayout, MainLayout } from 'layouts';
 
 import './App.css';
+import { useAppSelector } from 'store/hooks';
 
 function App() {
-  return (
-    <>
-      <MainLayout />
-    </>
-  );
+  const user = useAppSelector((state) => state.authentication.user);
+  return <>{user ? <MainLayout /> : <AuthenticationLayout />}</>;
 }
 
 export default App;
