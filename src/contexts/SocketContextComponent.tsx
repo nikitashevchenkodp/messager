@@ -20,6 +20,7 @@ const SocketContextComponent: React.FunctionComponent<ISocketContextComponentPro
   const [loading, setLoading] = useState(true);
   const dispatch = useAppDispatch();
   const messages = useAppSelector((state) => state.chatArea.messages);
+  const { _id } = useAppSelector((state) => state.authentication.user);
   console.log(messages);
 
   useEffect(() => {
@@ -43,6 +44,11 @@ const SocketContextComponent: React.FunctionComponent<ISocketContextComponentPro
       console.log('old messages', messages);
 
       dispatch(chatAreaActions.setMessages([...messages, message]));
+    });
+    socket.on('handshakeFromServer', (users: string[]) => {
+      console.info('User handshake callback message received');
+      SocketDispatch({ type: 'update_users', payload: users });
+      SocketDispatch({ type: 'update_uid', payload: _id });
     });
 
     /** Messages */
@@ -76,11 +82,7 @@ const SocketContextComponent: React.FunctionComponent<ISocketContextComponentPro
   const SendHandshake = async () => {
     console.info('Sending handshake to server ...');
 
-    socket.emit('handshake', async (uid: string, users: string[]) => {
-      console.info('User handshake callback message received');
-      SocketDispatch({ type: 'update_users', payload: users });
-      SocketDispatch({ type: 'update_uid', payload: uid });
-    });
+    socket.emit('handshake', { id: _id });
 
     setLoading(false);
   };

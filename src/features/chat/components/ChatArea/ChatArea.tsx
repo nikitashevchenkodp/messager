@@ -1,6 +1,7 @@
 import axios from 'axios';
+import SocketContext from 'contexts/SocketContext';
 import { chatAreaActions } from 'features/chat/redux/chatArea';
-import React, { useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import Message from '../Message/Message';
 import { ChatAreaStyled } from './styled';
@@ -11,6 +12,7 @@ const ChatArea = () => {
   const messages = useAppSelector((state) => state.chatArea.messages);
   const { _id } = useAppSelector((state) => state.authentication.user);
   const scrollRef = useRef<any>();
+
   console.log('render chat area');
 
   useEffect(() => {

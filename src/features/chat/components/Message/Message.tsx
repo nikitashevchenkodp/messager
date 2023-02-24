@@ -14,6 +14,7 @@ import messagePhoto from '../../../../assets/mockmessagePhoto.jpg';
 import { DoubleCheck, MessageRecieveTail, MessageSentTail } from 'components/icons';
 import axios from 'axios';
 import { useAppSelector } from 'store/hooks';
+import { formatTime } from 'helpers/formatMessageTime';
 
 interface Message {
   type: 'recieve' | 'sent';
@@ -40,7 +41,7 @@ const Message = forwardRef<HTMLDivElement, Message>(({ type, message }, ref) => 
       <MessageText>
         {message?.messageText}
         <MessageMeta>
-          <span>12:34</span>
+          <span>{formatTime(message?.createdAt)}</span>
           <span>
             <DoubleCheck width="19px" height="19px" />
           </span>

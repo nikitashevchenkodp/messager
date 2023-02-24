@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { DotsIcon, SearchIcon, SideBarIcon } from 'components/icons';
 import { ChatActions, ChatExtraInfo, ChatHeaderInner, ChatHeaderStyled, ChatTitle } from './styled';
+import SocketContext from 'contexts/SocketContext';
 
 const ChatHeader = () => {
+  const { socket } = useContext(SocketContext).SocketState;
+  const [status, setStatus] = useState('');
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('typing', (stat: string) => {
+        setStatus(stat);
+      });
+    }
+  }, []);
+
   return (
     <ChatHeaderStyled>
       <ChatHeaderInner>
@@ -14,7 +26,13 @@ const ChatHeader = () => {
             height: '100%'
           }}>
           <ChatTitle>Daria Yefimova</ChatTitle>
-          <ChatExtraInfo>Last seen 4 hours ago</ChatExtraInfo>
+          <ChatExtraInfo>
+            {status === 'typing' ? (
+              <p style={{ color: 'blue' }}>typing...</p>
+            ) : (
+              <>Last seen 4 hours ago</>
+            )}
+          </ChatExtraInfo>
         </div>
         <ChatActions>
           <SearchIcon width="24px" height="24px" cursor="pointer" />
