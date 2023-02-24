@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { chatAreaActions } from 'features/chat/redux/chatArea';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import Message from '../Message/Message';
 import { ChatAreaStyled } from './styled';
@@ -10,6 +10,8 @@ const ChatArea = () => {
   const activeChat = useAppSelector((state) => state.chats.activeChat);
   const messages = useAppSelector((state) => state.chatArea.messages);
   const { _id } = useAppSelector((state) => state.authentication.user);
+  const scrollRef = useRef<any>();
+  console.log('render chat area');
 
   useEffect(() => {
     axios
@@ -21,12 +23,16 @@ const ChatArea = () => {
       .then((res) => {
         dispatch(chatAreaActions.setMessages(res.data));
       });
-  }, [activeChat]);
+  }, []);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   return (
     <ChatAreaStyled>
       {messages?.map((msg) => {
-        return <Message type="sent" message={msg} key={msg._id} />;
+        return <Message type="sent" message={msg} ref={scrollRef} key={msg._id} />;
       })}
     </ChatAreaStyled>
   );

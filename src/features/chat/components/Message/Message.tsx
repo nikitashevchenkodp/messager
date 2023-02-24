@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, forwardRef, useEffect, useState } from 'react';
 import {
   MessageAuthor,
   MessageContainer,
@@ -20,33 +20,20 @@ interface Message {
   message: any;
 }
 
-const Message: FC<Message> = ({ type, message }) => {
-  const [messageOwner, setMessageOwner] = useState<any>();
+const Message = forwardRef<HTMLDivElement, Message>(({ type, message }, ref) => {
   const { _id } = useAppSelector((state) => state.authentication.user);
-
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5002/api/users/${message.from}`, {
-        headers: {
-          Authorization: '63e4f9faa0449d3d809f39f6'
-        }
-      })
-      .then((res) => {
-        setMessageOwner(res.data);
-      });
-  }, [message]);
 
   return (
     <MessageContainer
       type={type}
+      ref={ref}
       style={{
-        alignSelf: messageOwner?._id === `${_id}` ? 'flex-end' : 'flex-start',
-        borderRadius:
-          messageOwner?._id === '63e4f9faa0449d3d809f39f6' ? '10px 10px 0 10px' : '10px 10px 10px 0'
+        alignSelf: message?.from === `${_id}` ? 'flex-end' : 'flex-start',
+        borderRadius: message?.from === _id ? '10px 10px 0 10px' : '10px 10px 10px 0'
       }}>
-      <MessageHeader>
-        <MessageAuthor>{messageOwner?.fullName}</MessageAuthor>
-      </MessageHeader>
+      {/* <MessageHeader>
+        <MessageAuthor>{message?.fromFullName}</MessageAuthor>
+      </MessageHeader> */}
       {/* <MessageMedia>
         <MessageImage src={messagePhoto} />
       </MessageMedia> */}
@@ -59,7 +46,7 @@ const Message: FC<Message> = ({ type, message }) => {
           </span>
         </MessageMeta>
       </MessageText>
-      {messageOwner?._id !== '63e4f9faa0449d3d809f39f6' ? (
+      {message?.from !== _id ? (
         <RecieveTailContainer>
           <MessageRecieveTail />
         </RecieveTailContainer>
@@ -70,6 +57,8 @@ const Message: FC<Message> = ({ type, message }) => {
       )}
     </MessageContainer>
   );
-};
+});
+
+Message.displayName = 'Message';
 
 export default Message;

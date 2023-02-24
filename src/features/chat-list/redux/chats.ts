@@ -15,6 +15,7 @@ interface UIInitState {
   activeChat: {
     id: string;
     withWhom: string;
+    withWhomId: string;
   } | null;
   chats: Array<any>;
   isLoading: boolean;

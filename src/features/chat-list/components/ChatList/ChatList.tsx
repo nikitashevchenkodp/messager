@@ -52,7 +52,11 @@ const ChatList = () => {
   const setupActiveChat = (id: string) => {
     const activeChat = chatList.filter((chat) => chat.chatId === id)[0];
     dispatch(
-      chatsActions.setActiveChat({ id: activeChat.chatId, withWhom: activeChat.withWhomChat })
+      chatsActions.setActiveChat({
+        id: activeChat.chatId,
+        withWhom: activeChat.withWhomChat,
+        withWhomId: activeChat.withWhomId
+      })
     );
   };
 
