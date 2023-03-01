@@ -1,20 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React from 'react';
 import { DotsIcon, SearchIcon, SideBarIcon } from 'components/icons';
 import { ChatActions, ChatExtraInfo, ChatHeaderInner, ChatHeaderStyled, ChatTitle } from './styled';
-import SocketContext from 'contexts/SocketContext';
+import { useAppSelector } from 'store/hooks';
 
 const ChatHeader = () => {
-  const { socket } = useContext(SocketContext).SocketState;
-  const [status, setStatus] = useState('');
-
-  useEffect(() => {
-    if (socket) {
-      socket.on('typing', (stat: string) => {
-        setStatus(stat);
-      });
-    }
-  }, []);
-
+  const { status, userId } = useAppSelector((state) => state.chatArea.typingStatus);
+  const activeChat = useAppSelector((state) => state.chats.activeChat);
+  const show = userId === activeChat?.withWhomId;
   return (
     <ChatHeaderStyled>
       <ChatHeaderInner>
@@ -25,9 +17,9 @@ const ChatHeader = () => {
             justifyContent: 'space-between',
             height: '100%'
           }}>
-          <ChatTitle>Daria Yefimova</ChatTitle>
+          <ChatTitle>{activeChat?.withWhom}</ChatTitle>
           <ChatExtraInfo>
-            {status === 'typing' ? (
+            {show && status === 'typing' ? (
               <p style={{ color: 'blue' }}>typing...</p>
             ) : (
               <>Last seen 4 hours ago</>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface UIInitState {
@@ -12,6 +13,7 @@ export const authenticationSlice = createSlice({
   name: 'UI',
   initialState,
   reducers: {
+    loginStart: (state, action: PayloadAction<any>) => {},
     loginUser: (state, action: PayloadAction<any>) => {
       state.user = action.payload;
     }

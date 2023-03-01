@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { AuthenticationLayout, MainLayout } from 'layouts';
 
 import './App.css';
 import { useAppSelector } from 'store/hooks';
-import SocketContext from 'contexts/SocketContext';
+import SocketContextComponent from 'contexts/SocketContextComponent';
 
 function App() {
   const user = useAppSelector((state) => state.authentication.user);

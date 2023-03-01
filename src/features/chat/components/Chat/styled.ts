@@ -16,7 +16,7 @@ export const ChatStyled = styled.div<ChatStyledProps>`
 
   @media screen and (max-width: ${SM_SCREEN_WIDTH}px) {
     min-width: ${(props) => !props.isHideChatList && '0'};
-    width: ${(props) => (!props.isHideChatList ? '0' : '100%')};
-    max-width: ${(props) => (!props.isHideChatList ? '50%' : '100vw')};
+    /* width: ${(props) => (!props.isHideChatList ? '0' : '100%')};
+    max-width: ${(props) => (!props.isHideChatList ? '50%' : '100vw')}; */
   }
 `;

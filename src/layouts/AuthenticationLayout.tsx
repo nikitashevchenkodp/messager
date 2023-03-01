@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import { useAppDispatch } from 'store/hooks';
 import { authenticationActions } from 'store/slices/authentication';
@@ -11,9 +10,7 @@ const AuthenticationLayout = () => {
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
-    axios.post('http://localhost:5002/api/users/login', { email, password }).then((res) => {
-      dispatch(authenticationActions.loginUser(res.data));
-    });
+    dispatch(authenticationActions.loginStart({ email, password }));
   };
 
   return (

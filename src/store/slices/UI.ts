@@ -29,10 +29,20 @@ export const UISlice = createSlice({
       state.isHideChatList = false;
     },
     setChatListState: (state, action: PayloadAction<'expanded' | 'colapsed'>) => {
+      if (action.payload === 'colapsed') {
+        state.chatListWidth = 70;
+      } else {
+        state.chatListWidth = CHAT_LIST_MIN_WIDTH;
+      }
       state.chatListState = action.payload;
     },
     setChatListWidth: (state, action: PayloadAction<number>) => {
       state.chatListWidth = action.payload;
+      if (action.payload === 70) {
+        state.chatListState = 'colapsed';
+      } else {
+        state.chatListState = 'expanded';
+      }
     }
   }
 });

@@ -4,7 +4,7 @@ import Resizer from 'components/Resizer/Resizer';
 import { CHAT_LIST_MIN_WIDTH, CHAT_LIST_WIDTH_COLAPSED } from 'consts';
 import { chatsActions } from 'features/chat-list/redux/chats';
 import WindowEvent from 'helpers/WindowEventWrapper';
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { uiActions } from 'store/slices/UI';
 import ChatListItem from '../ChatListItem/ChatListItem';
@@ -18,14 +18,14 @@ const ChatList = () => {
   const chatListWidth = useAppSelector((state) => state.ui.chatListWidth);
   const chatList = useAppSelector((state) => state.chats.chats);
   const activeChat = useAppSelector((state) => state.chats.activeChat);
-  const activeFolder = useAppSelector((state) => state.folders.activeFolder);
-  const { _id } = useAppSelector((state) => state.authentication.user);
   const [val, setVal] = useState('');
+  const wind = useRef(window);
 
   const resizeHandler = () => {
-    const windowWidth = window.innerWidth;
+    const windowWidth = wind.current.innerWidth;
     if (windowWidth <= 756) {
       if (!isHideChatList) dispatch(uiActions.hideChatList());
+      dispatch(uiActions.setChatListState('expanded'));
     }
     if (windowWidth > 756) {
       if (isHideChatList) dispatch(uiActions.showChatList());
@@ -34,20 +34,7 @@ const ChatList = () => {
 
   const handleClick = () => {
     dispatch(uiActions.setChatListWidth(CHAT_LIST_MIN_WIDTH));
-    dispatch(uiActions.setChatListState('expanded'));
   };
-
-  useEffect(() => {
-    axios
-      .get('http://localhost:5002/api/chats', {
-        headers: {
-          Authorization: `${_id}`
-        }
-      })
-      .then((res) => {
-        dispatch(chatsActions.setChats(res.data));
-      });
-  }, []);
 
   const setupActiveChat = (id: string) => {
     const activeChat = chatList.filter((chat) => chat.chatId === id)[0];
@@ -58,6 +45,9 @@ const ChatList = () => {
         withWhomId: activeChat.withWhomId
       })
     );
+    if (wind.current.innerWidth < 756) {
+      if (!isHideChatList) dispatch(uiActions.hideChatList());
+    }
   };
 
   return (
@@ -79,7 +69,7 @@ const ChatList = () => {
                   <ChatListItem
                     chatItem={chatItem}
                     key={chatItem.chatId}
-                    active={chatItem._id === activeChat}
+                    active={chatItem.chatId === activeChat?.id}
                     onClick={() => setupActiveChat(chatItem.chatId)}
                   />
                 );

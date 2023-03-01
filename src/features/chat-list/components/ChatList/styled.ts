@@ -14,9 +14,8 @@ export const ChatListContainer = styled.div<ChatListContainerProps>`
   position: relative;
   height: 100vh;
 
-  max-width: ${(props: ChatListContainerProps) => (props.isHideChatList ? '0' : '100vw')};
-
   @media screen and (max-width: ${SM_SCREEN_WIDTH}px) {
+    /* max-width: ${(props: ChatListContainerProps) => (props.isHideChatList ? '0' : '100vw')}; */
     flex-grow: 1;
   }
 `;

@@ -20,31 +20,33 @@ const SocketContextComponent: React.FunctionComponent<ISocketContextComponentPro
   const [loading, setLoading] = useState(true);
   const dispatch = useAppDispatch();
   const messages = useAppSelector((state) => state.chatArea.messages);
+  const chats = useAppSelector((state) => state.chats.chats);
+  const activeChatId = useAppSelector((state) => state.chats.activeChat?.id);
   const { _id } = useAppSelector((state) => state.authentication.user);
-  console.log(messages);
 
   useEffect(() => {
     socket.connect();
     SocketDispatch({ type: 'update_socket', payload: socket });
-    StartListeners();
-    SendHandshake();
-    // eslint-disable-next-line
+    // Join();
+  }, []);
+
+  useEffect(() => {
+    // StartListeners();
   }, [messages]);
 
   const StartListeners = () => {
     /** Messages */
-    socket.on('user_connected', (users: string[]) => {
-      console.info('User connected message received');
-      SocketDispatch({ type: 'update_users', payload: users });
-    });
-
     socket.on('recMsg', (message) => {
-      console.log('got msg');
-      console.log(message);
-      console.log('old messages', messages);
-
-      dispatch(chatAreaActions.setMessages([...messages, message]));
+      console.log('asdfasdfasd');
+      console.log('message', message);
+      console.log('activeChat', activeChatId);
+      if (message.chatId === activeChatId) {
+        console.log('yes');
+        dispatch(chatAreaActions.setMessages([...messages, message]));
+      }
+      console.log('no');
     });
+
     socket.on('handshakeFromServer', (users: string[]) => {
       console.info('User handshake callback message received');
       SocketDispatch({ type: 'update_users', payload: users });
@@ -60,7 +62,7 @@ const SocketContextComponent: React.FunctionComponent<ISocketContextComponentPro
     /** Connection / reconnection listeners */
     socket.io.on('reconnect', (attempt) => {
       console.info('Reconnected on attempt: ' + attempt);
-      SendHandshake();
+      Join();
     });
 
     socket.io.on('reconnect_attempt', (attempt) => {
@@ -79,11 +81,8 @@ const SocketContextComponent: React.FunctionComponent<ISocketContextComponentPro
     });
   };
 
-  const SendHandshake = async () => {
-    console.info('Sending handshake to server ...');
-
-    socket.emit('handshake', { id: _id });
-
+  const Join = async () => {
+    socket.emit('join', { chats, id: _id });
     setLoading(false);
   };
 

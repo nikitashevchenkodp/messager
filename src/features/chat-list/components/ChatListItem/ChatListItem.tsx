@@ -30,7 +30,8 @@ interface ChatListItemProps {
 
 const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
   const chatListState = useAppSelector((state) => state.ui.chatListState);
-
+  const { status, userId } = useAppSelector((state) => state.chatArea.typingStatus);
+  const showTyping = chatItem.withWhomId === userId;
   const parseDate = (date: string) => {
     return new Date(date).toTimeString().slice(0, 5);
   };
@@ -48,7 +49,13 @@ const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
           <Title>{chatItem?.withWhomChat}</Title>
         </div>
         <ExtraInformation>
-          <LastMessage>{chatItem?.lastMessage?.messageText}</LastMessage>
+          <LastMessage>
+            {showTyping && status === 'typing' ? (
+              <span style={{ color: 'blue' }}>Typing...</span>
+            ) : (
+              <>{chatItem?.lastMessage?.messageText}</>
+            )}
+          </LastMessage>
         </ExtraInformation>
         <LastMessageTime hide={chatListState === 'colapsed'}>
           {parseDate(chatItem?.lastMessage?.createdAt)}
