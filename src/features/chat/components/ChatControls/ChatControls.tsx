@@ -22,11 +22,13 @@ const ChatControls = () => {
       }
     }
     try {
+      console.log(activeChat?.chatId);
+
       const { data: newMessage } = await sendMessage({
         from: `${_id}`,
-        to: activeChat?.withWhomId || '',
+        to: activeChat?.partnerId || '',
         messageText: val,
-        chatId: activeChat?.id || ''
+        chatId: activeChat?.chatId || ''
       });
       dispatch({ type: 'sendMessage', payload: newMessage });
       setVal('');

@@ -25,7 +25,7 @@ export const chatAreaSlice = createSlice({
     newMessage: (state, action: PayloadAction<any>) => {
       state.messages = [...state.messages, action.payload];
     },
-    typing: (state, action: PayloadAction<any>) => {},
+    typing: (state, action: PayloadAction<string>) => {},
     setTyping: (state, action: PayloadAction<any>) => {
       state.typingStatus = action.payload;
     }

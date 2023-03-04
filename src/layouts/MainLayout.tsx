@@ -4,7 +4,7 @@ import { Folders } from 'features/folders';
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 
-import { Container, MainLayoutStyled } from './styled';
+import { MainContainer, MainLayoutStyled } from './styled';
 
 const MainLayout = () => {
   const isHideChatList = useAppSelector((state) => state.ui.isHideChatList);
@@ -16,8 +16,10 @@ const MainLayout = () => {
   return (
     <MainLayoutStyled isHideChatList={isHideChatList}>
       <Folders />
-      <ChatList />
-      <Chat />
+      <MainContainer>
+        <ChatList />
+        <Chat />
+      </MainContainer>
     </MainLayoutStyled>
   );
 };

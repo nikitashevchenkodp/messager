@@ -10,7 +10,7 @@ interface UIInitState {
 
 const initialState: UIInitState = {
   windowWidth: window.innerWidth,
-  isHideChatList: window.innerWidth < 756,
+  isHideChatList: true,
   chatListState: 'expanded',
   chatListWidth: CHAT_LIST_MIN_WIDTH
 };

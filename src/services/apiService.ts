@@ -43,3 +43,6 @@ export const getChatList = async () => {
 export const getChatMessages = async (chatId: string) => {
   return axiosInst.get(`/api/chats/${chatId}`);
 };
+export const getAllUsers = async () => {
+  return axiosInst.get(`/api/users/`);
+};

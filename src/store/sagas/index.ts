@@ -1,16 +1,13 @@
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { PayloadAction } from '@reduxjs/toolkit';
 import { chatsActions } from 'features/chat-list';
 import { chatAreaActions } from 'features/chat/redux/chatArea';
-import { stat } from 'fs';
-import { eventChannel } from 'redux-saga';
-import { all, call, delay, fork, put, select, take, takeEvery } from 'redux-saga/effects';
-import { getChatList, getChatMessages, ILogin, login } from 'services/apiService';
-import { io } from 'socket.io-client';
+import { all, call, put, select, take } from 'redux-saga/effects';
+import { getChatList, getChatMessages, login } from 'services/apiService';
 import { RootState } from 'store';
+
 import { authenticationActions } from 'store/slices/authentication';
-import { addNewMessage, runIo } from './socketChanel';
+import { runIo } from './socketChanel';
 
 export function* loginSaga(): Generator<any, any, any> {
   try {
@@ -25,8 +22,10 @@ export function* loginSaga(): Generator<any, any, any> {
 export function* chatListSaga(): Generator<any, any, any> {
   while (true) {
     try {
-      yield take();
+      yield take([chatAreaActions.newMessage.type, authenticationActions.loginUser.type]);
       const res = yield call(getChatList);
+      console.log(res.data);
+
       yield put(chatsActions.setChats(res.data));
     } catch (error) {
       console.log(error);
@@ -38,10 +37,24 @@ export function* chatMessagesSaga(): Generator<any, any, any> {
   while (true) {
     try {
       const { payload } = yield take(chatsActions.setActiveChat.type);
-      const res = yield call(getChatMessages, payload.id);
+      const res = yield call(getChatMessages, payload.chatId);
       yield put(chatAreaActions.setMessages(res.data));
     } catch (error) {
       console.log(error);
+    }
+  }
+}
+
+function* addNewMessage(): any {
+  while (true) {
+    const message = yield take('newMessage');
+    console.log('addMessage', message);
+
+    const currentChatId = yield select((state: RootState) => state.chats.activeChat?.chatId);
+
+    if (message.payload.chatId === currentChatId) {
+      console.log('here');
+      yield put(chatAreaActions.newMessage(message.payload));
     }
   }
 }

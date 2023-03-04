@@ -11,12 +11,22 @@ interface ChatInfo {
   chatId: number;
 }
 
+interface IMessage {
+  messageText: string;
+  createdAt: string;
+  from: string;
+}
+
+interface IChat {
+  chatId: string;
+  partnerFullName: string;
+  partnerId: string;
+  partnerAvatar: string;
+  lastMessage: IMessage;
+}
+
 interface UIInitState {
-  activeChat: {
-    id: string;
-    withWhom: string;
-    withWhomId: string;
-  } | null;
+  activeChat: IChat | null;
   chats: Array<any>;
   isLoading: boolean;
   isError: boolean;
