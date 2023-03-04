@@ -1,16 +1,25 @@
 import { Chat } from 'features/chat';
 import { ChatList } from 'features/chat-list';
 import { Folders } from 'features/folders';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 
-import { MainLayoutStyled } from './styled';
+import { MainContainer, MainLayoutStyled } from './styled';
 
 const MainLayout = () => {
+  const isHideChatList = useAppSelector((state) => state.ui.isHideChatList);
+
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch({ type: 'CHANEL_ON' });
+  }, []);
   return (
-    <MainLayoutStyled>
+    <MainLayoutStyled isHideChatList={isHideChatList}>
       <Folders />
-      <ChatList />
-      <Chat />
+      <MainContainer>
+        <ChatList />
+        <Chat />
+      </MainContainer>
     </MainLayoutStyled>
   );
 };

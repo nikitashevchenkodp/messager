@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, forwardRef, useEffect, useState } from 'react';
 import {
   MessageAuthor,
   MessageContainer,
@@ -12,31 +12,42 @@ import {
 } from './styled';
 import messagePhoto from '../../../../assets/mockmessagePhoto.jpg';
 import { DoubleCheck, MessageRecieveTail, MessageSentTail } from 'components/icons';
+import axios from 'axios';
+import { useAppSelector } from 'store/hooks';
+import { formatTime } from 'helpers/formatMessageTime';
 
 interface Message {
   type: 'recieve' | 'sent';
+  message: any;
 }
 
-const Message: FC<Message> = ({ type }) => {
+const Message = forwardRef<HTMLDivElement, Message>(({ type, message }, ref) => {
+  const { _id } = useAppSelector((state) => state.authentication.user);
+
   return (
-    <MessageContainer type={type}>
-      <MessageHeader>
-        <MessageAuthor>Shevchenko Nikita</MessageAuthor>
-      </MessageHeader>
+    <MessageContainer
+      type={type}
+      ref={ref}
+      style={{
+        alignSelf: message?.from === `${_id}` ? 'flex-end' : 'flex-start',
+        borderRadius: message?.from === _id ? '10px 10px 0 10px' : '10px 10px 10px 0'
+      }}>
+      {/* <MessageHeader>
+        <MessageAuthor>{message?.fromFullName}</MessageAuthor>
+      </MessageHeader> */}
       {/* <MessageMedia>
         <MessageImage src={messagePhoto} />
       </MessageMedia> */}
       <MessageText>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium nobis recusandae
-        reprehenderit ipsum molestiae excepturi tempora culpa consequuntur ea cupiditate?
+        {message?.messageText}
         <MessageMeta>
-          <span>12:34</span>
+          <span>{formatTime(message?.createdAt)}</span>
           <span>
             <DoubleCheck width="19px" height="19px" />
           </span>
         </MessageMeta>
       </MessageText>
-      {type === 'recieve' ? (
+      {message?.from !== _id ? (
         <RecieveTailContainer>
           <MessageRecieveTail />
         </RecieveTailContainer>
@@ -47,6 +58,8 @@ const Message: FC<Message> = ({ type }) => {
       )}
     </MessageContainer>
   );
-};
+});
+
+Message.displayName = 'Message';
 
 export default Message;

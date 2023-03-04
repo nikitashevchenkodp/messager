@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { SM_SCREEN_WIDTH } from 'consts';
+import { CHAT_AREA_WIDTH, SM_SCREEN_WIDTH } from 'consts';
 
 interface ChatStyledProps {
   readonly isHideChatList: boolean;
@@ -11,12 +11,6 @@ export const ChatStyled = styled.div<ChatStyledProps>`
   max-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  min-width: 420px;
+  min-width: ${CHAT_AREA_WIDTH};
   max-width: 100%;
-
-  @media screen and (max-width: ${SM_SCREEN_WIDTH}px) {
-    min-width: ${(props) => !props.isHideChatList && '0'};
-    width: ${(props) => (!props.isHideChatList ? '0' : '100%')};
-    max-width: ${(props) => (!props.isHideChatList ? '50%' : '100vw')};
-  }
 `;

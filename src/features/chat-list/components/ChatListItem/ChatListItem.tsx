@@ -1,4 +1,5 @@
-import React, { FC } from 'react';
+import axios from 'axios';
+import React, { FC, useEffect, useState } from 'react';
 import { useAppSelector } from 'store/hooks';
 import {
   Avatar,
@@ -12,25 +13,23 @@ import {
 } from './styled';
 
 interface ChatListItemProps {
-  chatItem: {
-    title: string;
-    lastMessage: {
-      messageMediaThumb?: string;
-      text: string;
-      time: string;
-    };
-    avatar: string;
-  };
+  chatItem: any;
   active: boolean;
+  type: 'expanded' | 'colapsed';
   onClick: (...args: unknown[]) => void;
 }
 
 const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
   const chatListState = useAppSelector((state) => state.ui.chatListState);
+  const { status, userId } = useAppSelector((state) => state.chatArea.typingStatus);
+  const showTyping = chatItem.partnerId === userId;
+  const parseDate = (date: string) => {
+    return new Date(date).toTimeString().slice(0, 5);
+  };
 
   return (
     <ChatListItemContainer isActive={active} onClick={onClick}>
-      <Avatar src={chatItem.avatar} />
+      <Avatar src={chatItem?.partnerAvatar} />
       <ChatListItemInfoContainer>
         <div
           style={{
@@ -38,13 +37,19 @@ const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
             justifyContent: 'space-between',
             width: '100%'
           }}>
-          <Title>{chatItem.title}</Title>
+          <Title>{chatItem?.partnerFullName}</Title>
         </div>
         <ExtraInformation>
-          <LastMessage>{chatItem.lastMessage?.text}</LastMessage>
+          <LastMessage>
+            {showTyping && status === 'typing' ? (
+              <span style={{ color: 'blue' }}>Typing...</span>
+            ) : (
+              <>{chatItem?.lastMessage?.messageText}</>
+            )}
+          </LastMessage>
         </ExtraInformation>
         <LastMessageTime hide={chatListState === 'colapsed'}>
-          {chatItem.lastMessage?.time}
+          {parseDate(chatItem?.lastMessage?.createdAt)}
         </LastMessageTime>
         <NotifficationQuantity>2</NotifficationQuantity>
       </ChatListItemInfoContainer>

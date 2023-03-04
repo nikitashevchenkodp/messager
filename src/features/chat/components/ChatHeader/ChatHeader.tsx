@@ -1,8 +1,12 @@
 import React from 'react';
 import { DotsIcon, SearchIcon, SideBarIcon } from 'components/icons';
 import { ChatActions, ChatExtraInfo, ChatHeaderInner, ChatHeaderStyled, ChatTitle } from './styled';
+import { useAppSelector } from 'store/hooks';
 
 const ChatHeader = () => {
+  const { status, userId } = useAppSelector((state) => state.chatArea.typingStatus);
+  const activeChat = useAppSelector((state) => state.chats.activeChat);
+  const show = userId === activeChat?.partnerId;
   return (
     <ChatHeaderStyled>
       <ChatHeaderInner>
@@ -13,8 +17,14 @@ const ChatHeader = () => {
             justifyContent: 'space-between',
             height: '100%'
           }}>
-          <ChatTitle>Daria Yefimova</ChatTitle>
-          <ChatExtraInfo>Last seen 4 hours ago</ChatExtraInfo>
+          <ChatTitle>{activeChat?.partnerFullName}</ChatTitle>
+          <ChatExtraInfo>
+            {show && status === 'typing' ? (
+              <p style={{ color: 'blue' }}>typing...</p>
+            ) : (
+              <>Last seen 4 hours ago</>
+            )}
+          </ChatExtraInfo>
         </div>
         <ChatActions>
           <SearchIcon width="24px" height="24px" cursor="pointer" />
