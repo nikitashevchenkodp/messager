@@ -18,6 +18,7 @@ import { RootState } from 'store';
 
 import { authenticationActions } from 'store/slices/authentication';
 import { runIo } from './socketChanel';
+import { snackbarActions } from 'store/slices/snackbar';
 
 interface ILoginResponse {
   _id: string;
@@ -78,6 +79,17 @@ function* addNewMessage(): any {
     if (message.payload.chatId === currentChatId) {
       console.log('here');
       yield put(chatAreaActions.newMessage(message.payload));
+    } else {
+      yield put(
+        snackbarActions.enqueueSnackbar({
+          message: 'You got a new message',
+          options: {
+            key: new Date().getTime() + Math.random(),
+            variant: 'success'
+          },
+          dismissed: false
+        })
+      );
     }
   }
 }

@@ -11,6 +11,7 @@ import { chatAreaReducer } from 'features/chat/redux/chatArea';
 import { authenticationReducer } from './slices/authentication';
 import { rootSaga } from './sagas';
 import { usersStatusesReducer } from './slices/usersStatuses';
+import { snackbarReducer } from './slices/snackbar';
 
 const rootReducer = combineReducers({
   ui: uiReducer,
@@ -18,12 +19,14 @@ const rootReducer = combineReducers({
   chats: chatsReducer,
   chatArea: chatAreaReducer,
   authentication: authenticationReducer,
-  userStatuses: usersStatusesReducer
+  userStatuses: usersStatusesReducer,
+  snackbar: snackbarReducer
 });
 
 const persistConfig = {
   key: 'root',
-  storage
+  storage,
+  blacklist: ['snackbar']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

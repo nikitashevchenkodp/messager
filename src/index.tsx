@@ -6,14 +6,32 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { persistor, store } from 'store';
 import { PersistGate } from 'redux-persist/integration/react';
+import { SnackbarProvider } from 'notistack';
 import swDEV from './swDev';
+import MessageNotification from 'components/MessageNotification';
+import Button from 'components/shared/Button';
+import { snackbarActions } from 'store/slices/snackbar';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-        <App />
+        <SnackbarProvider
+          // Components={{
+          //   reportComplete: MessageNotification
+          // }}
+          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+          style={{ minWidth: '0' }}
+          action={(key) => (
+            <Button
+              style={{ color: '#fff' }}
+              onClick={() => store.dispatch(snackbarActions.closeNotification(key))}>
+              Close
+            </Button>
+          )}>
+          <App />
+        </SnackbarProvider>
       </PersistGate>
     </Provider>
   </React.StrictMode>

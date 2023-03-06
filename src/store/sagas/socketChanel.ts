@@ -17,6 +17,7 @@ import {
 } from 'redux-saga/effects';
 import { io, Socket } from 'socket.io-client';
 import { RootState } from 'store';
+import { snackbarActions } from 'store/slices/snackbar';
 import { usersStatusesActions } from 'store/slices/usersStatuses';
 
 let socket;
@@ -46,7 +47,17 @@ function runSagaChanel(socket: Socket) {
       emit(chatAreaActions.setTyping({ status, userId }));
     });
     socket.io.on('reconnect', (attempt: any) => {
-      console.info('Reconnected on attempt: ' + attempt);
+      emit({
+        type: snackbarActions.enqueueSnackbar.type,
+        payload: {
+          message: `Reconnected on attempt: ${attempt}`,
+          options: {
+            key: new Date().getTime() + Math.random(),
+            variant: 'success'
+          },
+          dismissed: false
+        }
+      });
     });
 
     socket.io.on('reconnect_attempt', (attempt: any) => {
@@ -54,14 +65,31 @@ function runSagaChanel(socket: Socket) {
     });
 
     socket.io.on('reconnect_error', (error: any) => {
-      console.info('Reconnection error: ' + error);
+      emit({
+        type: snackbarActions.enqueueSnackbar.type,
+        payload: {
+          message: `Reconnection error: ${error}`,
+          options: {
+            key: new Date().getTime() + Math.random(),
+            variant: 'warning'
+          },
+          dismissed: false
+        }
+      });
     });
 
     socket.io.on('reconnect_failed', () => {
-      console.info('Reconnection failure.');
-      alert(
-        'We are unable to connect you to the chat service.  Please make sure your internet connection is stable or try again later.'
-      );
+      emit({
+        type: snackbarActions.enqueueSnackbar.type,
+        payload: {
+          message: `We are unable to connect you to the chat service.  Please make sure your internet connection is stable or try again later.`,
+          options: {
+            key: new Date().getTime() + Math.random(),
+            variant: 'error'
+          },
+          dismissed: false
+        }
+      });
     });
 
     return () => {};
