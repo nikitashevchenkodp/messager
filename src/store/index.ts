@@ -10,13 +10,15 @@ import { uiReducer } from './slices/UI';
 import { chatAreaReducer } from 'features/chat/redux/chatArea';
 import { authenticationReducer } from './slices/authentication';
 import { rootSaga } from './sagas';
+import { usersStatusesReducer } from './slices/usersStatuses';
 
 const rootReducer = combineReducers({
   ui: uiReducer,
   folders: foldersReducer,
   chats: chatsReducer,
   chatArea: chatAreaReducer,
-  authentication: authenticationReducer
+  authentication: authenticationReducer,
+  userStatuses: usersStatusesReducer
 });
 
 const persistConfig = {

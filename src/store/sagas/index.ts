@@ -2,17 +2,40 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { chatsActions } from 'features/chat-list';
 import { chatAreaActions } from 'features/chat/redux/chatArea';
-import { all, call, put, select, take } from 'redux-saga/effects';
+import { AxiosResponse } from 'axios';
+import {
+  all,
+  call,
+  put,
+  select,
+  take,
+  TakeEffect,
+  CallEffect,
+  PutEffect
+} from 'redux-saga/effects';
 import { getChatList, getChatMessages, login } from 'services/apiService';
 import { RootState } from 'store';
 
 import { authenticationActions } from 'store/slices/authentication';
 import { runIo } from './socketChanel';
 
-export function* loginSaga(): Generator<any, any, any> {
+interface ILoginResponse {
+  _id: string;
+  avatar: string;
+  fullName: string;
+  email: string;
+  chats: Array<string>;
+}
+
+export function* loginSaga(): Generator<
+  TakeEffect | CallEffect | PutEffect,
+  void,
+  { payload: { email: string; password: string } } & AxiosResponse<ILoginResponse>
+> {
   try {
     const { payload } = yield take(authenticationActions.loginStart.type);
     const res = yield call(login, payload);
+    console.log(res);
     yield put(authenticationActions.loginUser(res.data));
   } catch (error) {
     console.log(error);

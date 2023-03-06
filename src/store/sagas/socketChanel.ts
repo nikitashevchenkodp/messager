@@ -17,6 +17,7 @@ import {
 } from 'redux-saga/effects';
 import { io, Socket } from 'socket.io-client';
 import { RootState } from 'store';
+import { usersStatusesActions } from 'store/slices/usersStatuses';
 
 let socket;
 
@@ -36,6 +37,9 @@ function runSagaChanel(socket: Socket) {
   return eventChannel((emit) => {
     socket.on('recMsg', (message: any) => {
       emit({ type: 'newMessage', payload: message });
+    });
+    socket.on('onlineUsers', (data: any) => {
+      emit(usersStatusesActions.updateOnline(data));
     });
 
     socket.on('typing', ({ status, userId }: any) => {

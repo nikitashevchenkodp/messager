@@ -84,3 +84,19 @@ export const LastMessageTime = styled.p<{ hide: boolean }>`
   background-color: transparent;
   display: ${(props) => (props.hide ? 'none' : 'block')};
 `;
+
+export const AvatarContainer = styled.div`
+  position: relative;
+`;
+
+export const NetworkStatus = styled.div<{ online: boolean }>`
+  display: ${(props) => (props.online ? 'block' : 'none')};
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border: 2px solid #fff;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: green;
+`;
