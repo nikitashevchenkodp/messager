@@ -6,6 +6,9 @@ import { useAppSelector } from 'store/hooks';
 const ChatHeader = () => {
   const { status, userId } = useAppSelector((state) => state.chatArea.typingStatus);
   const activeChat = useAppSelector((state) => state.chats.activeChat);
+  const onlineUsers = useAppSelector((state) => state.userStatuses.online);
+  const online = onlineUsers.includes(activeChat?.partnerId || '');
+
   const show = userId === activeChat?.partnerId;
   return (
     <ChatHeaderStyled>
@@ -19,8 +22,12 @@ const ChatHeader = () => {
           }}>
           <ChatTitle>{activeChat?.partnerFullName}</ChatTitle>
           <ChatExtraInfo>
-            {show && status === 'typing' ? (
-              <p style={{ color: 'blue' }}>typing...</p>
+            {online ? (
+              (show && status) === 'typing' ? (
+                <p style={{ color: 'blue' }}>typing...</p>
+              ) : (
+                <p style={{ color: 'green' }}>online</p>
+              )
             ) : (
               <>Last seen 4 hours ago</>
             )}

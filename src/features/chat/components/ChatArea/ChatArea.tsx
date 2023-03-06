@@ -11,15 +11,9 @@ const ChatArea = () => {
 
   return (
     <ChatAreaStyled>
-      {activeChat ? (
-        <>
-          {messages?.map((msg) => {
-            return <Message type="sent" message={msg} ref={scrollRef} key={msg._id} />;
-          })}
-        </>
-      ) : (
-        <p>Plese select a chat</p>
-      )}
+      {messages?.map((msg) => {
+        return <Message type="sent" message={msg} ref={scrollRef} key={msg._id} />;
+      })}
     </ChatAreaStyled>
   );
 };

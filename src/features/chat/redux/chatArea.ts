@@ -19,7 +19,6 @@ export const chatAreaSlice = createSlice({
   initialState,
   reducers: {
     setMessages: (state, action: PayloadAction<any>) => {
-      console.log('set messages');
       state.messages = action.payload;
     },
     newMessage: (state, action: PayloadAction<any>) => {
