@@ -1,6 +1,6 @@
-import axios from 'axios';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { useAppSelector } from 'store/hooks';
+import { IChat } from 'types';
 import {
   Avatar,
   AvatarContainer,
@@ -15,7 +15,7 @@ import {
 } from './styled';
 
 interface ChatListItemProps {
-  chatItem: any;
+  chatItem: IChat;
   active: boolean;
   type: 'expanded' | 'colapsed';
   onClick: (...args: unknown[]) => void;
@@ -23,19 +23,20 @@ interface ChatListItemProps {
 
 const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
   const chatListState = useAppSelector((state) => state.ui.chatListState);
-  const { status, userId } = useAppSelector((state) => state.chatArea.typingStatus);
-  const onlineUsers = useAppSelector((state) => state.userStatuses.online);
-  const showTyping = chatItem.partnerId === userId;
-  const online = onlineUsers.includes(chatItem.partnerId);
+  const online = useAppSelector((state) => state.userStatuses.onlineMap[chatItem.partnerId]);
+  const typing = useAppSelector(
+    (state) => state.userStatuses.onlineMap[chatItem.partnerId]?.typing
+  );
   const parseDate = (date: string) => {
     return new Date(date).toTimeString().slice(0, 5);
   };
+  console.log(active);
 
   return (
     <ChatListItemContainer isActive={active} onClick={onClick}>
       <AvatarContainer>
         <Avatar src={chatItem?.partnerAvatar} />
-        <NetworkStatus online={online} />
+        <NetworkStatus online={Boolean(online)} />
       </AvatarContainer>
       <ChatListItemInfoContainer>
         <div
@@ -48,7 +49,7 @@ const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
         </div>
         <ExtraInformation>
           <LastMessage>
-            {showTyping && status === 'typing' ? (
+            {typing ? (
               <span style={{ color: 'blue' }}>Typing...</span>
             ) : (
               <>{chatItem?.lastMessage?.messageText}</>

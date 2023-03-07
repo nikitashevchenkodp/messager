@@ -3,15 +3,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface UIInitState {
   messages: Array<any>;
-  typingStatus: any;
 }
 
 const initialState: UIInitState = {
-  messages: [],
-  typingStatus: {
-    status: '',
-    userWhoTiping: ''
-  }
+  messages: []
 };
 
 export const chatAreaSlice = createSlice({
@@ -23,10 +18,6 @@ export const chatAreaSlice = createSlice({
     },
     newMessage: (state, action: PayloadAction<any>) => {
       state.messages = [...state.messages, action.payload];
-    },
-    typing: (state, action: PayloadAction<string>) => {},
-    setTyping: (state, action: PayloadAction<any>) => {
-      state.typingStatus = action.payload;
     }
   }
 });

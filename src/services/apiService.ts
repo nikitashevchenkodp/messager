@@ -17,7 +17,7 @@ export interface ILogin {
 }
 
 export const axiosInst = axios.create({
-  baseURL: 'http://localhost:5002/'
+  baseURL: 'http://192.168.0.10:5002'
 });
 
 axiosInst.interceptors.request.use((config: any) => {
@@ -29,7 +29,7 @@ axiosInst.interceptors.request.use((config: any) => {
 });
 
 export const login = async (body: ILogin) => {
-  return axios.post('http://localhost:5002/api/users/login', body);
+  return axios.post('http://192.168.0.10:5002/api/users/login', body);
 };
 
 export const sendMessage = async (body: Omit<IMessage, '_id' | '_v' | 'createdAt'>) => {
