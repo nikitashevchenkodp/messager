@@ -6,13 +6,13 @@ import { ChatControlsContainer } from './styled';
 import Button from 'components/shared/Button';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { sendMessage } from 'services/apiService';
-import { chatAreaActions } from 'features/chat/redux/chatArea';
 
 const ChatControls = () => {
   const [val, setVal] = useState('');
   const activeChat = useAppSelector((state) => state.chats.activeChat);
   const { _id } = useAppSelector((state) => state.authentication.user);
-  const typingRef = useRef<any>();
+  const isTiping = useAppSelector((state) => state.userStatuses.onlineMap[_id]?.typing);
+  const typingRef = useRef<ReturnType<typeof setTimeout>>();
   const dispatch = useAppDispatch();
 
   const sendMesage = async (e: React.MouseEvent | React.KeyboardEvent) => {
@@ -41,12 +41,19 @@ const ChatControls = () => {
     if (typingRef.current) {
       clearInterval(typingRef.current);
     }
+
     typingRef.current = setTimeout(() => {
-      dispatch(chatAreaActions.typing(''));
-    }, 500);
-    dispatch(chatAreaActions.typing('typing'));
+      dispatch({ type: 'typing', payload: { userId: _id, typing: false } });
+    }, 1000);
+
+    if (isTiping) return;
+    dispatch({
+      type: 'typing',
+      payload: { userId: _id, typing: true }
+    });
   };
-  const handleKetDown = (e: React.KeyboardEvent) => {
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     sendMesage(e);
     handleTyping();
   };
@@ -60,7 +67,7 @@ const ChatControls = () => {
         label="Write a message..."
         value={val}
         onChange={(e) => setVal(e.target.value)}
-        onKeyDown={handleKetDown}
+        onKeyDown={handleKeyDown}
       />
       <Button>
         <EmojiIcon width="24px" height="24px" />

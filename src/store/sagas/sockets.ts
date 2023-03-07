@@ -1,3 +1,4 @@
+import { PayloadAction } from '@reduxjs/toolkit';
 import { chatAreaActions } from 'features/chat/redux/chatArea';
 import { EventChannel, eventChannel } from 'redux-saga';
 import {
@@ -16,13 +17,13 @@ import { io, Socket } from 'socket.io-client';
 import { RootState } from 'store';
 import { snackbarActions } from 'store/slices/snackbar';
 import { usersStatusesActions } from 'store/slices/usersStatuses';
-import { IMessage, OnlineUsers, TypingStatusObject } from 'types';
+import { IMessage, TypingStatusObject } from 'types';
 
 let socket;
 
 function* connect(): Generator<SelectEffect, Socket, string> {
   const userId = yield select((state: RootState) => state.authentication.user._id);
-  socket = io('http://localhost:5002', {
+  socket = io('http://192.168.0.10:5002', {
     reconnectionAttempts: 5,
     reconnectionDelay: 1000,
     query: {
@@ -38,12 +39,12 @@ function runSagaChanel(socket: Socket) {
       emit({ type: 'newMessage', payload: message });
     };
 
-    const onlineUsers = (data: OnlineUsers) => {
+    const online = (data: string[]) => {
       emit(usersStatusesActions.updateOnline(data));
     };
 
-    const typing = ({ status, userId }: TypingStatusObject) => {
-      emit(chatAreaActions.setTyping({ status, userId }));
+    const typing = ({ typing, userId }: TypingStatusObject) => {
+      emit(usersStatusesActions.setTypingStatus({ userId, typing }));
     };
 
     const reconnect = (attempt: number) => {
@@ -89,7 +90,7 @@ function runSagaChanel(socket: Socket) {
     };
 
     socket.on('recMsg', resieveMessage);
-    socket.on('onlineUsers', onlineUsers);
+    socket.on('online', online);
     socket.on('typing', typing);
     socket.io.on('reconnect', reconnect);
     socket.io.on('reconnect_error', reconnectError);
@@ -97,7 +98,7 @@ function runSagaChanel(socket: Socket) {
 
     return () => {
       socket.off('recMsg', resieveMessage);
-      socket.off('onlineUsers', onlineUsers);
+      socket.off('online', online);
       socket.off('typing', typing);
       socket.io.off('reconnect', reconnect);
       socket.io.off('reconnect_error', reconnectError);
@@ -134,12 +135,13 @@ function* sendMessage(socket: Socket) {
   }
 }
 
-function* typing(socket: Socket): Generator<TakeEffect | SelectEffect, void, { payload: string }> {
+function* typing(
+  socket: Socket
+): Generator<TakeEffect | SelectEffect, void, PayloadAction<{ userId: string; status: boolean }>> {
   while (true) {
-    const { payload } = yield take(chatAreaActions.typing.type);
-    const userId = yield select((state: RootState) => state.authentication.user._id);
+    const { payload } = yield take('typing');
     const chatId = yield select((state: RootState) => state.chats.activeChat?.chatId);
-    socket.emit('typing', { status: payload, userId, chatId });
+    socket.emit('typing', { ...payload, chatId });
   }
 }
 

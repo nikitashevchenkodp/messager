@@ -29,8 +29,6 @@ const ChatList = () => {
 
   const setupActiveChat = (id: string) => {
     const activeChat = chatList.filter((chat) => chat.chatId === id)[0];
-    console.log(activeChat);
-
     dispatch(chatsActions.setActiveChat(activeChat));
   };
 
@@ -53,7 +51,7 @@ const ChatList = () => {
                     <ChatListItem
                       chatItem={chatItem}
                       key={chatItem.chatId}
-                      active={chatItem.chatId === activeChat?.partnerId}
+                      active={chatItem.partnerId === activeChat?.partnerId}
                       onClick={() => setupActiveChat(chatItem.chatId)}
                       type={chatListState}
                     />
@@ -79,7 +77,7 @@ const ChatList = () => {
                   <ChatListItem
                     chatItem={chatItem}
                     key={chatItem.chatId}
-                    active={chatItem.chatId === activeChat?.partnerId}
+                    active={chatItem.partnerId === activeChat?.partnerId}
                     type="expanded"
                     onClick={() => {
                       setupActiveChat(chatItem.chatId);

@@ -20,12 +20,6 @@ export const snackbar = createSlice({
   name: 'shackbar',
   initialState,
   reducers: {
-    // addToDisplayed: (state, action: PayloadAction<string>) => {
-    //   state.displayed.push(action.payload);
-    // },
-    // removeFromDisplayed: (state, action: PayloadAction<string>) => {
-    //   state.displayed.filter((item) => item === action.payload);
-    // },
     enqueueSnackbar: (state, action: PayloadAction<any>) => {
       state.notifications = [...state.notifications, action.payload];
     },

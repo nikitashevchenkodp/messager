@@ -13,7 +13,7 @@ const MainLayout = () => {
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch({ type: 'CHANEL_ON' });
+    dispatch({ type: 'innit' });
   }, []);
 
   return (

@@ -26,6 +26,4 @@ export interface IChat {
   partnerId: string;
 }
 
-export type OnlineUsers = string[];
-
-export type TypingStatusObject = { userId: string; status: 'typing' | '' };
+export type TypingStatusObject = { userId: string; typing: boolean };
