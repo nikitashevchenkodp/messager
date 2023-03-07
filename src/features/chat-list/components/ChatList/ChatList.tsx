@@ -31,13 +31,7 @@ const ChatList = () => {
     const activeChat = chatList.filter((chat) => chat.chatId === id)[0];
     console.log(activeChat);
 
-    dispatch(
-      chatsActions.setActiveChat({
-        chatId: activeChat.chatId,
-        partnerFullName: activeChat.partnerFullName,
-        partnerId: activeChat.partnerId
-      })
-    );
+    dispatch(chatsActions.setActiveChat(activeChat));
   };
 
   return (

@@ -1,33 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-interface ChatInfo {
-  title: string;
-  lastMessage: {
-    messageMediaThumb?: string;
-    text: string;
-    time: string;
-  };
-  avatar: string;
-  chatId: number;
-}
-
-interface IMessage {
-  messageText: string;
-  createdAt: string;
-  from: string;
-}
-
-interface IChat {
-  chatId: string;
-  partnerFullName: string;
-  partnerId: string;
-  partnerAvatar: string;
-  lastMessage: IMessage;
-}
+import { IChat } from 'types';
 
 interface UIInitState {
   activeChat: IChat | null;
-  chats: Array<any>;
+  chats: Array<IChat>;
   isLoading: boolean;
   isError: boolean;
 }
@@ -49,7 +25,7 @@ export const chatsSlice = createSlice({
     setIsError: (state, action: PayloadAction<boolean>) => {
       state.isError = action.payload;
     },
-    setChats: (state, action: PayloadAction<ChatInfo[]>) => {
+    setChats: (state, action: PayloadAction<Array<IChat>>) => {
       state.chats = action.payload;
     },
     setActiveChat: (state, action: PayloadAction<any>) => {

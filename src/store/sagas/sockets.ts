@@ -1,8 +1,5 @@
-/* eslint-disable prefer-const */
-/* eslint-disable @typescript-eslint/no-empty-function */
-
 import { chatAreaActions } from 'features/chat/redux/chatArea';
-import { END, eventChannel } from 'redux-saga';
+import { EventChannel, eventChannel } from 'redux-saga';
 import {
   call,
   CallEffect,
@@ -19,6 +16,7 @@ import { io, Socket } from 'socket.io-client';
 import { RootState } from 'store';
 import { snackbarActions } from 'store/slices/snackbar';
 import { usersStatusesActions } from 'store/slices/usersStatuses';
+import { IMessage, OnlineUsers, TypingStatusObject } from 'types';
 
 let socket;
 
@@ -36,17 +34,19 @@ function* connect(): Generator<SelectEffect, Socket, string> {
 
 function runSagaChanel(socket: Socket) {
   return eventChannel((emit) => {
-    socket.on('recMsg', (message: any) => {
+    const resieveMessage = (message: IMessage) => {
       emit({ type: 'newMessage', payload: message });
-    });
-    socket.on('onlineUsers', (data: any) => {
-      emit(usersStatusesActions.updateOnline(data));
-    });
+    };
 
-    socket.on('typing', ({ status, userId }: any) => {
+    const onlineUsers = (data: OnlineUsers) => {
+      emit(usersStatusesActions.updateOnline(data));
+    };
+
+    const typing = ({ status, userId }: TypingStatusObject) => {
       emit(chatAreaActions.setTyping({ status, userId }));
-    });
-    socket.io.on('reconnect', (attempt: any) => {
+    };
+
+    const reconnect = (attempt: number) => {
       emit({
         type: snackbarActions.enqueueSnackbar.type,
         payload: {
@@ -58,13 +58,9 @@ function runSagaChanel(socket: Socket) {
           dismissed: false
         }
       });
-    });
+    };
 
-    socket.io.on('reconnect_attempt', (attempt: any) => {
-      console.info('Reconnection Attempt: ' + attempt);
-    });
-
-    socket.io.on('reconnect_error', (error: any) => {
+    const reconnectError = (error: Error) => {
       emit({
         type: snackbarActions.enqueueSnackbar.type,
         payload: {
@@ -76,9 +72,9 @@ function runSagaChanel(socket: Socket) {
           dismissed: false
         }
       });
-    });
+    };
 
-    socket.io.on('reconnect_failed', () => {
+    const reconnectFailed = () => {
       emit({
         type: snackbarActions.enqueueSnackbar.type,
         payload: {
@@ -90,16 +86,38 @@ function runSagaChanel(socket: Socket) {
           dismissed: false
         }
       });
-    });
+    };
 
-    return () => {};
+    socket.on('recMsg', resieveMessage);
+    socket.on('onlineUsers', onlineUsers);
+    socket.on('typing', typing);
+    socket.io.on('reconnect', reconnect);
+    socket.io.on('reconnect_error', reconnectError);
+    socket.io.on('reconnect_failed', reconnectFailed);
+
+    return () => {
+      socket.off('recMsg', resieveMessage);
+      socket.off('onlineUsers', onlineUsers);
+      socket.off('typing', typing);
+      socket.io.off('reconnect', reconnect);
+      socket.io.off('reconnect_error', reconnectError);
+      socket.io.off('reconnect_failed', reconnectFailed);
+    };
   });
 }
 
-function* runChanel(socket: Socket): Generator<CallEffect | TakeEffect | PutEffect, void, any> {
+function* runChanel(
+  socket: Socket
+): Generator<
+  CallEffect | TakeEffect | PutEffect,
+  void,
+  EventChannel<{ type: string; payload: any }> & any
+> {
   const channel = yield call(runSagaChanel, socket);
+
   try {
     while (true) {
+      // eslint-disable-next-line prefer-const
       let action = yield take(channel);
       yield put(action);
     }
@@ -109,7 +127,7 @@ function* runChanel(socket: Socket): Generator<CallEffect | TakeEffect | PutEffe
   }
 }
 
-function* write(socket: Socket) {
+function* sendMessage(socket: Socket) {
   while (true) {
     const { payload } = yield take('sendMessage');
     socket.emit('sendMessage', payload);
@@ -126,11 +144,11 @@ function* typing(socket: Socket): Generator<TakeEffect | SelectEffect, void, { p
 }
 
 function* runSocketEmmiters(socket: Socket) {
-  yield fork(write, socket);
+  yield fork(sendMessage, socket);
   yield fork(typing, socket);
 }
 
-export function* runIo(): Generator<TakeEffect | CallEffect | ForkEffect, void, any> {
+export function* IOSaga(): Generator<TakeEffect | CallEffect | ForkEffect, void, Socket> {
   try {
     yield take('CHANEL_ON');
     const socket = yield call(connect);

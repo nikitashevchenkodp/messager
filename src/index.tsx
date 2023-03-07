@@ -8,21 +8,21 @@ import { persistor, store } from 'store';
 import { PersistGate } from 'redux-persist/integration/react';
 import { SnackbarProvider } from 'notistack';
 import swDEV from './swDev';
-import MessageNotification from 'components/MessageNotification';
 import Button from 'components/shared/Button';
 import { snackbarActions } from 'store/slices/snackbar';
+import NetworkChecker from 'components/NetworkChecker';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate persistor={persistor}>
+        <NetworkChecker />
         <SnackbarProvider
           // Components={{
           //   reportComplete: MessageNotification
           // }}
           anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-          style={{ minWidth: '0' }}
           action={(key) => (
             <Button
               style={{ color: '#fff' }}
