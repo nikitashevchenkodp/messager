@@ -19,10 +19,12 @@ export const ModalWindow = styled.div<{ active: boolean }>`
 export const ModalWindowContent = styled.div<{ active: boolean }>`
   max-width: 90%;
   margin: 0 auto;
-  background-color: #fff;
   z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  transform: ${(props) => (props.active ? 'scale(1)' : 'scale(0.5)')};
+  transform: ${(props) => (props.active ? 'none' : 'translateX(50%)')};
   transition: 0.2s;
   color: black;
 `;
