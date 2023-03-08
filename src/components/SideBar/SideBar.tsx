@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import Avatar from 'components/Avatar';
 import Divider from 'components/Divider';
 import { useAppSelector } from 'store/hooks';
@@ -14,6 +14,7 @@ import {
   UserFullname
 } from './styled';
 import { InsertEmoticonSharp } from '@mui/icons-material';
+import Modal from 'components/Modal';
 
 interface IMenuItem {
   Icon: ReactElement;
@@ -34,13 +35,17 @@ const menuItems: IMenuItem[] = [
   }
 ];
 
-const SideBar = () => {
+const SideBar = ({ openMenuItem }: any) => {
   const user = useAppSelector((state) => state.authentication.user);
 
   const items = menuItems.map((menuItem) => {
     const { Icon, iconContainerColor, title } = menuItem;
     return (
-      <MenuItem key={title}>
+      <MenuItem
+        key={title}
+        onClick={() => {
+          openMenuItem();
+        }}>
         <MenuIcon color={iconContainerColor}>{Icon}</MenuIcon>
         <MenuItemTitle>{title}</MenuItemTitle>
       </MenuItem>

@@ -12,12 +12,15 @@ import { FoldersContainer } from './styled';
 
 import Drawer from 'components/Drawer';
 import SideBar from 'components/SideBar';
+import Modal from 'components/Modal';
+import Contacts from 'components/Contacts';
 
 const Folders = () => {
   const dispatch = useDispatch();
   const folders = useAppSelector((state) => state.folders.folders);
   const activeFolder = useAppSelector((state) => state.folders.activeFolder);
   const [isOpen, setIsOpen] = useState(false);
+  const [isActive, setIsActive] = useState(false);
 
   const clickHandler = (e: React.MouseEvent<HTMLButtonElement>, folderName: string) => {
     e.stopPropagation();
@@ -75,8 +78,16 @@ const Folders = () => {
         {foldersTabs}
       </FoldersContainer>
       <Drawer open={isOpen} onClose={() => setIsOpen(false)}>
-        <SideBar />
+        <SideBar
+          openMenuItem={() => {
+            setIsActive(true);
+            setIsOpen(false);
+          }}
+        />
       </Drawer>
+      <Modal active={isActive} onClose={() => setIsActive(false)}>
+        <Contacts />
+      </Modal>
     </>
   );
 };
