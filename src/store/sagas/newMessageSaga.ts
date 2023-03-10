@@ -14,9 +14,10 @@ export function* newMessage(): Generator<
     const message = yield take('newMessage');
     console.log('addMessage', message);
 
-    const currentChatId = yield select((state: RootState) => state.chats.activeChat?.chatId);
+    const currenUserId = yield select((state: RootState) => state.chats.activeUser?.id);
+    const userId = yield select((state: RootState) => state.authentication.user._id);
 
-    if (message.payload.chatId === currentChatId) {
+    if (message.payload.from === currenUserId || message.payload.from === userId) {
       yield put(chatAreaActions.newMessage(message.payload));
     } else {
       yield put(

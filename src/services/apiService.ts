@@ -32,7 +32,7 @@ export const login = async (body: ILogin) => {
   return axios.post('http://192.168.0.10:5002/api/users/login', body);
 };
 
-export const sendMessage = async (body: Omit<IMessage, '_id' | '_v' | 'createdAt'>) => {
+export const sendMessage = async (body: Omit<IMessage, '_id' | '_v' | 'createdAt' | 'chatId'>) => {
   return axiosInst.post('/api/messages/send', body);
 };
 
@@ -40,7 +40,7 @@ export const getChatList = async () => {
   return axiosInst.get('/api/chats');
 };
 
-export const getChatMessages = async (chatId: string) => {
+export const getChatMessages = async (chatId = '') => {
   return axiosInst.get(`/api/chats/${chatId}`);
 };
 export const getAllUsers = async () => {

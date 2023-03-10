@@ -140,8 +140,8 @@ function* typing(
 ): Generator<TakeEffect | SelectEffect, void, PayloadAction<{ userId: string; status: boolean }>> {
   while (true) {
     const { payload } = yield take('typing');
-    const chatId = yield select((state: RootState) => state.chats.activeChat?.chatId);
-    socket.emit('typing', { ...payload, chatId });
+    const userId = yield select((state: RootState) => state.chats.activeUser?.id);
+    socket.emit('typing', { ...payload, userId });
   }
 }
 

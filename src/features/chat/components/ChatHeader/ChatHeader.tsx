@@ -4,13 +4,11 @@ import { ChatActions, ChatExtraInfo, ChatHeaderInner, ChatHeaderStyled, ChatTitl
 import { useAppSelector } from 'store/hooks';
 
 const ChatHeader = () => {
-  const activeChat = useAppSelector((state) => state.chats.activeChat);
+  const activeUser = useAppSelector((state) => state.chats.activeUser);
   const typing = useAppSelector(
-    (state) => state.userStatuses.onlineMap[activeChat?.partnerId || '']?.typing
+    (state) => state.userStatuses.onlineMap[activeUser?.id || '']?.typing
   );
-  const online = useAppSelector(
-    (state) => state.userStatuses.onlineMap[activeChat?.partnerId || '']
-  );
+  const online = useAppSelector((state) => state.userStatuses.onlineMap[activeUser?.id || '']);
 
   return (
     <ChatHeaderStyled>
@@ -22,7 +20,7 @@ const ChatHeader = () => {
             justifyContent: 'space-between',
             height: '100%'
           }}>
-          <ChatTitle>{activeChat?.partnerFullName}</ChatTitle>
+          <ChatTitle>{activeUser?.fullName}</ChatTitle>
           <ChatExtraInfo>
             {online ? (
               typing ? (

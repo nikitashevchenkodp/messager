@@ -1,15 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IChat } from 'types';
 
+interface IUser {
+  id: string;
+  fullName: string;
+}
+
 interface UIInitState {
-  activeChat: IChat | null;
+  activeUser: IUser | null;
   chats: Array<IChat>;
   isLoading: boolean;
   isError: boolean;
 }
 
 const initialState: UIInitState = {
-  activeChat: null,
+  activeUser: null,
   chats: [],
   isLoading: false,
   isError: false
@@ -28,9 +33,9 @@ export const chatsSlice = createSlice({
     setChats: (state, action: PayloadAction<Array<IChat>>) => {
       state.chats = action.payload;
     },
-    setActiveChat: (state, action: PayloadAction<any>) => {
+    setActiveUser: (state, action: PayloadAction<any>) => {
       console.log(action.payload);
-      state.activeChat = action.payload;
+      state.activeUser = action.payload;
     }
   }
 });

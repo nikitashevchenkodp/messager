@@ -20,7 +20,7 @@ const ChatList = () => {
   const isHideChatList = useAppSelector((state) => state.ui.isHideChatList);
   const chatListState = useAppSelector((state) => state.ui.chatListState);
   const chatList = useAppSelector((state) => state.chats.chats);
-  const activeChat = useAppSelector((state) => state.chats.activeChat);
+  const activeUser = useAppSelector((state) => state.chats.activeUser);
   const [val, setVal] = useState('');
 
   const handleClick = () => {
@@ -29,7 +29,8 @@ const ChatList = () => {
 
   const setupActiveChat = (id: string) => {
     const activeChat = chatList.filter((chat) => chat.chatId === id)[0];
-    dispatch(chatsActions.setActiveChat(activeChat));
+    const activeUser = { id: activeChat.partnerId, fullName: activeChat.partnerFullName };
+    dispatch(chatsActions.setActiveUser(activeUser));
   };
 
   return (
@@ -51,7 +52,7 @@ const ChatList = () => {
                     <ChatListItem
                       chatItem={chatItem}
                       key={chatItem.chatId}
-                      active={chatItem.partnerId === activeChat?.partnerId}
+                      active={chatItem.partnerId === activeUser?.id}
                       onClick={() => setupActiveChat(chatItem.chatId)}
                       type={chatListState}
                     />
@@ -77,7 +78,7 @@ const ChatList = () => {
                   <ChatListItem
                     chatItem={chatItem}
                     key={chatItem.chatId}
-                    active={chatItem.partnerId === activeChat?.partnerId}
+                    active={chatItem.partnerId === activeUser?.id}
                     type="expanded"
                     onClick={() => {
                       setupActiveChat(chatItem.chatId);
