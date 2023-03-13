@@ -86,7 +86,7 @@ const Folders = () => {
         />
       </Drawer>
       <Modal active={isActive} onClose={() => setIsActive(false)}>
-        <Contacts />
+        <Contacts onClose={() => setIsActive(false)} />
       </Modal>
     </>
   );

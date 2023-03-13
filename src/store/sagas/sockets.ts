@@ -18,12 +18,14 @@ import { RootState } from 'store';
 import { snackbarActions } from 'store/slices/snackbar';
 import { usersStatusesActions } from 'store/slices/usersStatuses';
 import { IMessage, TypingStatusObject } from 'types';
+import { serverLink } from 'consts/externalLinks';
+import { chatsActions } from 'features/chat-list';
 
 let socket;
 
 function* connect(): Generator<SelectEffect, Socket, string> {
   const userId = yield select((state: RootState) => state.authentication.user._id);
-  socket = io('http://192.168.0.10:5002', {
+  socket = io(serverLink, {
     reconnectionAttempts: 5,
     reconnectionDelay: 1000,
     query: {
@@ -48,6 +50,7 @@ function runSagaChanel(socket: Socket) {
     };
 
     const reconnect = (attempt: number) => {
+      emit({ type: 'GET_CHATLIST' });
       emit({
         type: snackbarActions.enqueueSnackbar.type,
         payload: {
@@ -135,13 +138,14 @@ function* sendMessage(socket: Socket) {
   }
 }
 
-function* typing(
-  socket: Socket
-): Generator<TakeEffect | SelectEffect, void, PayloadAction<{ userId: string; status: boolean }>> {
+function* typing(socket: Socket): Generator<TakeEffect | SelectEffect, void, any> {
   while (true) {
     const { payload } = yield take('typing');
-    const userId = yield select((state: RootState) => state.chats.activeUser?.id);
-    socket.emit('typing', { ...payload, userId });
+    const user = yield select((state: RootState) => state.chats.activeUser?.id);
+    const chatId = yield select(
+      (state: RootState) => state.chats.chats.find((chat) => chat.partnerId === user)?.chatId
+    );
+    socket.emit('typing', { ...payload, chatId });
   }
 }
 

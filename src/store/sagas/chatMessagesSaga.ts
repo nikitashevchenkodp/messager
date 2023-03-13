@@ -28,6 +28,7 @@ export function* chatMessagesSaga(): Generator<
         (state: RootState) =>
           state.chats.chats.find((chat) => chat.partnerId === action.payload.id)?.chatId
       );
+      if (!chatId) return;
       const res = yield call(getChatMessages, chatId);
       console.log(res);
 

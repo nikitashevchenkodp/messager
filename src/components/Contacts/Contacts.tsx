@@ -8,6 +8,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import Divider from 'components/Divider';
 import { getAllUsers } from 'services/apiService';
 import Avatar from 'components/Avatar';
+import { useAppDispatch } from 'store/hooks';
+import { chatsActions } from 'features/chat-list';
 
 const ContactsContainer = styled.div`
   width: 400px;
@@ -71,9 +73,10 @@ const UserMeta = styled.p`
   font-size: 15px;
 `;
 
-const Contacts = () => {
+const Contacts = ({ onClose }: any) => {
   const [serachQuery, setSearchQuery] = useState('');
   const [users, setUsers] = useState<any>([]);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     getAllUsers()
@@ -119,7 +122,12 @@ const Contacts = () => {
         <List>
           {users.map((user: any) => {
             return (
-              <UserListItem key={user._id}>
+              <UserListItem
+                key={user._id}
+                onClick={() => {
+                  dispatch(chatsActions.setActiveUser({ id: user._id, fullName: user.fullName }));
+                  onClose();
+                }}>
                 <Avatar src={user.avatar} fullName={user.fullName} />
                 <UserInfo>
                   <UserName>{user.fullName}</UserName>

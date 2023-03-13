@@ -30,7 +30,7 @@ const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
   const parseDate = (date: string) => {
     return new Date(date).toTimeString().slice(0, 5);
   };
-  console.log(active);
+  console.log('render', chatItem.partnerFullName);
 
   return (
     <ChatListItemContainer isActive={active} onClick={onClick}>

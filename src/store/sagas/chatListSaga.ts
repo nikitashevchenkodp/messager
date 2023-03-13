@@ -15,6 +15,8 @@ export function* getChatListSaga(): Generator<
 > {
   try {
     const res = yield call(getChatList);
+    console.log(res);
+
     yield put(chatsActions.setChats(res.data));
   } catch (error) {
     console.log(error);
@@ -27,7 +29,11 @@ export function* chatListSaga(): Generator<
   AxiosResponse<Array<IChat>>
 > {
   while (true) {
-    yield take([chatAreaActions.newMessage.type, authenticationActions.loginUser.type]);
+    yield take([
+      chatAreaActions.newMessage.type,
+      authenticationActions.loginUser.type,
+      'GET_CHATLIST'
+    ]);
     yield call(getChatListSaga);
   }
 }
