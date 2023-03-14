@@ -5,8 +5,8 @@ import Message from '../Message/Message';
 import { ChatAreaStyled } from './styled';
 
 const ChatArea = () => {
-  const activeChat = useAppSelector((state) => state.chats.activeChat);
-  const messages = useAppSelector((state) => state.chatArea.messages);
+  const activeChatId = useAppSelector((state) => state.entities.active.activeChat?.chatId);
+  const messages = useAppSelector((state) => state.entities.chat.messages[activeChatId || '']);
   const scrollRef = useScrollToBottom(messages);
 
   return (

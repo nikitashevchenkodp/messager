@@ -2,31 +2,41 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import persistStore from 'redux-persist/es/persistStore';
 import persistReducer from 'redux-persist/lib/persistReducer';
 import storage from 'redux-persist/lib/storage';
-import { chatsReducer } from 'features/chat-list';
 import { foldersReducer } from 'features/folders';
 import createSagaMiddleware from 'redux-saga';
 
-import { uiReducer } from './slices/UI';
-import { chatAreaReducer } from 'features/chat/redux/chatArea';
-import { authenticationReducer } from './slices/authentication';
+import { uiSettingsReducer } from './slices/UI';
+import { chatReducer } from 'features/chat/redux/chat';
+import { authenticationReducer as authentication } from './slices/authentication';
 import { rootSaga } from './sagas';
-import { usersStatusesReducer } from './slices/usersStatuses';
+import { onlineReducer as online } from './slices/usersStatuses';
 import { snackbarReducer } from './slices/snackbar';
+import { chatListReducer } from 'features/chat-list';
+import { activeEntitiesReducer } from './slices/activeEntities';
+
+const ui = combineReducers({
+  uiSettings: uiSettingsReducer,
+  snackbar: snackbarReducer
+});
+
+const entities = combineReducers({
+  folders: foldersReducer,
+  chatList: chatListReducer,
+  chat: chatReducer,
+  active: activeEntitiesReducer
+});
 
 const rootReducer = combineReducers({
-  ui: uiReducer,
-  folders: foldersReducer,
-  chats: chatsReducer,
-  chatArea: chatAreaReducer,
-  authentication: authenticationReducer,
-  userStatuses: usersStatusesReducer,
-  snackbar: snackbarReducer
+  ui,
+  entities,
+  authentication,
+  online
 });
 
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['snackbar', 'chatArea', 'userStatuses', 'chats']
+  blacklist: ['entities', 'online', 'ui']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

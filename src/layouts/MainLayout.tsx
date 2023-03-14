@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { MainContainer, MainLayoutStyled } from './styled';
 
 const MainLayout = () => {
-  const isHideChatList = useAppSelector((state) => state.ui.isHideChatList);
+  const isHideChatList = useAppSelector((state) => state.ui.uiSettings.isHideChatList);
   useNotifier();
 
   const dispatch = useAppDispatch();

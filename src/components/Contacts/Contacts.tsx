@@ -2,12 +2,13 @@ import Button from 'components/shared/Button';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SortByAlphaIcon from '@mui/icons-material/SortByAlpha';
-import { Input } from 'components/Input/styled';
 import SearchInput from 'components/Input/Input';
 import SearchIcon from '@mui/icons-material/Search';
 import Divider from 'components/Divider';
 import { getAllUsers } from 'services/apiService';
 import Avatar from 'components/Avatar';
+import { useAppDispatch } from 'store/hooks';
+import { activeEntitiesActions } from 'store/slices/activeEntities';
 
 const ContactsContainer = styled.div`
   width: 400px;
@@ -71,9 +72,17 @@ const UserMeta = styled.p`
   font-size: 15px;
 `;
 
-const Contacts = () => {
+interface IContactItem {
+  id: string;
+  fullName: string;
+  avatar: string;
+  chatId: string;
+}
+
+const Contacts = ({ onClose }: any) => {
   const [serachQuery, setSearchQuery] = useState('');
-  const [users, setUsers] = useState<any>([]);
+  const [users, setUsers] = useState<IContactItem[]>([]);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     getAllUsers()
@@ -117,12 +126,22 @@ const Contacts = () => {
       <Divider />
       <ContactsBody>
         <List>
-          {users.map((user: any) => {
+          {users.map((item) => {
             return (
-              <UserListItem key={user._id}>
-                <Avatar src={user.avatar} fullName={user.fullName} />
+              <UserListItem
+                key={item.id}
+                onClick={() => {
+                  dispatch(
+                    activeEntitiesActions.setActiveChat({
+                      chatId: item.chatId,
+                      user: { id: item.id, fullName: item.fullName, avatar: item.avatar }
+                    })
+                  );
+                  onClose();
+                }}>
+                <Avatar src={item.avatar} fullName={item.fullName} />
                 <UserInfo>
-                  <UserName>{user.fullName}</UserName>
+                  <UserName>{item.fullName}</UserName>
                   <UserMeta>last seen 4 hours ago</UserMeta>
                 </UserInfo>
               </UserListItem>

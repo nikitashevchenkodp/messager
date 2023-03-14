@@ -6,25 +6,23 @@ interface Folder {
 }
 
 interface UIInitState {
-  folders: Array<Folder>;
+  items: Array<Folder>;
   isLoading: boolean;
   isError: boolean;
-  activeFolder: string;
 }
 
-const folders = [
+const foldersMock = [
   { name: 'Bots', unreadedNotifications: 0 },
   { name: 'Others', unreadedNotifications: 2 }
 ];
 
 const initialState: UIInitState = {
-  folders: [],
+  items: [],
   isLoading: false,
-  isError: false,
-  activeFolder: 'All chats'
+  isError: false
 };
 
-export const foldersSlice = createSlice({
+export const folders = createSlice({
   name: 'folders',
   initialState,
   reducers: {
@@ -35,15 +33,12 @@ export const foldersSlice = createSlice({
       state.isError = action.payload;
     },
     setFolders: (state, action: PayloadAction<Folder[]>) => {
-      state.folders = action.payload.map((item) => {
+      state.items = action.payload.map((item) => {
         return { ...item, active: false };
       });
-    },
-    setActiveFolder: (state, action: PayloadAction<string>) => {
-      state.activeFolder = action.payload;
     }
   }
 });
 
-export const foldersReducer = foldersSlice.reducer;
-export const foldersActions = foldersSlice.actions;
+export const foldersReducer = folders.reducer;
+export const foldersActions = folders.actions;

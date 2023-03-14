@@ -1,4 +1,4 @@
 import ChatList from './components/ChatList/ChatList';
-import { chatsActions, chatsReducer } from './redux/chats';
+import { chatListActions, chatListReducer } from './redux/chats';
 
-export { chatsActions, ChatList, chatsReducer };
+export { chatListActions, ChatList, chatListReducer };

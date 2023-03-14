@@ -7,7 +7,7 @@ import ChatHeader from '../ChatHeader/ChatHeader';
 import { ChatStyled, NoActveChats, SelectChat } from './styled';
 
 const Chat = () => {
-  const activeChat = useAppSelector((state) => state.chats.activeChat);
+  const activeChat = useAppSelector((state) => state.entities.active.activeChat);
 
   return (
     <ChatStyled>

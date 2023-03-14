@@ -1,10 +1,11 @@
 import { SearchIcon } from 'components/icons';
 import ResizableContainer from 'components/ResizableContainer';
 import { CHAT_LIST_MIN_WIDTH } from 'consts';
-import { chatsActions } from 'features/chat-list/redux/chats';
 import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { uiActions } from 'store/slices/UI';
+import { activeEntitiesActions } from 'store/slices/activeEntities';
+import { uiSettingsActions } from 'store/slices/UI';
+import { IChat } from 'types';
 import ChatListItem from '../ChatListItem/ChatListItem';
 import SearchInput from '../SearchInput/SearchInput';
 import {
@@ -17,19 +18,24 @@ import {
 
 const ChatList = () => {
   const dispatch = useAppDispatch();
-  const isHideChatList = useAppSelector((state) => state.ui.isHideChatList);
-  const chatListState = useAppSelector((state) => state.ui.chatListState);
-  const chatList = useAppSelector((state) => state.chats.chats);
-  const activeChat = useAppSelector((state) => state.chats.activeChat);
+  const isHideChatList = useAppSelector((state) => state.ui.uiSettings.isHideChatList);
+  const chatListState = useAppSelector((state) => state.ui.uiSettings.chatListState);
+  const chatList = useAppSelector((state) => state.entities.chatList.items);
+  const activeChat = useAppSelector((state) => state.entities.active.activeChat);
   const [val, setVal] = useState('');
 
   const handleClick = () => {
-    dispatch(uiActions.setChatListWidth(CHAT_LIST_MIN_WIDTH));
+    dispatch(uiSettingsActions.setChatListWidth(CHAT_LIST_MIN_WIDTH));
   };
 
-  const setupActiveChat = (id: string) => {
-    const activeChat = chatList.filter((chat) => chat.chatId === id)[0];
-    dispatch(chatsActions.setActiveChat(activeChat));
+  const setupActiveChat = (chatItem: IChat) => {
+    const { chatId, user } = chatItem;
+    dispatch(
+      activeEntitiesActions.setActiveChat({
+        chatId,
+        user
+      })
+    );
   };
 
   return (
@@ -51,8 +57,8 @@ const ChatList = () => {
                     <ChatListItem
                       chatItem={chatItem}
                       key={chatItem.chatId}
-                      active={chatItem.partnerId === activeChat?.partnerId}
-                      onClick={() => setupActiveChat(chatItem.chatId)}
+                      active={chatItem.chatId === activeChat?.chatId}
+                      onClick={() => setupActiveChat(chatItem)}
                       type={chatListState}
                     />
                   );
@@ -77,11 +83,11 @@ const ChatList = () => {
                   <ChatListItem
                     chatItem={chatItem}
                     key={chatItem.chatId}
-                    active={chatItem.partnerId === activeChat?.partnerId}
+                    active={chatItem.chatId === activeChat?.chatId}
                     type="expanded"
                     onClick={() => {
-                      setupActiveChat(chatItem.chatId);
-                      dispatch(uiActions.hideChatList());
+                      setupActiveChat(chatItem);
+                      dispatch(uiSettingsActions.hideChatList());
                     }}
                   />
                 );

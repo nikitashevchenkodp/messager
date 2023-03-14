@@ -6,7 +6,7 @@ import { snackbarActions } from 'store/slices/snackbar';
 
 const useNotifier = () => {
   const dispatch = useDispatch();
-  const notifications = useAppSelector((store) => store.snackbar.notifications || []);
+  const notifications = useAppSelector((store) => store.ui.snackbar.notifications || []);
   const [displayed, setDisplayed] = useState([] as string[]);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
