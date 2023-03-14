@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
+import { uiSettingsActions } from 'store/slices/UI';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { uiActions } from '../../store/slices/UI';
 import './Resizer.scss';
 
 interface ResizerProps {
@@ -10,7 +10,7 @@ interface ResizerProps {
 }
 
 const Resizer: FC<ResizerProps> = ({ minWidth, edgeCaseWidth = 0, delayInPixels = 0 }) => {
-  const chatListState = useAppSelector((state) => state.ui.chatListState);
+  const chatListState = useAppSelector((state) => state.ui.uiSettings.chatListState);
   const resizableElem = useRef<ChildNode | null>(null);
   const resizerRef = useRef<HTMLElement | null>(null);
   const root = useRef<HTMLElement | null>(document.querySelector('#root'));
@@ -36,7 +36,7 @@ const Resizer: FC<ResizerProps> = ({ minWidth, edgeCaseWidth = 0, delayInPixels 
 
   const handleMouseUp = () => {
     dispatch(
-      uiActions.setChatListWidth(
+      uiSettingsActions.setChatListWidth(
         parseInt(window.getComputedStyle(resizableElem.current as HTMLElement).width)
       )
     );
@@ -71,7 +71,7 @@ const Resizer: FC<ResizerProps> = ({ minWidth, edgeCaseWidth = 0, delayInPixels 
     const onMouseUp = () => {
       if (resizableElem.current) {
         dispatch(
-          uiActions.setChatListWidth(
+          uiSettingsActions.setChatListWidth(
             parseInt(window.getComputedStyle(resizableElem.current as HTMLElement).width)
           )
         );

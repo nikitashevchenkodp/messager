@@ -1,9 +1,7 @@
-import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { AllChats, Folder } from 'components/icons';
-import { foldersActions } from 'features/folders/redux/folders';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from 'store/hooks';
-import { uiActions } from 'store/slices/UI';
 import Burger from '../Burger';
 import BurgerButton from '../BurgerButton';
 import TabsButton from '../TabsButton';
@@ -14,18 +12,20 @@ import Drawer from 'components/Drawer';
 import SideBar from 'components/SideBar';
 import Modal from 'components/Modal';
 import Contacts from 'components/Contacts';
+import { activeEntitiesActions } from 'store/slices/activeEntities';
+import { uiSettingsActions } from 'store/slices/UI';
 
 const Folders = () => {
   const dispatch = useDispatch();
-  const folders = useAppSelector((state) => state.folders.folders);
-  const activeFolder = useAppSelector((state) => state.folders.activeFolder);
+  const folders = useAppSelector((state) => state.entities.folders.items);
+  const activeFolder = useAppSelector((state) => state.entities.active.activeFolder);
   const [isOpen, setIsOpen] = useState(false);
   const [isActive, setIsActive] = useState(false);
 
   const clickHandler = (e: React.MouseEvent<HTMLButtonElement>, folderName: string) => {
     e.stopPropagation();
-    dispatch(foldersActions.setActiveFolder(folderName));
-    dispatch(uiActions.showChatList());
+    dispatch(activeEntitiesActions.setActiveFolder(folderName));
+    dispatch(uiSettingsActions.showChatList());
   };
 
   const foldersTabs = useMemo(() => {

@@ -1,5 +1,3 @@
-import { PayloadAction } from '@reduxjs/toolkit';
-import { chatAreaActions } from 'features/chat/redux/chatArea';
 import { EventChannel, eventChannel } from 'redux-saga';
 import {
   call,
@@ -16,10 +14,10 @@ import {
 import { io, Socket } from 'socket.io-client';
 import { RootState } from 'store';
 import { snackbarActions } from 'store/slices/snackbar';
-import { usersStatusesActions } from 'store/slices/usersStatuses';
 import { IMessage, TypingStatusObject } from 'types';
 import { serverLink } from 'consts/externalLinks';
-import { chatsActions } from 'features/chat-list';
+import { onlineActions } from 'store/slices/usersStatuses';
+import { activeEntitiesActions } from 'store/slices/activeEntities';
 
 let socket;
 
@@ -41,12 +39,19 @@ function runSagaChanel(socket: Socket) {
       emit({ type: 'newMessage', payload: message });
     };
 
+    const messageFromNewContact = () => {
+      emit({ type: 'GET_CHATLIST' });
+    };
+    const newChatCreated = (chatId: string) => {
+      emit({ type: activeEntitiesActions.newChatCreated.type, payload: chatId });
+    };
+
     const online = (data: string[]) => {
-      emit(usersStatusesActions.updateOnline(data));
+      emit(onlineActions.updateOnline(data));
     };
 
     const typing = ({ typing, userId }: TypingStatusObject) => {
-      emit(usersStatusesActions.setTypingStatus({ userId, typing }));
+      emit(onlineActions.setTypingStatus({ userId, typing }));
     };
 
     const reconnect = (attempt: number) => {
@@ -93,6 +98,8 @@ function runSagaChanel(socket: Socket) {
     };
 
     socket.on('recMsg', resieveMessage);
+    socket.on('messageFromNewContact', messageFromNewContact);
+    socket.on('newChatCreated', newChatCreated);
     socket.on('online', online);
     socket.on('typing', typing);
     socket.io.on('reconnect', reconnect);
@@ -141,10 +148,7 @@ function* sendMessage(socket: Socket) {
 function* typing(socket: Socket): Generator<TakeEffect | SelectEffect, void, any> {
   while (true) {
     const { payload } = yield take('typing');
-    const user = yield select((state: RootState) => state.chats.activeUser?.id);
-    const chatId = yield select(
-      (state: RootState) => state.chats.chats.find((chat) => chat.partnerId === user)?.chatId
-    );
+    const chatId = yield select((state: RootState) => state.entities.active.activeChat?.chatId);
     socket.emit('typing', { ...payload, chatId });
   }
 }

@@ -1,5 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { chatAreaActions } from 'features/chat/redux/chatArea';
+import { chatActions } from 'features/chat';
 import { put, PutEffect, select, SelectEffect, take, TakeEffect } from 'redux-saga/effects';
 import { RootState } from 'store';
 import { snackbarActions } from 'store/slices/snackbar';
@@ -12,24 +12,16 @@ export function* newMessage(): Generator<
 > {
   while (true) {
     const message = yield take('newMessage');
-    console.log('addMessage', message);
-
-    const currenUserId = yield select((state: RootState) => state.chats.activeUser?.id);
-    const userId = yield select((state: RootState) => state.authentication.user._id);
-
-    if (message.payload.from === currenUserId || message.payload.from === userId) {
-      yield put(chatAreaActions.newMessage(message.payload));
-    } else {
-      yield put(
-        snackbarActions.enqueueSnackbar({
-          message: 'You recieved a new message',
-          options: {
-            key: new Date().getTime() + Math.random(),
-            variant: 'success'
-          },
-          dismissed: false
-        })
-      );
-    }
+    yield put(chatActions.newMessage(message.payload));
+    // yield put(
+    //   snackbarActions.enqueueSnackbar({
+    //     message: 'You recieved a new message',
+    //     options: {
+    //       key: new Date().getTime() + Math.random(),
+    //       variant: 'success'
+    //     },
+    //     dismissed: false
+    //   })
+    // );
   }
 }

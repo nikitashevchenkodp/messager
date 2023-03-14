@@ -21,9 +21,11 @@ export type MessageShort = Pick<IMessage, 'messageText' | 'createdAt' | 'from' |
 export interface IChat {
   chatId: string;
   lastMessage: MessageShort;
-  partnerAvatar: string;
-  partnerFullName: string;
-  partnerId: string;
+  user: {
+    avatar: string;
+    fullName: string;
+    id: string;
+  };
 }
 
 export type TypingStatusObject = { userId: string; typing: boolean };

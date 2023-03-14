@@ -15,7 +15,7 @@ const initialState: UIInitState = {
   chatListWidth: CHAT_LIST_MIN_WIDTH
 };
 
-export const UISlice = createSlice({
+export const uiSettings = createSlice({
   name: 'UI',
   initialState,
   reducers: {
@@ -47,5 +47,5 @@ export const UISlice = createSlice({
   }
 });
 
-export const uiReducer = UISlice.reducer;
-export const uiActions = UISlice.actions;
+export const uiSettingsReducer = uiSettings.reducer;
+export const uiSettingsActions = uiSettings.actions;

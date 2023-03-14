@@ -1,4 +1,4 @@
-import React, { FC, forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef } from 'react';
 import {
   MessageAuthor,
   MessageContainer,

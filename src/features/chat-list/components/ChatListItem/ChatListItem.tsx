@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { useAppSelector } from 'store/hooks';
 import { IChat } from 'types';
+import { parseDate } from 'utils';
 import {
   Avatar,
   AvatarContainer,
@@ -22,20 +23,14 @@ interface ChatListItemProps {
 }
 
 const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
-  const chatListState = useAppSelector((state) => state.ui.chatListState);
-  const online = useAppSelector((state) => state.userStatuses.onlineMap[chatItem.partnerId]);
-  const typing = useAppSelector(
-    (state) => state.userStatuses.onlineMap[chatItem.partnerId]?.typing
-  );
-  const parseDate = (date: string) => {
-    return new Date(date).toTimeString().slice(0, 5);
-  };
-  console.log('render', chatItem.partnerFullName);
+  const chatListState = useAppSelector((state) => state.ui.uiSettings.chatListState);
+  const online = useAppSelector((state) => state.online.users[chatItem.user.id]);
+  console.log('render', chatItem.user.fullName);
 
   return (
     <ChatListItemContainer isActive={active} onClick={onClick}>
       <AvatarContainer>
-        <Avatar src={chatItem?.partnerAvatar} />
+        <Avatar src={chatItem?.user.avatar} />
         <NetworkStatus online={Boolean(online)} />
       </AvatarContainer>
       <ChatListItemInfoContainer>
@@ -45,11 +40,11 @@ const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
             justifyContent: 'space-between',
             width: '100%'
           }}>
-          <Title>{chatItem?.partnerFullName}</Title>
+          <Title>{chatItem?.user.fullName}</Title>
         </div>
         <ExtraInformation>
           <LastMessage>
-            {typing ? (
+            {online?.typing ? (
               <span style={{ color: 'blue' }}>Typing...</span>
             ) : (
               <>{chatItem?.lastMessage?.messageText}</>

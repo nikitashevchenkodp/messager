@@ -1,26 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IChat } from 'types';
 
-interface IUser {
-  id: string;
-  fullName: string;
-}
-
 interface UIInitState {
-  activeUser: IUser | null;
-  chats: Array<IChat>;
+  items: Array<IChat>;
   isLoading: boolean;
   isError: boolean;
 }
 
 const initialState: UIInitState = {
-  activeUser: null,
-  chats: [],
+  items: [],
   isLoading: false,
   isError: false
 };
 
-export const chatsSlice = createSlice({
+export const chatList = createSlice({
   name: 'chats',
   initialState,
   reducers: {
@@ -31,14 +24,10 @@ export const chatsSlice = createSlice({
       state.isError = action.payload;
     },
     setChats: (state, action: PayloadAction<Array<IChat>>) => {
-      state.chats = action.payload;
-    },
-    setActiveUser: (state, action: PayloadAction<any>) => {
-      console.log(action.payload);
-      state.activeUser = action.payload;
+      state.items = action.payload;
     }
   }
 });
 
-export const chatsReducer = chatsSlice.reducer;
-export const chatsActions = chatsSlice.actions;
+export const chatListReducer = chatList.reducer;
+export const chatListActions = chatList.actions;

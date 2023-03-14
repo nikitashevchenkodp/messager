@@ -19,7 +19,7 @@ interface IResizableContainer {
 
 const ResizableContainer: FC<IResizableContainer> = (props) => {
   const { children } = props;
-  const chatListWidth = useAppSelector((state) => state.ui.chatListWidth);
+  const chatListWidth = useAppSelector((state) => state.ui.uiSettings.chatListWidth);
 
   return (
     <>

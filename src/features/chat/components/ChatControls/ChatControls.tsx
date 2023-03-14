@@ -9,9 +9,9 @@ import { sendMessage } from 'services/apiService';
 
 const ChatControls = () => {
   const [val, setVal] = useState('');
-  const activeUser = useAppSelector((state) => state.chats.activeUser);
+  const activeChat = useAppSelector((state) => state.entities.active.activeChat);
   const { _id } = useAppSelector((state) => state.authentication.user);
-  const isTiping = useAppSelector((state) => state.userStatuses.onlineMap[_id]?.typing);
+  const isTiping = useAppSelector((state) => state.online.users[_id]?.typing);
   const typingRef = useRef<ReturnType<typeof setTimeout>>();
   const dispatch = useAppDispatch();
 
@@ -22,18 +22,21 @@ const ChatControls = () => {
       }
     }
     try {
-      const { data: newMessage } = await sendMessage({
+      await sendMessage({
         from: `${_id}`,
-        to: activeUser?.id || '',
+        to: activeChat?.user.id || '',
+        chatId: activeChat?.chatId || '',
         messageText: val
       });
-      console.log({
-        from: `${_id}`,
-        to: activeUser?.id || '',
-        messageText: val
+      dispatch({
+        type: 'sendMessage',
+        payload: {
+          from: `${_id}`,
+          to: activeChat?.user.id || '',
+          chatId: activeChat?.chatId || '',
+          messageText: val
+        }
       });
-
-      dispatch({ type: 'sendMessage', payload: newMessage });
       setVal('');
     } catch (error) {
       console.log(error);

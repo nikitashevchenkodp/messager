@@ -8,35 +8,32 @@ interface UserItem {
 }
 
 interface UIInitState {
-  online: string[];
-  onlineMap: UserItem;
+  users: UserItem;
 }
 
 const initialState: UIInitState = {
-  online: [],
-  onlineMap: {}
+  users: {}
 };
 
-export const usersStatuses = createSlice({
+export const online = createSlice({
   name: 'statuses',
   initialState,
   reducers: {
     updateOnline: (state, action: PayloadAction<string[]>) => {
-      state.online = action.payload;
-      state.onlineMap = action.payload.reduce((acc, item) => {
+      state.users = action.payload.reduce((acc, item) => {
         acc[item] = { typing: false };
         return acc;
       }, {} as UserItem);
     },
     setTypingStatus: (state, action: PayloadAction<{ userId: string; typing: boolean }>) => {
       const { userId, typing } = action.payload;
-      state.onlineMap[userId] = { typing };
+      state.users[userId] = { typing };
     }
   }
 });
 
-export const usersStatusesReducer = usersStatuses.reducer;
-export const usersStatusesActions = usersStatuses.actions;
+export const onlineReducer = online.reducer;
+export const onlineActions = online.actions;
 
 // interface UserItem {
 //   [id: string]: {
