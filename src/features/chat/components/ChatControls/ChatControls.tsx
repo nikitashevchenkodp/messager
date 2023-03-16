@@ -26,7 +26,7 @@ const ChatControls = () => {
         from: `${_id}`,
         to: activeChat?.user.id || '',
         chatId: activeChat?.chatId || '',
-        messageText: val
+        text: val
       });
       dispatch({
         type: 'sendMessage',
@@ -34,7 +34,7 @@ const ChatControls = () => {
           from: `${_id}`,
           to: activeChat?.user.id || '',
           chatId: activeChat?.chatId || '',
-          messageText: val
+          text: val
         }
       });
       setVal('');

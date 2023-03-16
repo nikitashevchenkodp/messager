@@ -6,17 +6,25 @@ export interface ILoginResponse {
   chats: Array<string>;
 }
 
+type Attachment = 'img' | 'video';
+
 export interface IMessage {
-  messageText: string;
+  text: string;
   createdAt: string;
   from: string;
   _id: string;
   chatId: string;
   to: string;
   updatedAt: string;
+  delivered?: boolean;
+  unreaded?: boolean;
+  edited?: boolean;
+  attachment?: {
+    media: [{ type: Attachment; src: string }];
+  };
 }
 
-export type MessageShort = Pick<IMessage, 'messageText' | 'createdAt' | 'from' | '_id'>;
+export type MessageShort = Pick<IMessage, 'text' | 'createdAt' | 'from' | '_id'>;
 
 export interface IChat {
   chatId: string;

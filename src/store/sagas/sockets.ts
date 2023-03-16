@@ -18,6 +18,7 @@ import { IMessage, TypingStatusObject } from 'types';
 import { serverLink } from 'consts/externalLinks';
 import { onlineActions } from 'store/slices/usersStatuses';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
+import * as events from 'consts/events';
 
 let socket;
 
@@ -97,19 +98,21 @@ function runSagaChanel(socket: Socket) {
       });
     };
 
-    socket.on('recMsg', resieveMessage);
-    socket.on('messageFromNewContact', messageFromNewContact);
-    socket.on('newChatCreated', newChatCreated);
-    socket.on('online', online);
-    socket.on('typing', typing);
+    socket.on(events.RESPONSE_MESSAGE, resieveMessage);
+    socket.on(events.MESSAGE_FROM_NEW_CONTACT, messageFromNewContact);
+    socket.on(events.NEW_CHAT_CREATED, newChatCreated);
+    socket.on(events.ONLINE_USERS, online);
+    socket.on(events.TYPING_ON, typing);
     socket.io.on('reconnect', reconnect);
     socket.io.on('reconnect_error', reconnectError);
     socket.io.on('reconnect_failed', reconnectFailed);
 
     return () => {
-      socket.off('recMsg', resieveMessage);
-      socket.off('online', online);
-      socket.off('typing', typing);
+      socket.off(events.RESPONSE_MESSAGE, resieveMessage);
+      socket.off(events.MESSAGE_FROM_NEW_CONTACT, online);
+      socket.off(events.TYPING_ON, typing);
+      socket.off(events.MESSAGE_FROM_NEW_CONTACT, messageFromNewContact);
+      socket.off(events.NEW_CHAT_CREATED, newChatCreated);
       socket.io.off('reconnect', reconnect);
       socket.io.off('reconnect_error', reconnectError);
       socket.io.off('reconnect_failed', reconnectFailed);
@@ -141,7 +144,7 @@ function* runChanel(
 function* sendMessage(socket: Socket) {
   while (true) {
     const { payload } = yield take('sendMessage');
-    socket.emit('sendMessage', payload);
+    socket.emit(events.REQUEST_MESSAGE, payload);
   }
 }
 
@@ -149,7 +152,7 @@ function* typing(socket: Socket): Generator<TakeEffect | SelectEffect, void, any
   while (true) {
     const { payload } = yield take('typing');
     const chatId = yield select((state: RootState) => state.entities.active.activeChat?.chatId);
-    socket.emit('typing', { ...payload, chatId });
+    socket.emit(events.TYPING_EMIT, { ...payload, chatId });
   }
 }
 

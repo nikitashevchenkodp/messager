@@ -7,7 +7,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import Divider from 'components/Divider';
 import { getAllUsers } from 'services/apiService';
 import Avatar from 'components/Avatar';
-import { useAppDispatch } from 'store/hooks';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
 
 const ContactsContainer = styled.div`
@@ -83,6 +83,7 @@ const Contacts = ({ onClose }: any) => {
   const [serachQuery, setSearchQuery] = useState('');
   const [users, setUsers] = useState<IContactItem[]>([]);
   const dispatch = useAppDispatch();
+  const online = useAppSelector((state) => state.online.users);
 
   useEffect(() => {
     getAllUsers()
@@ -142,7 +143,13 @@ const Contacts = ({ onClose }: any) => {
                 <Avatar src={item.avatar} fullName={item.fullName} />
                 <UserInfo>
                   <UserName>{item.fullName}</UserName>
-                  <UserMeta>last seen 4 hours ago</UserMeta>
+                  <UserMeta>
+                    {online[item.id] ? (
+                      <span style={{ color: 'blue' }}>online</span>
+                    ) : (
+                      'last seen 4 hours ago'
+                    )}
+                  </UserMeta>
                 </UserInfo>
               </UserListItem>
             );

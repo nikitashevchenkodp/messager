@@ -47,7 +47,7 @@ const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
             {online?.typing ? (
               <span style={{ color: 'blue' }}>Typing...</span>
             ) : (
-              <>{chatItem?.lastMessage?.messageText}</>
+              <>{chatItem?.lastMessage?.text}</>
             )}
           </LastMessage>
         </ExtraInformation>
