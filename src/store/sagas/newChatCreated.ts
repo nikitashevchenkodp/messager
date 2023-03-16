@@ -10,9 +10,7 @@ import {
   take,
   TakeEffect
 } from 'redux-saga/effects';
-import { RootState } from 'store';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
-import { snackbarActions } from 'store/slices/snackbar';
 import { IMessage } from 'types';
 import { getChatListSaga } from './chatListSaga';
 import { getMessagesSaga } from './chatMessagesSaga';
