@@ -1,6 +1,6 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
-import { chatActions } from 'features/chat';
+import { chatsActions } from 'features/chat';
 import { chatListActions } from 'features/chat-list';
 import {
   call,
@@ -21,8 +21,7 @@ import { activeEntitiesActions } from 'store/slices/activeEntities';
 export function* getMessagesSaga(chatId: string): any {
   try {
     const res = yield call(getChatMessages, chatId);
-    console.log(res.data);
-    yield put(chatActions.setMessages({ chatId, items: res.data }));
+    yield put(chatsActions.setChat({ chatId, messages: res.data }));
   } catch (error) {
     console.log(error);
   }

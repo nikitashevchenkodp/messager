@@ -33,7 +33,7 @@ export const login = async (body: ILogin) => {
   return axios.post(`${serverLink}/api/users/login`, body);
 };
 
-export const sendMessage = async (body: any) => console.log('sended', body);
+export const sendMessage = () => console.log('sended');
 
 export const getChatList = async () => {
   return axiosInst.get('/api/chats');

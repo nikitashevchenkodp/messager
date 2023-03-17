@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { EmojiIcon, MicrophoneIcon, PaperclipIcon, SendIcon } from 'components/icons';
 
 import ChatInput from '../ChatInput/ChatInput';
@@ -8,26 +8,29 @@ import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { sendMessage } from 'services/apiService';
 
 const ChatControls = () => {
-  const [val, setVal] = useState('');
   const activeChat = useAppSelector((state) => state.entities.active.activeChat);
+  const editableMessage = useAppSelector(
+    (state) => state.entities.chats.chatsByIds[activeChat?.chatId || '']?.editableMessage
+  );
+  const [val, setVal] = useState('');
   const { _id } = useAppSelector((state) => state.authentication.user);
   const isTiping = useAppSelector((state) => state.online.users[_id]?.typing);
   const typingRef = useRef<ReturnType<typeof setTimeout>>();
   const dispatch = useAppDispatch();
 
-  const sendMesage = async (e: React.MouseEvent | React.KeyboardEvent) => {
+  useEffect(() => {
+    if (!editableMessage) return;
+    setVal(editableMessage?.text);
+  }, [editableMessage]);
+
+  const sendMesage = (e: React.MouseEvent | React.KeyboardEvent) => {
     if ('key' in e) {
       if (e.key !== 'Enter') {
         return;
       }
     }
     try {
-      await sendMessage({
-        from: `${_id}`,
-        to: activeChat?.user.id || '',
-        chatId: activeChat?.chatId || '',
-        text: val
-      });
+      sendMessage();
       dispatch({
         type: 'sendMessage',
         payload: {
@@ -63,6 +66,8 @@ const ChatControls = () => {
     sendMesage(e);
     handleTyping();
   };
+
+  console.log(val);
 
   return (
     <ChatControlsContainer>

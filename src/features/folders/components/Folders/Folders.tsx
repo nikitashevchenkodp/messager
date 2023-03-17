@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useAppSelector } from 'store/hooks';
 import Burger from '../Burger';
 import BurgerButton from '../BurgerButton';
-import TabsButton from '../TabsButton';
+import { TabsButton } from '../TabsButton';
 
 import { FoldersContainer } from './styled';
 

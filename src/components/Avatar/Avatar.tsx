@@ -10,10 +10,7 @@ type IAvatar = {
 const AvatarContainer = styled.div`
   border-radius: 50%;
   width: 60px;
-  min-width: 60px;
-  max-width: 60px;
-  min-height: 60px;
-  max-height: 60px;
+  height: 60px;
   background-color: rgb(79, 158, 230);
   overflow: hidden;
   display: flex;

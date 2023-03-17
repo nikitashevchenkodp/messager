@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { AxiosResponse } from 'axios';
 import { ChildProcess } from 'child_process';
-import { chatActions } from 'features/chat/redux/chat';
+import { chatsActions } from 'features/chat/redux/chat';
 import { chatListActions } from 'features/chat-list';
 import { call, CallEffect, put, PutEffect, take, TakeEffect } from 'redux-saga/effects';
 import { getChatList } from 'services/apiService';
@@ -32,7 +32,11 @@ export function* chatListSaga(): Generator<
   AxiosResponse<Array<IChat>>
 > {
   while (true) {
-    yield take([chatActions.newMessage.type, authenticationActions.loginUser.type, 'GET_CHATLIST']);
+    yield take([
+      chatsActions.newMessage.type,
+      authenticationActions.loginUser.type,
+      'GET_CHATLIST'
+    ]);
     yield call(getChatListSaga);
   }
 }

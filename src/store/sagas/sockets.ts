@@ -19,6 +19,8 @@ import { serverLink } from 'consts/externalLinks';
 import { onlineActions } from 'store/slices/usersStatuses';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
 import * as events from 'consts/events';
+import { deleteMessageSaga } from './deleteMessage';
+import { chatsActions } from 'features/chat';
 
 let socket;
 
@@ -53,6 +55,10 @@ function runSagaChanel(socket: Socket) {
 
     const typing = ({ typing, userId }: TypingStatusObject) => {
       emit(onlineActions.setTypingStatus({ userId, typing }));
+    };
+    const messageDeleted = ({ message }: any) => {
+      console.log('message deleted', message._id);
+      emit(chatsActions.deleteMessage({ chatId: message.chatId, messageId: message._id }));
     };
 
     const reconnect = (attempt: number) => {
@@ -103,6 +109,7 @@ function runSagaChanel(socket: Socket) {
     socket.on(events.NEW_CHAT_CREATED, newChatCreated);
     socket.on(events.ONLINE_USERS, online);
     socket.on(events.TYPING_ON, typing);
+    socket.on('messageDeleted', messageDeleted);
     socket.io.on('reconnect', reconnect);
     socket.io.on('reconnect_error', reconnectError);
     socket.io.on('reconnect_failed', reconnectFailed);
@@ -113,6 +120,8 @@ function runSagaChanel(socket: Socket) {
       socket.off(events.TYPING_ON, typing);
       socket.off(events.MESSAGE_FROM_NEW_CONTACT, messageFromNewContact);
       socket.off(events.NEW_CHAT_CREATED, newChatCreated);
+      socket.off('messageDeleted', messageDeleted);
+
       socket.io.off('reconnect', reconnect);
       socket.io.off('reconnect_error', reconnectError);
       socket.io.off('reconnect_failed', reconnectFailed);
@@ -159,6 +168,7 @@ function* typing(socket: Socket): Generator<TakeEffect | SelectEffect, void, any
 function* runSocketEmmiters(socket: Socket) {
   yield fork(sendMessage, socket);
   yield fork(typing, socket);
+  yield fork(deleteMessageSaga, socket);
 }
 
 export function* IOSaga(): Generator<TakeEffect | CallEffect | ForkEffect, void, Socket> {

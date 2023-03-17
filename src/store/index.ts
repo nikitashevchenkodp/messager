@@ -6,7 +6,7 @@ import { foldersReducer } from 'features/folders';
 import createSagaMiddleware from 'redux-saga';
 
 import { uiSettingsReducer } from './slices/UI';
-import { chatReducer } from 'features/chat/redux/chat';
+import { chatsReducer } from 'features/chat/redux/chat';
 import { authenticationReducer as authentication } from './slices/authentication';
 import { rootSaga } from './sagas';
 import { onlineReducer as online } from './slices/usersStatuses';
@@ -22,7 +22,7 @@ const ui = combineReducers({
 const entities = combineReducers({
   folders: foldersReducer,
   chatList: chatListReducer,
-  chat: chatReducer,
+  chats: chatsReducer,
   active: activeEntitiesReducer
 });
 

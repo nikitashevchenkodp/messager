@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { GridContainer, MessageImage, MessageMedia } from './styled';
 import Modal from 'components/Modal';
+import { Attachment, IMediaItem } from 'types';
 
-const MediaMessage = ({ media }: { media: any[] }) => {
+const MediaMessage = ({ media }: { media?: IMediaItem[] }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [src, setSrc] = useState('');
 
@@ -10,7 +11,7 @@ const MediaMessage = ({ media }: { media: any[] }) => {
     <>
       {' '}
       <GridContainer>
-        {media.map((item: any, i: number) => (
+        {media?.map((item: any, i: number) => (
           <MessageMedia
             key={i}
             onClick={() => {

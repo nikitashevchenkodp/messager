@@ -1,3 +1,5 @@
+import { IReaction } from 'features/message/Reactions/Reactions';
+
 export interface ILoginResponse {
   _id: string;
   avatar: string;
@@ -6,8 +8,11 @@ export interface ILoginResponse {
   chats: Array<string>;
 }
 
-type Attachment = 'img' | 'video';
-
+export type Attachment = 'img' | 'video';
+export interface IMediaItem {
+  type: Attachment;
+  src: string;
+}
 export interface IMessage {
   text: string;
   createdAt: string;
@@ -19,8 +24,9 @@ export interface IMessage {
   delivered?: boolean;
   unreaded?: boolean;
   edited?: boolean;
+  reactions?: IReaction[];
   attachment?: {
-    media: [{ type: Attachment; src: string }];
+    media: IMediaItem[];
   };
 }
 

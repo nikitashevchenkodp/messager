@@ -14,4 +14,4 @@ const TabsButton = styled(ButtonBase)<{ isActive: boolean }>`
   transition: 0.1s;
 `;
 
-export default TabsButton;
+export { TabsButton };
