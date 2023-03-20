@@ -24,7 +24,11 @@ interface ChatListItemProps {
 
 const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
   const chatListState = useAppSelector((state) => state.ui.uiSettings.chatListState);
-  const online = useAppSelector((state) => state.online.users[chatItem.user.id]);
+  const online = useAppSelector((state) => state.users.statusesById[chatItem.user.id]);
+  const messages = useAppSelector(
+    (state) => state.entities.messages.byChatId[chatItem.chatId]?.messages
+  );
+  const lastMessage = messages?.[messages.length - 1];
   console.log('render', chatItem.user.fullName);
 
   return (
@@ -47,12 +51,12 @@ const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
             {online?.typing ? (
               <span style={{ color: 'blue' }}>Typing...</span>
             ) : (
-              <>{chatItem?.lastMessage?.text}</>
+              <>{lastMessage?.text}</>
             )}
           </LastMessage>
         </ExtraInformation>
         <LastMessageTime hide={chatListState === 'colapsed'}>
-          {parseDate(chatItem?.lastMessage?.createdAt)}
+          {parseDate(lastMessage?.createdAt)}
         </LastMessageTime>
         <NotifficationQuantity>2</NotifficationQuantity>
       </ChatListItemInfoContainer>

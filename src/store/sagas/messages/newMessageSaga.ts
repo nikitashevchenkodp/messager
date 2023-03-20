@@ -1,5 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { chatsActions } from 'features/chat';
+import { messagesActions } from 'features/chat';
 import { put, PutEffect, select, SelectEffect, take, TakeEffect } from 'redux-saga/effects';
 import { RootState } from 'store';
 import { snackbarActions } from 'store/slices/snackbar';
@@ -12,7 +12,7 @@ export function* newMessage(): Generator<
 > {
   while (true) {
     const message = yield take('newMessage');
-    yield put(chatsActions.newMessage(message.payload));
+    yield put(messagesActions.newMessage(message.payload));
     // yield put(
     //   snackbarActions.enqueueSnackbar({
     //     message: 'You recieved a new message',

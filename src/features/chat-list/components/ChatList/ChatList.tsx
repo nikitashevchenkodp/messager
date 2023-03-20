@@ -20,7 +20,7 @@ const ChatList = () => {
   const dispatch = useAppDispatch();
   const isHideChatList = useAppSelector((state) => state.ui.uiSettings.isHideChatList);
   const chatListState = useAppSelector((state) => state.ui.uiSettings.chatListState);
-  const chatList = useAppSelector((state) => state.entities.chatList.items);
+  const chatList = useAppSelector((state) => state.entities.chats.items);
   const activeChat = useAppSelector((state) => state.entities.active.activeChat);
   const [val, setVal] = useState('');
 

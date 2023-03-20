@@ -1,5 +1,5 @@
 import { call, put, take } from 'redux-saga/effects';
-import { getChatListSaga } from './chatListSaga';
+import { getChatListSaga } from './chats/chatListSaga';
 
 export function* initSaga() {
   yield take('innit');

@@ -1,39 +1,50 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface UserItem {
+interface IStatusesById {
   [id: string]: {
     typing: boolean;
   };
 }
 
+interface IUser {
+  _id: string;
+  fullName: string;
+  avatar: string;
+  email: string;
+}
+
 interface UIInitState {
-  users: UserItem;
+  usersById: {
+    [id: string]: IUser;
+  };
+  statusesById: IStatusesById;
 }
 
 const initialState: UIInitState = {
-  users: {}
+  usersById: {},
+  statusesById: {}
 };
 
-export const online = createSlice({
+export const users = createSlice({
   name: 'statuses',
   initialState,
   reducers: {
     updateOnline: (state, action: PayloadAction<string[]>) => {
-      state.users = action.payload.reduce((acc, item) => {
+      state.statusesById = action.payload.reduce((acc, item) => {
         acc[item] = { typing: false };
         return acc;
-      }, {} as UserItem);
+      }, {} as IStatusesById);
     },
     setTypingStatus: (state, action: PayloadAction<{ userId: string; typing: boolean }>) => {
       const { userId, typing } = action.payload;
-      state.users[userId] = { typing };
+      state.statusesById[userId] = { typing };
     }
   }
 });
 
-export const onlineReducer = online.reducer;
-export const onlineActions = online.actions;
+export const usersReducer = users.reducer;
+export const usersActions = users.actions;
 
 // interface UserItem {
 //   [id: string]: {

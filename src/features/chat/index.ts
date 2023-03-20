@@ -1,4 +1,4 @@
 import Chat from './components/Chat/Chat';
-import { chatsActions, chatsReducer } from './redux/chat';
+import { messagesActions, messagesReducer } from './redux/chat';
 
-export { Chat, chatsActions, chatsReducer };
+export { Chat, messagesActions, messagesReducer };

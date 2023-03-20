@@ -7,7 +7,7 @@ import Message from 'features/message/Message/Message';
 const ChatArea = () => {
   const activeChatId = useAppSelector((state) => state.entities.active.activeChat?.chatId);
   const messages = useAppSelector(
-    (state) => state.entities.chats.chatsByIds[activeChatId || '']?.messages
+    (state) => state.entities.messages.byChatId[activeChatId || '']?.messages
   );
   const scrollRef = useScrollToBottom(messages);
 

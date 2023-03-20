@@ -10,11 +10,11 @@ import { sendMessage } from 'services/apiService';
 const ChatControls = () => {
   const activeChat = useAppSelector((state) => state.entities.active.activeChat);
   const editableMessage = useAppSelector(
-    (state) => state.entities.chats.chatsByIds[activeChat?.chatId || '']?.editableMessage
+    (state) => state.entities.messages.byChatId[activeChat?.chatId || '']?.editableMessage
   );
   const [val, setVal] = useState('');
   const { _id } = useAppSelector((state) => state.authentication.user);
-  const isTiping = useAppSelector((state) => state.online.users[_id]?.typing);
+  const isTiping = useAppSelector((state) => state.users.statusesById[_id]?.typing);
   const typingRef = useRef<ReturnType<typeof setTimeout>>();
   const dispatch = useAppDispatch();
 

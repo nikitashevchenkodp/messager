@@ -16,11 +16,11 @@ import { RootState } from 'store';
 import { snackbarActions } from 'store/slices/snackbar';
 import { IMessage, TypingStatusObject } from 'types';
 import { serverLink } from 'consts/externalLinks';
-import { onlineActions } from 'store/slices/usersStatuses';
+import { usersActions } from 'store/slices/usersStatuses';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
 import * as events from 'consts/events';
-import { deleteMessageSaga } from './deleteMessage';
-import { chatsActions } from 'features/chat';
+import { deleteMessageSaga } from './messages/deleteMessage';
+import { messagesActions } from 'features/chat';
 
 let socket;
 
@@ -50,15 +50,15 @@ function runSagaChanel(socket: Socket) {
     };
 
     const online = (data: string[]) => {
-      emit(onlineActions.updateOnline(data));
+      emit(usersActions.updateOnline(data));
     };
 
     const typing = ({ typing, userId }: TypingStatusObject) => {
-      emit(onlineActions.setTypingStatus({ userId, typing }));
+      emit(usersActions.setTypingStatus({ userId, typing }));
     };
     const messageDeleted = ({ message }: any) => {
       console.log('message deleted', message._id);
-      emit(chatsActions.deleteMessage({ chatId: message.chatId, messageId: message._id }));
+      emit(messagesActions.deleteMessage({ chatId: message.chatId, messageId: message._id }));
     };
 
     const reconnect = (attempt: number) => {

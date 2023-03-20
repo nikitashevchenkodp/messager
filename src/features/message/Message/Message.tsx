@@ -20,7 +20,7 @@ import messagePhoto from '../../../assets/mockmessagePhoto.jpg';
 import { mockMessage } from 'mock/message';
 import Menu from 'components/Menu';
 import { useAppDispatch } from 'store/hooks';
-import { chatsActions } from 'features/chat';
+import { messagesActions } from 'features/chat';
 import Modal from 'components/Modal';
 import DeletionConfirm from 'components/DeletionConfirm';
 
@@ -42,7 +42,7 @@ const Message = forwardRef<HTMLDivElement, IMessageProps>(({ message }, ref) => 
   const editMessage = (messageId: string, chatId: string) => {
     console.log('edit');
 
-    // dispatch(chatsActions.setEditableMessage({ messageId, chatId }));
+    // dispatch(messagesActions.setEditableMessage({ messageId, chatId }));
   };
   const deleteMessage = (message: IMessage) => {
     setSelectedMessage(message);
@@ -90,7 +90,7 @@ const Message = forwardRef<HTMLDivElement, IMessageProps>(({ message }, ref) => 
         <DeletionConfirm
           confirm={() => {
             console.log('delete');
-            dispatch(chatsActions.startDeleteMessage(selectedMessage!));
+            dispatch(messagesActions.startDeleteMessage(selectedMessage!));
             setIsDeleteOpen(false);
           }}
           cancel={() => {

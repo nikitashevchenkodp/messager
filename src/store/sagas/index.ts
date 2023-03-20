@@ -1,10 +1,10 @@
 import { all } from 'redux-saga/effects';
-import { chatListSaga } from './chatListSaga';
-import { loadMessagesSaga } from './chatMessagesSaga';
+import { chatListSaga } from './chats/chatListSaga';
+import { loadMessagesSaga } from './messages/chatMessagesSaga';
 import { initSaga } from './initSaga';
-import { loginSaga } from './loginSaga';
-import { newChatCreated } from './newChatCreated';
-import { newMessage } from './newMessageSaga';
+import { loginSaga } from './auth/loginSaga';
+import { newChatCreated } from './chats/newChatCreated';
+import { newMessage } from './messages/newMessageSaga';
 
 import { IOSaga } from './sockets';
 
