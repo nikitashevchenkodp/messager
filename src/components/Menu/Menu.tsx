@@ -1,5 +1,5 @@
 import Portal from 'components/Portal';
-import React, { FC, useLayoutEffect, useRef } from 'react';
+import React, { FC, memo, useLayoutEffect, useRef } from 'react';
 import { MenuBackground, MenuContainer } from './styled';
 
 interface IMenuProps {
@@ -14,6 +14,8 @@ interface IMenuProps {
 
 const Menu: FC<IMenuProps> = ({ isOpen, coordinates, onClose, children }) => {
   const containerRef = useRef<null | HTMLDivElement>(null);
+
+  console.log('render Menu');
 
   useLayoutEffect(() => {
     if (containerRef.current) {
@@ -36,4 +38,4 @@ const Menu: FC<IMenuProps> = ({ isOpen, coordinates, onClose, children }) => {
   );
 };
 
-export default Menu;
+export default memo(Menu);

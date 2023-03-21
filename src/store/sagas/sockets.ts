@@ -23,6 +23,7 @@ import { messagesActions } from 'features/chat';
 import { connectToNewChat } from './chats/connectToNewChatSaga';
 import { sendMessage } from './messages/sendMessage';
 import { typingSaga } from './messages/typingSaga';
+import { editMessageSaga } from './messages/editMessageSaga';
 
 let socket;
 
@@ -62,6 +63,11 @@ function socketChanel(socket: Socket) {
     const messageDeleted = ({ message }: any) => {
       emit(messagesActions.deleteMessage({ chatId: message.chatId, messageId: message._id }));
     };
+    const messageEdited = ({ message }: any) => {
+      console.log('got edited message on frontend');
+
+      emit(messagesActions.editMessage(message));
+    };
 
     socket.on(events.RESPONSE_MESSAGE, resieveMessage);
     socket.on(events.MESSAGE_FROM_NEW_CONTACT, messageFromNewContact);
@@ -69,6 +75,7 @@ function socketChanel(socket: Socket) {
     socket.on(events.ONLINE_USERS, online);
     socket.on(events.TYPING_ON, typing);
     socket.on('messageDeleted', messageDeleted);
+    socket.on('messageEdited', messageEdited);
 
     return () => {
       socket.off(events.RESPONSE_MESSAGE, resieveMessage);
@@ -77,6 +84,7 @@ function socketChanel(socket: Socket) {
       socket.off(events.MESSAGE_FROM_NEW_CONTACT, messageFromNewContact);
       socket.off(events.NEW_CHAT_CREATED, newChatCreated);
       socket.off('messageDeleted', messageDeleted);
+      socket.off('messageEdited', messageEdited);
     };
   });
 }
@@ -104,6 +112,7 @@ function* runChanel(
 
 function* runSocketEmmiters(socket: Socket) {
   yield fork(sendMessage, socket);
+  yield fork(editMessageSaga, socket);
   yield fork(typingSaga, socket);
   yield fork(deleteMessageSaga, socket);
   yield fork(connectToNewChat, socket);

@@ -32,13 +32,11 @@ export function* loadMessagesSaga(
   void,
   PayloadAction<{ id: string; fullName: string }> & any
 > {
-  while (true) {
-    try {
-      for (let i = 0; i < chatList.length; i++) {
-        yield fork(getMessagesSaga, chatList[i].chatId);
-      }
-    } catch (error) {
-      console.log(error);
+  try {
+    for (let i = 0; i < chatList.length; i++) {
+      yield fork(getMessagesSaga, chatList[i].chatId);
     }
+  } catch (error) {
+    console.log(error);
   }
 }

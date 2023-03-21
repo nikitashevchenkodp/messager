@@ -11,6 +11,7 @@ interface IMessageTextContent {
   meta: {
     createdAt: string;
     delivered: boolean;
+    edited: boolean;
   };
   reactions?: IReaction[];
 }
@@ -25,6 +26,7 @@ const MessageTextContent: FC<IMessageTextContent> = ({ text, meta, reactions, ty
           switch case? может есть какой-то супер крутой способ настраивать роутинг?asdasdasds */}
       <Reactions type={type} reactions={reactions} />
       <MessageMeta>
+        {meta.edited && <span>edited</span>}
         <span>{formatTime(meta?.createdAt)}</span>
         <span>
           <DoubleCheck width="19px" height="19px" />

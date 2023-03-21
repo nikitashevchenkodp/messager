@@ -6,8 +6,6 @@ interface IFastReaction {
 }
 
 const FastReaction: FC<IFastReaction> = ({ position }) => {
-  console.log(position);
-
   return (
     <FastReactionContainer position={position}>
       <FavoriteIcon color="error" />

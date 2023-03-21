@@ -15,9 +15,7 @@ const Chat = () => {
         <>
           {' '}
           <ChatHeader />
-          <Suspense fallback={<p>Loading...</p>}>
-            <ChatArea />
-          </Suspense>
+          <ChatArea />
           <ChatControls />
         </>
       ) : (

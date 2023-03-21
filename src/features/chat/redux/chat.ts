@@ -39,6 +39,17 @@ export const messages = createSlice({
         (msg) => msg._id !== messageId
       );
     },
+    editMessage: (state, action: PayloadAction<IMessage>) => {
+      console.log('edited message in slice');
+
+      const { chatId, _id } = action.payload;
+      state.byChatId[chatId].messages = state.byChatId[chatId].messages.map((msg) => {
+        if (msg._id === _id) {
+          return action.payload;
+        }
+        return msg;
+      });
+    },
     setEditableMessage: (state, action: PayloadAction<{ chatId: string; messageId?: string }>) => {
       const { chatId, messageId } = action.payload;
       if (!messageId) {

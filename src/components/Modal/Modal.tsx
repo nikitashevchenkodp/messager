@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, memo } from 'react';
 import { ModalWindow, ModalWindowContent } from './styled';
 
 type ModalWindowProps = {
@@ -8,8 +8,6 @@ type ModalWindowProps = {
 };
 
 const Modal: FC<ModalWindowProps> = ({ children, active, onClose }) => {
-  console.log(active);
-
   return (
     <ModalWindow active={active} onClick={onClose}>
       <ModalWindowContent active={active} onClick={(e) => e.stopPropagation()}>
@@ -19,4 +17,4 @@ const Modal: FC<ModalWindowProps> = ({ children, active, onClose }) => {
   );
 };
 
-export default Modal;
+export default memo(Modal);
