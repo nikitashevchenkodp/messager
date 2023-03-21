@@ -4,19 +4,20 @@ import { ChildProcess } from 'child_process';
 import { messagesActions } from 'features/chat/redux/chat';
 import { chatsActions } from 'features/chat-list';
 import { call, CallEffect, put, PutEffect, take, TakeEffect } from 'redux-saga/effects';
-import { getChatList } from 'services/apiService';
+import { getChat, getChatList } from 'services/apiService';
 import { authenticationActions } from 'store/slices/authentication';
 import { IChat } from 'types';
 
-export function* getChatListSaga(): Generator<
+export function* getChatSaga(
+  chatId: string
+): Generator<
   TakeEffect | CallEffect | PutEffect | ChildProcess,
-  any,
-  AxiosResponse<Array<IChat>>
+  void,
+  AxiosResponse<Array<IChat>> & any
 > {
   try {
-    const res = yield call(getChatList);
-    yield put(chatsActions.setChats(res.data));
-    return res;
+    const newChat = yield call(getChat, chatId);
+    yield put(chatsActions.addChat(newChat.data));
   } catch (error) {
     console.log(error);
   }

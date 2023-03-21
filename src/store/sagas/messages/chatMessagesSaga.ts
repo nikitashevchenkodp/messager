@@ -25,15 +25,15 @@ export function* getMessagesSaga(chatId: string): any {
   }
 }
 
-export function* loadMessagesSaga(): Generator<
+export function* loadMessagesSaga(
+  chatList: any
+): Generator<
   TakeEffect | CallEffect | PutEffect | SelectEffect | ForkEffect,
   void,
   PayloadAction<{ id: string; fullName: string }> & any
 > {
   while (true) {
     try {
-      const action = yield take(chatsActions.setChats.type);
-      const chatList = action.payload;
       for (let i = 0; i < chatList.length; i++) {
         yield fork(getMessagesSaga, chatList[i].chatId);
       }
