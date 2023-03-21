@@ -83,15 +83,13 @@ const Contacts = ({ onClose }: any) => {
   const [serachQuery, setSearchQuery] = useState('');
   const [users, setUsers] = useState<IContactItem[]>([]);
   const dispatch = useAppDispatch();
-  const online = useAppSelector((state) => state.online.users);
+  const online = useAppSelector((state) => state.users.statusesById);
 
   useEffect(() => {
     getAllUsers()
       .then((res) => setUsers(res.data))
       .catch((e) => console.log(e));
   }, []);
-
-  console.log(users);
 
   return (
     <ContactsContainer>

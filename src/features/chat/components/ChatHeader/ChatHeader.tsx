@@ -5,7 +5,7 @@ import { useAppSelector } from 'store/hooks';
 
 const ChatHeader = () => {
   const userWithWhomChat = useAppSelector((state) => state.entities.active.activeChat?.user);
-  const online = useAppSelector((state) => state.online.users[userWithWhomChat?.id || '']);
+  const online = useAppSelector((state) => state.users.statusesById[userWithWhomChat?.id || '']);
 
   return (
     <ChatHeaderStyled>

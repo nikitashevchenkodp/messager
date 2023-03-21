@@ -6,12 +6,12 @@ import { foldersReducer } from 'features/folders';
 import createSagaMiddleware from 'redux-saga';
 
 import { uiSettingsReducer } from './slices/UI';
-import { chatsReducer } from 'features/chat/redux/chat';
+import { messagesReducer } from 'features/chat/redux/chat';
 import { authenticationReducer as authentication } from './slices/authentication';
 import { rootSaga } from './sagas';
-import { onlineReducer as online } from './slices/usersStatuses';
+import { usersReducer as users } from './slices/usersStatuses';
 import { snackbarReducer } from './slices/snackbar';
-import { chatListReducer } from 'features/chat-list';
+import { chatsReducer } from 'features/chat-list';
 import { activeEntitiesReducer } from './slices/activeEntities';
 
 const ui = combineReducers({
@@ -21,8 +21,8 @@ const ui = combineReducers({
 
 const entities = combineReducers({
   folders: foldersReducer,
-  chatList: chatListReducer,
   chats: chatsReducer,
+  messages: messagesReducer,
   active: activeEntitiesReducer
 });
 
@@ -30,7 +30,7 @@ const rootReducer = combineReducers({
   ui,
   entities,
   authentication,
-  online
+  users
 });
 
 const persistConfig = {

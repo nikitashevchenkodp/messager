@@ -6,6 +6,7 @@ export const REQUEST_MESSAGE = 'requestMessage';
 export const RESPONSE_MESSAGE = 'responseMessage';
 export const TYPING_EMIT = 'typing';
 export const MESSAGE_DELIVERED_EMIT = 'messageDelivered';
+export const EDIT_MESSAGE = 'editMessage';
 
 // On
 

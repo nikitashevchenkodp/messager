@@ -2,25 +2,32 @@ import React, { useEffect, useRef, useState } from 'react';
 import { EmojiIcon, MicrophoneIcon, PaperclipIcon, SendIcon } from 'components/icons';
 
 import ChatInput from '../ChatInput/ChatInput';
-import { ChatControlsContainer } from './styled';
+import { ChatControlsContainer, ChatFooter } from './styled';
 import Button from 'components/shared/Button';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { sendMessage } from 'services/apiService';
+import EditableMessage from '../EditableMessage';
+import { messagesActions } from 'features/chat/redux/chat';
 
 const ChatControls = () => {
   const activeChat = useAppSelector((state) => state.entities.active.activeChat);
   const editableMessage = useAppSelector(
-    (state) => state.entities.chats.chatsByIds[activeChat?.chatId || '']?.editableMessage
+    (state) => state.entities.messages.byChatId[activeChat?.chatId || '']?.editableMessage
   );
   const [val, setVal] = useState('');
   const { _id } = useAppSelector((state) => state.authentication.user);
-  const isTiping = useAppSelector((state) => state.online.users[_id]?.typing);
+  const isTiping = useAppSelector((state) => state.users.statusesById[_id]?.typing);
   const typingRef = useRef<ReturnType<typeof setTimeout>>();
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!editableMessage) return;
+    if (!editableMessage) {
+      setVal('');
+      return;
+    }
     setVal(editableMessage?.text);
+    if (inputRef.current) inputRef.current.focus();
   }, [editableMessage]);
 
   const sendMesage = (e: React.MouseEvent | React.KeyboardEvent) => {
@@ -31,16 +38,27 @@ const ChatControls = () => {
     }
     try {
       sendMessage();
-      dispatch({
-        type: 'sendMessage',
-        payload: {
-          from: `${_id}`,
-          to: activeChat?.user.id || '',
-          chatId: activeChat?.chatId || '',
-          text: val
-        }
-      });
-      setVal('');
+      if (editableMessage) {
+        dispatch({
+          type: 'editMessage',
+          payload: {
+            messageId: editableMessage._id,
+            text: val
+          }
+        });
+        dispatch(messagesActions.setEditableMessage({ chatId: activeChat?.chatId || '' }));
+      } else {
+        dispatch({
+          type: 'sendMessage',
+          payload: {
+            from: `${_id}`,
+            to: activeChat?.user.id || '',
+            chatId: activeChat?.chatId || '',
+            text: val
+          }
+        });
+        setVal('');
+      }
     } catch (error) {
       console.log(error);
     }
@@ -70,27 +88,32 @@ const ChatControls = () => {
   console.log(val);
 
   return (
-    <ChatControlsContainer>
-      <Button>
-        <PaperclipIcon width="24px" height="24px" />
-      </Button>
-      <ChatInput
-        label="Write a message..."
-        value={val}
-        onChange={(e) => setVal(e.target.value)}
-        onKeyDown={handleKeyDown}
-      />
-      <Button>
-        <EmojiIcon width="24px" height="24px" />
-      </Button>
-      <Button>
-        {val.length ? (
-          <SendIcon width="24px" height="24px" onClick={sendMesage} />
-        ) : (
-          <MicrophoneIcon width="24px" height="24px" />
-        )}
-      </Button>
-    </ChatControlsContainer>
+    <ChatFooter>
+      {editableMessage && <EditableMessage message={editableMessage} setInputValue={setVal} />}
+      <ChatControlsContainer>
+        <Button>
+          <PaperclipIcon width="24px" height="24px" />
+          <input type="file" hidden />
+        </Button>
+        <ChatInput
+          ref={inputRef}
+          label="Write a message..."
+          value={val}
+          onChange={(e) => setVal(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+        <Button>
+          <EmojiIcon width="24px" height="24px" />
+        </Button>
+        <Button>
+          {val.length ? (
+            <SendIcon width="24px" height="24px" onClick={sendMesage} />
+          ) : (
+            <MicrophoneIcon width="24px" height="24px" />
+          )}
+        </Button>
+      </ChatControlsContainer>
+    </ChatFooter>
   );
 };
 

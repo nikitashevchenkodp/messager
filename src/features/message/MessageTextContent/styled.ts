@@ -20,5 +20,6 @@ export const MessageMeta = styled.div`
   cursor: pointer;
   display: flex;
   align-items: center;
+  gap: 2px;
   color: rgb(160, 172, 182);
 `;

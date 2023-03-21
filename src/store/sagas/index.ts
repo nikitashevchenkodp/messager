@@ -1,21 +1,10 @@
 import { all } from 'redux-saga/effects';
-import { chatListSaga } from './chatListSaga';
-import { loadMessagesSaga } from './chatMessagesSaga';
 import { initSaga } from './initSaga';
-import { loginSaga } from './loginSaga';
-import { newChatCreated } from './newChatCreated';
-import { newMessage } from './newMessageSaga';
+import { loginSaga } from './auth/loginSaga';
 
-import { IOSaga } from './sockets';
+import { socketSaga } from './sockets';
+import { messagesFlow } from './messages';
 
 export function* rootSaga() {
-  yield all([
-    loginSaga(),
-    initSaga(),
-    IOSaga(),
-    chatListSaga(),
-    loadMessagesSaga(),
-    newMessage(),
-    newChatCreated()
-  ]);
+  yield all([loginSaga(), initSaga(), socketSaga(), messagesFlow()]);
 }
