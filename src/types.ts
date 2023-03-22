@@ -24,7 +24,7 @@ export interface IMessage {
   delivered?: boolean;
   unreaded?: boolean;
   edited?: boolean;
-  reactions?: IReaction[];
+  reactions: IReaction[];
   attachment?: {
     media: IMediaItem[];
   };

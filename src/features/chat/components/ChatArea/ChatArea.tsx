@@ -9,30 +9,13 @@ import { IMessage } from 'types';
 import { messagesActions } from 'features/chat/redux/chat';
 import ChatMessages from '../ChatMessages';
 import styled from 'styled-components';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import EditIcon from '@mui/icons-material/Edit';
-import ReplyIcon from '@mui/icons-material/Reply';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import ReactionsMenu from 'features/message/ReactionsMenu';
+import MenuOptions from 'features/message/MesageMenu';
 
-const MessageMenu = styled.ul`
-  border-radius: 8px;
-  background-color: #fff;
-  padding: 6px 0;
-  overflow: hidden;
-`;
-
-const MenuItem = styled.li`
-  padding: 5px 10px;
-  background: #fff;
-  width: 150px;
-  cursor: pointer;
-  transition: 0.1s;
+const MessageMenuContainer = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 4px;
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-  }
 `;
 
 const ChatArea = () => {
@@ -45,6 +28,7 @@ const ChatArea = () => {
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
   const [openedMessageMenu, setOpenedMessageMenu] = useState<null | IMessage>(null);
+  const { _id, avatar, fullName } = useAppSelector((state) => state.authentication.user);
 
   const dispatch = useAppDispatch();
 
@@ -78,29 +62,35 @@ const ChatArea = () => {
   }, [openedMessageMenu]);
 
   const onModalClose = useCallback(() => setIsDeleteOpen(!isDeleteOpen), []);
-  console.log('rendr Chat Area');
+
+  const addReaction = (e: React.MouseEvent) => {
+    console.log(openedMessageMenu);
+
+    const reactionItem = {
+      chatId: openedMessageMenu?.chatId,
+      messageId: openedMessageMenu?._id,
+      reaction: {
+        reaction: e.currentTarget.textContent,
+        by: {
+          id: _id,
+          avatar,
+          fullName
+        }
+      }
+    };
+    dispatch({ type: 'addReaction', payload: reactionItem });
+  };
 
   return (
     <>
       <Menu isOpen={isMenuOpen} coordinates={coordinates} onClose={() => setIsMenuOpen(false)}>
-        <MessageMenu>
-          <MenuItem onClick={openDeletionModal}>
-            <DeleteOutlineIcon />
-            Delete
-          </MenuItem>
-          <MenuItem onClick={editMessage}>
-            <EditIcon />
-            Edit
-          </MenuItem>
-          <MenuItem onClick={() => console.log('reply')}>
-            <ReplyIcon />
-            Reply
-          </MenuItem>
-          <MenuItem onClick={() => console.log('select')}>
-            <CheckCircleOutlineIcon />
-            Select
-          </MenuItem>
-        </MessageMenu>
+        <MessageMenuContainer>
+          <ReactionsMenu
+            addReaction={addReaction}
+            alreadeMadeReactions={openedMessageMenu?.reactions}
+          />
+          <MenuOptions onEdit={editMessage} onDelete={openDeletionModal} />
+        </MessageMenuContainer>
       </Menu>
       <ChatMessages messages={messages} scrollRef={scrollRef} openMessageMenu={openMessageMenu} />
       <Modal active={isDeleteOpen} onClose={onModalClose}>
