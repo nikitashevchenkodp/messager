@@ -24,6 +24,8 @@ import { connectToNewChat } from './chats/connectToNewChatSaga';
 import { sendMessage } from './messages/sendMessage';
 import { typingSaga } from './messages/typingSaga';
 import { editMessageSaga } from './messages/editMessageSaga';
+import { addReaction } from './messages/addReaction';
+import { deleteReaction } from './messages/deleteReaction';
 
 let socket;
 
@@ -46,7 +48,6 @@ function socketChanel(socket: Socket) {
     };
 
     const messageFromNewContact = (data: any) => {
-      console.log('message from new contact', data);
       emit({ type: 'MESSAGE_FROM_NEW_CONTACT', payload: data });
     };
     const newChatCreated = (chatId: string) => {
@@ -64,9 +65,15 @@ function socketChanel(socket: Socket) {
       emit(messagesActions.deleteMessage({ chatId: message.chatId, messageId: message._id }));
     };
     const messageEdited = ({ message }: any) => {
-      console.log('got edited message on frontend');
-
       emit(messagesActions.editMessage(message));
+    };
+    const reactionAdded = ({ chatId, messageId, reactions }: any) => {
+      emit(messagesActions.setReactions({ chatId, messageId, reactions }));
+    };
+    const reactionDeleted = ({ chatId, messageId, reactions }: any) => {
+      console.log('get response');
+
+      emit(messagesActions.setReactions({ chatId, messageId, reactions }));
     };
 
     socket.on(events.RESPONSE_MESSAGE, resieveMessage);
@@ -76,6 +83,8 @@ function socketChanel(socket: Socket) {
     socket.on(events.TYPING_ON, typing);
     socket.on('messageDeleted', messageDeleted);
     socket.on('messageEdited', messageEdited);
+    socket.on('reactionAdded', reactionAdded);
+    socket.on('reactionDeleted', reactionDeleted);
 
     return () => {
       socket.off(events.RESPONSE_MESSAGE, resieveMessage);
@@ -85,6 +94,8 @@ function socketChanel(socket: Socket) {
       socket.off(events.NEW_CHAT_CREATED, newChatCreated);
       socket.off('messageDeleted', messageDeleted);
       socket.off('messageEdited', messageEdited);
+      socket.off('reactionAdded', reactionAdded);
+      socket.off('reactionDeleted', reactionDeleted);
     };
   });
 }
@@ -113,6 +124,8 @@ function* runChanel(
 function* runSocketEmmiters(socket: Socket) {
   yield fork(sendMessage, socket);
   yield fork(editMessageSaga, socket);
+  yield fork(addReaction, socket);
+  yield fork(deleteReaction, socket);
   yield fork(typingSaga, socket);
   yield fork(deleteMessageSaga, socket);
   yield fork(connectToNewChat, socket);

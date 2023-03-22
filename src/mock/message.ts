@@ -15,23 +15,32 @@ export const mockMessage: IMessage = {
   edited: false,
   reactions: [
     {
+      _id: 'asdfasdf',
       reaction: '💋',
       by: {
-        userId: '23451234123412341234',
+        id: '23451234123412341234',
         fullName: 'Nikita Shevchenko',
         avatar: 'https://picsum.photos/id/25/200/300'
       }
     },
     {
+      _id: '234rfds342frewfr',
       reaction: '🇺🇦',
       by: {
-        userId: '23451234123412341234',
+        id: '23451234123412341234',
         fullName: 'Nikita Shevchenko',
         avatar: ''
       }
     }
   ],
   attachment: {
-    media: [{ type: 'img', src: mockmessagePhoto }]
+    media: [
+      { type: 'img', src: mockmessagePhoto },
+      { type: 'img', src: mockmessagePhoto },
+      { type: 'img', src: mockmessagePhoto },
+      { type: 'img', src: mockmessagePhoto },
+      { type: 'img', src: mockmessagePhoto },
+      { type: 'img', src: mockmessagePhoto }
+    ]
   }
 };

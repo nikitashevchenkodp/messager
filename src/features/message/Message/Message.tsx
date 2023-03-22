@@ -35,8 +35,9 @@ const Message = forwardRef<HTMLDivElement, IMessageProps>(({ message, openMessag
     <>
       <MessageContainer type={type} ref={ref} onContextMenu={(e) => openMessageMenu(e, message)}>
         <MessageContent>
-          <MediaMessage media={mockMessage.attachment?.media} />
+          {/* <MediaMessage media={mockMessage.attachment?.media} /> */}
           <MessageTextContent
+            messageId={message._id}
             type={type}
             text={message?.text}
             meta={{
@@ -44,7 +45,7 @@ const Message = forwardRef<HTMLDivElement, IMessageProps>(({ message, openMessag
               delivered: false,
               edited: message.edited || false
             }}
-            reactions={mockMessage.reactions}
+            reactions={message.reactions}
           />
         </MessageContent>
         {message?.from !== _id ? (

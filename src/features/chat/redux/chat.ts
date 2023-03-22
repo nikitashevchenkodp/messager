@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IReaction } from 'features/message/Reactions/Reactions';
 import { IMessage } from 'types';
 
 interface UIInitState {
@@ -46,6 +47,19 @@ export const messages = createSlice({
       state.byChatId[chatId].messages = state.byChatId[chatId].messages.map((msg) => {
         if (msg._id === _id) {
           return action.payload;
+        }
+        return msg;
+      });
+    },
+    setReactions: (
+      state,
+      action: PayloadAction<{ chatId: string; messageId: string; reactions: IReaction[] }>
+    ) => {
+      console.log('add reaction in slice');
+      const { chatId, messageId, reactions: newReactions } = action.payload;
+      state.byChatId[chatId].messages = state.byChatId[chatId].messages.map((msg) => {
+        if (msg._id === messageId) {
+          return { ...msg, reactions: newReactions };
         }
         return msg;
       });
