@@ -61,7 +61,7 @@ const ChatArea = () => {
     setIsDeleteOpen(false);
   }, [openedMessageMenu]);
 
-  const onModalClose = useCallback(() => setIsDeleteOpen(!isDeleteOpen), []);
+  const onDeleteModalClose = useCallback(() => setIsDeleteOpen(!isDeleteOpen), []);
 
   const addReaction = (e: React.MouseEvent) => {
     console.log(openedMessageMenu);
@@ -93,7 +93,7 @@ const ChatArea = () => {
         </MessageMenuContainer>
       </Menu>
       <ChatMessages messages={messages} scrollRef={scrollRef} openMessageMenu={openMessageMenu} />
-      <Modal active={isDeleteOpen} onClose={onModalClose}>
+      <Modal active={isDeleteOpen} onClose={onDeleteModalClose}>
         <DeletionConfirm confirm={deleteMessage} cancel={closeDeletionModal} />
       </Modal>
     </>

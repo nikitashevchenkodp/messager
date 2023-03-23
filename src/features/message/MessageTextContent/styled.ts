@@ -6,6 +6,7 @@ export const MessageText = styled.div`
   line-height: 1.2;
   font-weight: 500;
   position: relative;
+  hyphens: auto;
 `;
 
 export const MessageMeta = styled.div`

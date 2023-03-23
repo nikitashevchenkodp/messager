@@ -22,6 +22,7 @@ const EditableMessageContainer = styled.div`
 `;
 const CentrContainer = styled.div`
   flex: 1;
+  overflow: hidden;
 `;
 const Title = styled.p``;
 const MessageText = styled.p`
