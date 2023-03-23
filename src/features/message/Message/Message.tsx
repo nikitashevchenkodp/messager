@@ -12,15 +12,20 @@ import { IMessage } from 'types';
 import MediaMessage from '../MediaMessage';
 
 interface IMessageProps {
-  message: IMessage;
+  messageId: string;
   openMessageMenu: (e: React.MouseEvent, message: IMessage) => void;
 }
 import MessageTextContent from '../MessageTextContent';
 import FastReaction from '../FastReaction';
 
-const Message = forwardRef<HTMLDivElement, IMessageProps>(({ message, openMessageMenu }, ref) => {
+const Message = forwardRef<HTMLDivElement, IMessageProps>(({ messageId, openMessageMenu }, ref) => {
   const { _id } = useAppSelector((state) => state.authentication.user);
+  const activechatId = useAppSelector((state) => state.entities.active.activeChat?.chatId);
+  const message = useAppSelector(
+    (state) => state.entities.messages.byChatId[activechatId || ''].messages[messageId]
+  );
   const type = message?.from === _id ? 'sent' : 'recieved';
+  console.log('render message');
 
   return (
     <>
@@ -32,6 +37,7 @@ const Message = forwardRef<HTMLDivElement, IMessageProps>(({ message, openMessag
           <MessageContent>
             {/* <MediaMessage media={mockMessage.attachment?.media} /> */}
             <MessageTextContent
+              chatId={message.chatId}
               messageId={message._id}
               type={type}
               text={message?.text}

@@ -11,7 +11,7 @@ export const MessageWrapper = styled.div<{ type: 'sent' | 'recieved'; selected: 
       return `
         &::before {
           content: '';
-          z-index: 100;
+        
           position: absolute;
           top: 0;
           left: 0;

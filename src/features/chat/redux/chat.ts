@@ -2,12 +2,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IReaction } from 'features/message/Reactions/Reactions';
 import { IMessage } from 'types';
+import { arrayOfIds, arrayToObject } from 'utils/arrayToObject';
 
 interface UIInitState {
   byChatId: {
     [id: string]: {
       chatId: string;
-      messages: IMessage[];
+      messages: {
+        [id: string]: IMessage;
+      };
+      messagesIds: string[];
       editableMessage: IMessage | null;
     };
   };
@@ -23,54 +27,54 @@ export const messages = createSlice({
   reducers: {
     setChat: (state, action: PayloadAction<{ chatId: string; messages: any[] }>) => {
       const { chatId, messages } = action.payload;
+      const messagesById = arrayToObject(messages, '_id');
+      const messagesIds = arrayOfIds(messages, '_id');
       state.byChatId[action.payload.chatId] = {
         chatId,
-        messages,
+        messages: messagesById,
+        messagesIds,
         editableMessage: null
       };
     },
-    newMessage: (state, action: PayloadAction<any>) => {
-      const chatId = action.payload.chatId;
-      state.byChatId[chatId].messages.push(action.payload);
+    newMessage: (state, action: PayloadAction<IMessage>) => {
+      const { chatId, _id } = action.payload;
+      state.byChatId[chatId].messages[_id] = action.payload;
+      state.byChatId[chatId].messagesIds.push(_id);
     },
     startDeleteMessage: (state, action: PayloadAction<IMessage>) => {},
     deleteMessage: (state, action: PayloadAction<{ chatId: string; messageId: string }>) => {
       const { chatId, messageId } = action.payload;
-      state.byChatId[chatId].messages = state.byChatId[chatId].messages.filter(
-        (msg) => msg._id !== messageId
+      delete state.byChatId[chatId].messages[messageId];
+      state.byChatId[chatId].messagesIds = state.byChatId[chatId].messagesIds.filter(
+        (id) => id !== messageId
       );
     },
     editMessage: (state, action: PayloadAction<IMessage>) => {
-      console.log('edited message in slice');
-
       const { chatId, _id } = action.payload;
-      state.byChatId[chatId].messages = state.byChatId[chatId].messages.map((msg) => {
-        if (msg._id === _id) {
-          return action.payload;
-        }
-        return msg;
-      });
+      state.byChatId[chatId].messages[_id] = action.payload;
     },
-    setReactions: (
+    addReaction: (
       state,
-      action: PayloadAction<{ chatId: string; messageId: string; reactions: IReaction[] }>
+      action: PayloadAction<{ chatId: string; messageId: string; reaction: IReaction }>
     ) => {
-      console.log('add reaction in slice');
-      const { chatId, messageId, reactions: newReactions } = action.payload;
-      state.byChatId[chatId].messages = state.byChatId[chatId].messages.map((msg) => {
-        if (msg._id === messageId) {
-          return { ...msg, reactions: newReactions };
-        }
-        return msg;
-      });
+      const { chatId, messageId, reaction } = action.payload;
+      state.byChatId[chatId].messages[messageId].reactions.push(reaction);
+    },
+    deleteReaction: (
+      state,
+      action: PayloadAction<{ chatId: string; messageId: string; reactionId: string }>
+    ) => {
+      const { chatId, messageId, reactionId } = action.payload;
+      state.byChatId[chatId].messages[messageId].reactions = state.byChatId[chatId].messages[
+        messageId
+      ].reactions.filter((reaction) => reaction._id !== reactionId);
     },
     setEditableMessage: (state, action: PayloadAction<{ chatId: string; messageId?: string }>) => {
       const { chatId, messageId } = action.payload;
       if (!messageId) {
         state.byChatId[chatId].editableMessage = null;
       } else {
-        state.byChatId[chatId].editableMessage =
-          state.byChatId[chatId].messages.find((message) => message._id === messageId) || null;
+        state.byChatId[chatId].editableMessage = state.byChatId[chatId].messages[messageId];
       }
     }
   }

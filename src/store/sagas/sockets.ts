@@ -67,13 +67,12 @@ function socketChanel(socket: Socket) {
     const messageEdited = ({ message }: any) => {
       emit(messagesActions.editMessage(message));
     };
-    const reactionAdded = ({ chatId, messageId, reactions }: any) => {
-      emit(messagesActions.setReactions({ chatId, messageId, reactions }));
+    const reactionAdded = ({ chatId, messageId, reaction }: any) => {
+      emit(messagesActions.addReaction({ chatId, messageId, reaction }));
     };
-    const reactionDeleted = ({ chatId, messageId, reactions }: any) => {
+    const reactionDeleted = ({ chatId, messageId, reactionId }: any) => {
       console.log('get response');
-
-      emit(messagesActions.setReactions({ chatId, messageId, reactions }));
+      emit(messagesActions.deleteReaction({ chatId, messageId, reactionId }));
     };
 
     socket.on(events.RESPONSE_MESSAGE, resieveMessage);

@@ -44,8 +44,6 @@ export const getChat = async (chatId: string) => {
 
 export const getChatMessages = async (chatId = '') => {
   const res = await axiosInst.get(`/api/messages/${chatId}`);
-  console.log(res);
-
   return res;
 };
 export const getAllUsers = async () => {

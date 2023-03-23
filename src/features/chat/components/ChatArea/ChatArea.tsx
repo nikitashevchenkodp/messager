@@ -20,10 +20,8 @@ const MessageMenuContainer = styled.div`
 
 const ChatArea = () => {
   const activeChatId = useAppSelector((state) => state.entities.active.activeChat?.chatId);
-  const messages = useAppSelector(
-    (state) => state.entities.messages.byChatId[activeChatId || '']?.messages
-  );
-  const scrollRef = useScrollToBottom(messages);
+  console.log('render chat area');
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
@@ -92,7 +90,7 @@ const ChatArea = () => {
           <MenuOptions onEdit={editMessage} onDelete={openDeletionModal} />
         </MessageMenuContainer>
       </Menu>
-      <ChatMessages messages={messages} scrollRef={scrollRef} openMessageMenu={openMessageMenu} />
+      <ChatMessages openMessageMenu={openMessageMenu} />
       <Modal active={isDeleteOpen} onClose={onDeleteModalClose}>
         <DeletionConfirm confirm={deleteMessage} cancel={closeDeletionModal} />
       </Modal>

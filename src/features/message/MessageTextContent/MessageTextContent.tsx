@@ -7,6 +7,7 @@ import { IReaction } from '../Reactions/Reactions';
 
 interface IMessageTextContent {
   messageId: string;
+  chatId: string;
   type: 'sent' | 'recieved';
   text: string;
   meta: {
@@ -22,12 +23,13 @@ const MessageTextContent: FC<IMessageTextContent> = ({
   meta,
   reactions,
   type,
-  messageId
+  messageId,
+  chatId
 }) => {
   return (
     <MessageText>
       {text}
-      <Reactions type={type} reactions={reactions} messageId={messageId} />
+      <Reactions type={type} reactions={reactions} messageId={messageId} chatId={chatId} />
       <MessageMeta>
         {meta.edited && <span>edited</span>}
         <span>{formatTime(meta?.createdAt)}</span>

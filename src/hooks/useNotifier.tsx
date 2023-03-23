@@ -11,7 +11,6 @@ const useNotifier = () => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   React.useEffect(() => {
-    console.log(notifications.length);
     notifications.forEach(({ message, options, dismissed }) => {
       if (dismissed) {
         // dismiss snackbar using notistack

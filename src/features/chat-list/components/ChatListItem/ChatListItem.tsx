@@ -25,11 +25,13 @@ interface ChatListItemProps {
 const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
   const chatListState = useAppSelector((state) => state.ui.uiSettings.chatListState);
   const online = useAppSelector((state) => state.users.statusesById[chatItem.user.id]);
-  const messages = useAppSelector(
-    (state) => state.entities.messages.byChatId[chatItem.chatId]?.messages
+  const messagesIds = useAppSelector(
+    (state) => state.entities.messages.byChatId[chatItem.chatId]?.messagesIds
   );
-  const lastMessage = messages?.[messages.length - 1];
-  console.log('render', chatItem.user.fullName);
+  const lastMessageId = messagesIds?.[messagesIds.length - 1];
+  const lastMessage = useAppSelector(
+    (state) => state.entities.messages.byChatId[chatItem.chatId]?.messages[lastMessageId]
+  );
 
   return (
     <ChatListItemContainer isActive={active} onClick={onClick}>

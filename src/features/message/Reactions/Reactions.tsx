@@ -17,15 +17,16 @@ interface IReactionsProps {
   reactions?: IReaction[];
   type: 'sent' | 'recieved';
   messageId: string;
+  chatId: string;
 }
 
-const Reactions: FC<IReactionsProps> = ({ reactions, type, messageId }) => {
+const Reactions: FC<IReactionsProps> = ({ reactions, type, messageId, chatId }) => {
   const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.authentication.user._id);
 
   const deleteReaction = (reaction: IReaction) => {
     if (reaction.by.id !== userId) return;
-    dispatch({ type: 'deleteReaction', payload: { reactionId: reaction._id, messageId } });
+    dispatch({ type: 'deleteReaction', payload: { reactionId: reaction._id, messageId, chatId } });
   };
 
   return (
