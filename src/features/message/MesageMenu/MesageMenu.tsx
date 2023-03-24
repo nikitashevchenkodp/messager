@@ -10,9 +10,10 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 interface IMenuOptionsProps {
   onEdit: () => void;
   onDelete: () => void;
+  onSelect: () => void;
 }
 
-const MenuOptions: FC<IMenuOptionsProps> = ({ onEdit, onDelete }) => {
+const MenuOptions: FC<IMenuOptionsProps> = ({ onEdit, onDelete, onSelect }) => {
   return (
     <MenuItems>
       <MenuItem onClick={onDelete}>
@@ -27,7 +28,7 @@ const MenuOptions: FC<IMenuOptionsProps> = ({ onEdit, onDelete }) => {
         <ReplyIcon />
         Reply
       </MenuItem>
-      <MenuItem onClick={() => console.log('select')}>
+      <MenuItem onClick={onSelect}>
         <CheckCircleOutlineIcon />
         Select
       </MenuItem>

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useCallback, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { useScrollToBottom } from 'hooks/useScrollToBottom';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import Menu from 'components/Menu';
@@ -18,15 +18,24 @@ const MessageMenuContainer = styled.div`
   align-items: center;
 `;
 
-const ChatArea = () => {
-  const activeChatId = useAppSelector((state) => state.entities.active.activeChat?.chatId);
-  console.log('render chat area');
+interface IChatAreaProps {
+  addToSelected: (id: string) => void;
+  toggleFromSelected: (id: string) => void;
+  selectedMessagesIds: Record<PropertyKey, string>;
+}
 
+const ChatArea: FC<IChatAreaProps> = ({
+  addToSelected,
+  selectedMessagesIds,
+  toggleFromSelected
+}) => {
+  const activeChatId = useAppSelector((state) => state.entities.active.activeChat?.chatId);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
   const [openedMessageMenu, setOpenedMessageMenu] = useState<null | IMessage>(null);
   const { _id, avatar, fullName } = useAppSelector((state) => state.authentication.user);
+  console.log(selectedMessagesIds);
 
   const dispatch = useAppDispatch();
 
@@ -79,6 +88,10 @@ const ChatArea = () => {
     dispatch({ type: 'addReaction', payload: reactionItem });
   };
 
+  const selectMessage = () => {
+    addToSelected(openedMessageMenu?._id || '');
+  };
+
   return (
     <>
       <Menu isOpen={isMenuOpen} coordinates={coordinates} onClose={() => setIsMenuOpen(false)}>
@@ -87,10 +100,14 @@ const ChatArea = () => {
             addReaction={addReaction}
             alreadeMadeReactions={openedMessageMenu?.reactions}
           />
-          <MenuOptions onEdit={editMessage} onDelete={openDeletionModal} />
+          <MenuOptions onEdit={editMessage} onDelete={openDeletionModal} onSelect={selectMessage} />
         </MessageMenuContainer>
       </Menu>
-      <ChatMessages openMessageMenu={openMessageMenu} />
+      <ChatMessages
+        toggleFromSelected={toggleFromSelected}
+        selectedMessagesIds={selectedMessagesIds}
+        openMessageMenu={openMessageMenu}
+      />
       <Modal active={isDeleteOpen} onClose={onDeleteModalClose}>
         <DeletionConfirm confirm={deleteMessage} cancel={closeDeletionModal} />
       </Modal>
