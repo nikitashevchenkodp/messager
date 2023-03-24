@@ -1,6 +1,8 @@
 import Button from 'components/shared/Button';
 import { CHAT_HEADER_HEIGHT } from 'consts';
 import React, { FC } from 'react';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { activeEntitiesActions } from 'store/slices/activeEntities';
 import styled from 'styled-components';
 
 interface ISelectedMessagesMenuProps {
@@ -46,16 +48,20 @@ const PrimaryButton = styled(Button)`
   font-size: 15px;
 `;
 
-const SelectedMessagesMenu: FC<ISelectedMessagesMenuProps> = ({
-  selectedMessagesIds,
-  deleteAllSelectedMessages
-}) => {
-  const selectedMessagesQuantity = Object.keys(selectedMessagesIds).length;
+const SelectedMessagesMenu = () => {
+  const selectedMessagesQuantity = Object.keys(
+    useAppSelector((state) => state.entities.active.activeChat.selectedMessagesIds)
+  ).length;
+
+  const dispatch = useAppDispatch();
+
   return (
     <SelectedMessagesMenuContainer isSelectedMessages={Boolean(selectedMessagesQuantity)}>
       <PrimaryButton>Forward {selectedMessagesQuantity}</PrimaryButton>
       <PrimaryButton>Delete {selectedMessagesQuantity}</PrimaryButton>
-      <TextButton onClick={deleteAllSelectedMessages}>Cancel</TextButton>
+      <TextButton onClick={() => dispatch(activeEntitiesActions.deleteAllSelectedMessagesIds())}>
+        Cancel
+      </TextButton>
     </SelectedMessagesMenuContainer>
   );
 };

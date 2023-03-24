@@ -15,7 +15,7 @@ interface IMessageProps {
   messageId: string;
   openMessageMenu: (e: React.MouseEvent, message: IMessage) => void;
   selected: boolean;
-  toggleFromSelected: (id: string) => void;
+  toggleFromSelected?: () => void;
 }
 import MessageTextContent from '../MessageTextContent';
 import FastReaction from '../FastReaction';
@@ -35,7 +35,7 @@ const Message = forwardRef<HTMLDivElement, IMessageProps>(
           selected={selected}
           onContextMenu={(e) => openMessageMenu(e, message)}
           type={type}
-          onClick={() => toggleFromSelected?.(messageId)}>
+          onClick={toggleFromSelected}>
           <MessageContainer ref={ref} type={type}>
             <MessageContent>
               {/* <MediaMessage media={mockMessage.attachment?.media} /> */}

@@ -11,6 +11,7 @@ import ChatMessages from '../ChatMessages';
 import styled from 'styled-components';
 import ReactionsMenu from 'features/message/ReactionsMenu';
 import MenuOptions from 'features/message/MesageMenu';
+import { activeEntitiesActions } from 'store/slices/activeEntities';
 
 const MessageMenuContainer = styled.div`
   display: flex;
@@ -18,64 +19,48 @@ const MessageMenuContainer = styled.div`
   align-items: center;
 `;
 
-interface IChatAreaProps {
-  addToSelected: (id: string) => void;
-  toggleFromSelected: (id: string) => void;
-  selectedMessagesIds: Record<PropertyKey, string>;
-}
-
-const ChatArea: FC<IChatAreaProps> = ({
-  addToSelected,
-  selectedMessagesIds,
-  toggleFromSelected
-}) => {
+const ChatArea = () => {
   const activeChatId = useAppSelector((state) => state.entities.active.activeChat?.chatId);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
-  const [openedMessageMenu, setOpenedMessageMenu] = useState<null | IMessage>(null);
   const { _id, avatar, fullName } = useAppSelector((state) => state.authentication.user);
-  console.log(selectedMessagesIds);
-
+  const activeMessage = useAppSelector((state) => state.entities.active.activeChat.activeMessage);
+  const isModalOpen = useAppSelector((state) => state.entities.active.activeChat.isOpenDeleteModal);
   const dispatch = useAppDispatch();
 
   const openMessageMenu = useCallback((e: React.MouseEvent, message: IMessage) => {
     e.preventDefault();
     setCoordinates({ x: e.clientX, y: e.clientY });
-    setOpenedMessageMenu(message);
+    dispatch(activeEntitiesActions.setActiveMessage(message));
     setIsMenuOpen(true);
   }, []);
 
   const editMessage = useCallback(() => {
     dispatch(
       messagesActions.setEditableMessage({
-        messageId: openedMessageMenu?._id,
+        messageId: activeMessage?._id,
         chatId: activeChatId!
       })
     );
-  }, [openedMessageMenu]);
+  }, [activeMessage]);
 
   const openDeletionModal = useCallback(() => {
-    setIsDeleteOpen(true);
+    dispatch(activeEntitiesActions.setIsOpenDeleteModal(true));
   }, []);
 
   const closeDeletionModal = useCallback(() => {
-    setIsDeleteOpen(false);
+    dispatch(activeEntitiesActions.setIsOpenDeleteModal(false));
   }, []);
 
   const deleteMessage = useCallback(() => {
-    openedMessageMenu && dispatch(messagesActions.startDeleteMessage(openedMessageMenu));
-    setIsDeleteOpen(false);
-  }, [openedMessageMenu]);
-
-  const onDeleteModalClose = useCallback(() => setIsDeleteOpen(!isDeleteOpen), []);
+    activeMessage && dispatch(messagesActions.startDeleteMessage(activeMessage));
+    dispatch(activeEntitiesActions.setIsOpenDeleteModal(false));
+  }, [activeMessage]);
 
   const addReaction = (e: React.MouseEvent) => {
-    console.log(openedMessageMenu);
-
     const reactionItem = {
-      chatId: openedMessageMenu?.chatId,
-      messageId: openedMessageMenu?._id,
+      chatId: activeMessage?.chatId,
+      messageId: activeMessage?._id,
       reaction: {
         reaction: e.currentTarget.textContent,
         by: {
@@ -89,7 +74,7 @@ const ChatArea: FC<IChatAreaProps> = ({
   };
 
   const selectMessage = () => {
-    addToSelected(openedMessageMenu?._id || '');
+    dispatch(activeEntitiesActions.addToSelectedMessagesIds());
   };
 
   return (
@@ -98,17 +83,13 @@ const ChatArea: FC<IChatAreaProps> = ({
         <MessageMenuContainer>
           <ReactionsMenu
             addReaction={addReaction}
-            alreadeMadeReactions={openedMessageMenu?.reactions}
+            alreadeMadeReactions={activeMessage?.reactions}
           />
           <MenuOptions onEdit={editMessage} onDelete={openDeletionModal} onSelect={selectMessage} />
         </MessageMenuContainer>
       </Menu>
-      <ChatMessages
-        toggleFromSelected={toggleFromSelected}
-        selectedMessagesIds={selectedMessagesIds}
-        openMessageMenu={openMessageMenu}
-      />
-      <Modal active={isDeleteOpen} onClose={onDeleteModalClose}>
+      <ChatMessages openMessageMenu={openMessageMenu} />
+      <Modal active={isModalOpen} onClose={closeDeletionModal}>
         <DeletionConfirm confirm={deleteMessage} cancel={closeDeletionModal} />
       </Modal>
     </>
