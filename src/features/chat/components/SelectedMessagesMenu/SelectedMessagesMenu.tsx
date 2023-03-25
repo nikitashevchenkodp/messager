@@ -1,5 +1,6 @@
 import Button from 'components/shared/Button';
 import { CHAT_HEADER_HEIGHT } from 'consts';
+import { messagesActions } from 'features/chat/redux/chat';
 import React, { FC } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
@@ -49,16 +50,20 @@ const PrimaryButton = styled(Button)`
 `;
 
 const SelectedMessagesMenu = () => {
-  const selectedMessagesQuantity = Object.keys(
-    useAppSelector((state) => state.entities.active.activeChat.selectedMessagesIds)
-  ).length;
+  const selectedMessages = useAppSelector(
+    (state) => state.entities.active.activeChat.selectedMessagesIds
+  );
+
+  const selectedMessagesQuantity = Object.keys(selectedMessages).length;
 
   const dispatch = useAppDispatch();
 
   return (
     <SelectedMessagesMenuContainer isSelectedMessages={Boolean(selectedMessagesQuantity)}>
       <PrimaryButton>Forward {selectedMessagesQuantity}</PrimaryButton>
-      <PrimaryButton>Delete {selectedMessagesQuantity}</PrimaryButton>
+      <PrimaryButton onClick={() => dispatch(activeEntitiesActions.setIsOpenDeleteModal(true))}>
+        Delete {selectedMessagesQuantity}
+      </PrimaryButton>
       <TextButton onClick={() => dispatch(activeEntitiesActions.deleteAllSelectedMessagesIds())}>
         Cancel
       </TextButton>

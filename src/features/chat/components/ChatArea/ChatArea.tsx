@@ -53,7 +53,13 @@ const ChatArea = () => {
   }, []);
 
   const deleteMessage = useCallback(() => {
-    activeMessage && dispatch(messagesActions.startDeleteMessage(activeMessage));
+    activeMessage &&
+      dispatch(
+        messagesActions.startDeleteMessages({
+          chatId: activeChatId,
+          messagesIds: [activeMessage._id]
+        })
+      );
     dispatch(activeEntitiesActions.setIsOpenDeleteModal(false));
   }, [activeMessage]);
 

@@ -61,8 +61,8 @@ function socketChanel(socket: Socket) {
     const typing = ({ typing, userId }: TypingStatusObject) => {
       emit(usersActions.setTypingStatus({ userId, typing }));
     };
-    const messageDeleted = ({ message }: any) => {
-      emit(messagesActions.deleteMessage({ chatId: message.chatId, messageId: message._id }));
+    const messagesDeleted = ({ chatId, messagesIds }: any) => {
+      emit(messagesActions.deleteMessages({ chatId, messagesIds }));
     };
     const messageEdited = ({ message }: any) => {
       emit(messagesActions.editMessage(message));
@@ -80,7 +80,7 @@ function socketChanel(socket: Socket) {
     socket.on(events.NEW_CHAT_CREATED, newChatCreated);
     socket.on(events.ONLINE_USERS, online);
     socket.on(events.TYPING_ON, typing);
-    socket.on('messageDeleted', messageDeleted);
+    socket.on('messageDeleted', messagesDeleted);
     socket.on('messageEdited', messageEdited);
     socket.on('reactionAdded', reactionAdded);
     socket.on('reactionDeleted', reactionDeleted);
@@ -91,7 +91,7 @@ function socketChanel(socket: Socket) {
       socket.off(events.TYPING_ON, typing);
       socket.off(events.MESSAGE_FROM_NEW_CONTACT, messageFromNewContact);
       socket.off(events.NEW_CHAT_CREATED, newChatCreated);
-      socket.off('messageDeleted', messageDeleted);
+      socket.off('messageDeleted', messagesDeleted);
       socket.off('messageEdited', messageEdited);
       socket.off('reactionAdded', reactionAdded);
       socket.off('reactionDeleted', reactionDeleted);

@@ -1,5 +1,5 @@
 import Portal from 'components/Portal';
-import React, { FC, memo, useLayoutEffect, useRef } from 'react';
+import React, { FC, memo, useEffect, useLayoutEffect, useRef } from 'react';
 import { MenuBackground, MenuContainer } from './styled';
 
 interface IMenuProps {
@@ -15,13 +15,28 @@ interface IMenuProps {
 const Menu: FC<IMenuProps> = ({ isOpen, coordinates, onClose, children }) => {
   const containerRef = useRef<null | HTMLDivElement>(null);
 
-  console.log('render Menu');
-
   useLayoutEffect(() => {
     if (containerRef.current) {
       containerRef.current.style.position = 'absolute';
-      containerRef.current.style.top = `${coordinates.y}px`;
-      containerRef.current.style.left = `${coordinates.x}px`;
+      const { width, height } = containerRef.current.getBoundingClientRect();
+      const { x, y } = coordinates;
+
+      const coefficientDeflectionX = window.innerWidth - x - width;
+      const coefficientDeflectionY = window.innerHeight - y - height;
+
+      if (coefficientDeflectionX < 0 && coefficientDeflectionY < 0) {
+        containerRef.current.style.left = `${coordinates.x + coefficientDeflectionX - 10}px`;
+        containerRef.current.style.top = `${coordinates.y + coefficientDeflectionY - 10}px`;
+      } else if (coefficientDeflectionY < 0) {
+        containerRef.current.style.left = `${coordinates.x}px`;
+        containerRef.current.style.top = `${coordinates.y + coefficientDeflectionY - 10}px`;
+      } else if (coefficientDeflectionX < 0) {
+        containerRef.current.style.left = `${coordinates.x + coefficientDeflectionX - 10}px`;
+        containerRef.current.style.top = `${coordinates.y}px`;
+      } else {
+        containerRef.current.style.top = `${coordinates.y}px`;
+        containerRef.current.style.left = `${coordinates.x}px`;
+      }
     }
   }, [coordinates]);
 
