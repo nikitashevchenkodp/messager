@@ -41,13 +41,18 @@ export const messages = createSlice({
       state.byChatId[chatId].messages[_id] = action.payload;
       state.byChatId[chatId].messagesIds.push(_id);
     },
-    startDeleteMessage: (state, action: PayloadAction<IMessage>) => {},
-    deleteMessage: (state, action: PayloadAction<{ chatId: string; messageId: string }>) => {
-      const { chatId, messageId } = action.payload;
-      delete state.byChatId[chatId].messages[messageId];
-      state.byChatId[chatId].messagesIds = state.byChatId[chatId].messagesIds.filter(
-        (id) => id !== messageId
-      );
+    startDeleteMessages: (
+      state,
+      action: PayloadAction<{ chatId: string; messagesIds: string[] }>
+    ) => {},
+    deleteMessages: (state, action: PayloadAction<{ chatId: string; messagesIds: string[] }>) => {
+      const { chatId, messagesIds } = action.payload;
+      messagesIds.forEach((id) => {
+        delete state.byChatId[chatId].messages[id];
+        state.byChatId[chatId].messagesIds = state.byChatId[chatId].messagesIds.filter(
+          (msgId) => msgId !== id
+        );
+      });
     },
     editMessage: (state, action: PayloadAction<IMessage>) => {
       const { chatId, _id } = action.payload;

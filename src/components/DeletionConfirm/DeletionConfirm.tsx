@@ -1,11 +1,42 @@
 import Button from 'components/shared/Button';
+import { messagesActions } from 'features/chat';
 import React from 'react';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { activeEntitiesActions } from 'store/slices/activeEntities';
 import { DeletionConfirmContainer } from './styled';
 
-const DeletionConfirm = ({ confirm, cancel }: any) => {
+const DeletionConfirm = ({ cancel }: any) => {
+  const selectedMessages = useAppSelector(
+    (state) => state.entities.active.activeChat.selectedMessagesIds
+  );
+  const selectedMessagesLength = Object.keys(selectedMessages).length;
+  const activeChatId = useAppSelector((state) => state.entities.active.activeChat.chatId);
+
+  const dispatch = useAppDispatch();
+
+  const deleteMessages = () => {
+    dispatch(
+      messagesActions.startDeleteMessages({
+        chatId: activeChatId,
+        messagesIds: Object.keys(selectedMessages)
+      })
+    );
+    dispatch(activeEntitiesActions.setIsOpenDeleteModal(false));
+    dispatch(activeEntitiesActions.deleteAllSelectedMessagesIds());
+  };
+
+  const onCancel = () => {
+    cancel();
+    dispatch(activeEntitiesActions.deleteAllSelectedMessagesIds());
+  };
+
   return (
     <DeletionConfirmContainer>
       <p>DeletionConfirm</p>
+      <p>
+        Do you really want to delete{' '}
+        {selectedMessagesLength > 1 ? `${selectedMessagesLength} messages` : 'message'}?
+      </p>
       <div
         style={{
           display: 'flex',
@@ -14,11 +45,13 @@ const DeletionConfirm = ({ confirm, cancel }: any) => {
           width: '100%',
           justifyContent: 'center'
         }}>
-        <Button onClick={confirm} style={{ background: 'red', color: '#fff', padding: '8px 16px' }}>
+        <Button
+          onClick={deleteMessages}
+          style={{ background: 'red', color: '#fff', padding: '8px 16px' }}>
           Confirm
         </Button>
         <Button
-          onClick={cancel}
+          onClick={onCancel}
           style={{ background: '#fff', color: 'black', padding: '8px 16px' }}>
           Cancel
         </Button>

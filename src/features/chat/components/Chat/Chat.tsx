@@ -1,8 +1,9 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import { useAppSelector } from 'store/hooks';
 import ChatArea from '../ChatArea/ChatArea';
 import ChatControls from '../ChatControls/ChatControls';
 import ChatHeader from '../ChatHeader/ChatHeader';
+import SelectedMessagesMenu from '../SelectedMessagesMenu';
 
 import { ChatStyled, NoActveChats, SelectChat } from './styled';
 
@@ -11,9 +12,10 @@ const Chat = () => {
 
   return (
     <ChatStyled>
-      {activeChat ? (
+      {activeChat.user ? (
         <>
           {' '}
+          <SelectedMessagesMenu />
           <ChatHeader />
           <ChatArea />
           <ChatControls />

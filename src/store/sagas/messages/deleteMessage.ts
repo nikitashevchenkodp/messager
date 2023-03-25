@@ -5,7 +5,7 @@ import { Socket } from 'socket.io-client';
 
 export function* deleteMessageSaga(socket: Socket): any {
   while (true) {
-    const { payload } = yield take(messagesActions.startDeleteMessage.type);
-    socket.emit('deleteMessage', { message: payload });
+    const { payload } = yield take(messagesActions.startDeleteMessages.type);
+    socket.emit('deleteMessage', { ...payload });
   }
 }

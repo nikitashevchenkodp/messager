@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { DotsIcon, SearchIcon, SideBarIcon } from 'components/icons';
 import { ChatActions, ChatExtraInfo, ChatHeaderInner, ChatHeaderStyled, ChatTitle } from './styled';
 import { useAppSelector } from 'store/hooks';

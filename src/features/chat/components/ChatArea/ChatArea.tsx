@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useCallback, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { useScrollToBottom } from 'hooks/useScrollToBottom';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import Menu from 'components/Menu';
@@ -11,6 +11,7 @@ import ChatMessages from '../ChatMessages';
 import styled from 'styled-components';
 import ReactionsMenu from 'features/message/ReactionsMenu';
 import MenuOptions from 'features/message/MesageMenu';
+import { activeEntitiesActions } from 'store/slices/activeEntities';
 
 const MessageMenuContainer = styled.div`
   display: flex;
@@ -20,53 +21,52 @@ const MessageMenuContainer = styled.div`
 
 const ChatArea = () => {
   const activeChatId = useAppSelector((state) => state.entities.active.activeChat?.chatId);
-  console.log('render chat area');
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
-  const [openedMessageMenu, setOpenedMessageMenu] = useState<null | IMessage>(null);
   const { _id, avatar, fullName } = useAppSelector((state) => state.authentication.user);
-
+  const activeMessage = useAppSelector((state) => state.entities.active.activeChat.activeMessage);
+  const isModalOpen = useAppSelector((state) => state.entities.active.activeChat.isOpenDeleteModal);
   const dispatch = useAppDispatch();
 
   const openMessageMenu = useCallback((e: React.MouseEvent, message: IMessage) => {
     e.preventDefault();
     setCoordinates({ x: e.clientX, y: e.clientY });
-    setOpenedMessageMenu(message);
+    dispatch(activeEntitiesActions.setActiveMessage(message));
     setIsMenuOpen(true);
   }, []);
 
   const editMessage = useCallback(() => {
     dispatch(
       messagesActions.setEditableMessage({
-        messageId: openedMessageMenu?._id,
+        messageId: activeMessage?._id,
         chatId: activeChatId!
       })
     );
-  }, [openedMessageMenu]);
+  }, [activeMessage]);
 
   const openDeletionModal = useCallback(() => {
-    setIsDeleteOpen(true);
+    dispatch(activeEntitiesActions.setIsOpenDeleteModal(true));
   }, []);
 
   const closeDeletionModal = useCallback(() => {
-    setIsDeleteOpen(false);
+    dispatch(activeEntitiesActions.setIsOpenDeleteModal(false));
   }, []);
 
   const deleteMessage = useCallback(() => {
-    openedMessageMenu && dispatch(messagesActions.startDeleteMessage(openedMessageMenu));
-    setIsDeleteOpen(false);
-  }, [openedMessageMenu]);
-
-  const onDeleteModalClose = useCallback(() => setIsDeleteOpen(!isDeleteOpen), []);
+    activeMessage &&
+      dispatch(
+        messagesActions.startDeleteMessages({
+          chatId: activeChatId,
+          messagesIds: [activeMessage._id]
+        })
+      );
+    dispatch(activeEntitiesActions.setIsOpenDeleteModal(false));
+  }, [activeMessage]);
 
   const addReaction = (e: React.MouseEvent) => {
-    console.log(openedMessageMenu);
-
     const reactionItem = {
-      chatId: openedMessageMenu?.chatId,
-      messageId: openedMessageMenu?._id,
+      chatId: activeMessage?.chatId,
+      messageId: activeMessage?._id,
       reaction: {
         reaction: e.currentTarget.textContent,
         by: {
@@ -79,19 +79,23 @@ const ChatArea = () => {
     dispatch({ type: 'addReaction', payload: reactionItem });
   };
 
+  const selectMessage = () => {
+    dispatch(activeEntitiesActions.addToSelectedMessagesIds());
+  };
+
   return (
     <>
       <Menu isOpen={isMenuOpen} coordinates={coordinates} onClose={() => setIsMenuOpen(false)}>
         <MessageMenuContainer>
           <ReactionsMenu
             addReaction={addReaction}
-            alreadeMadeReactions={openedMessageMenu?.reactions}
+            alreadeMadeReactions={activeMessage?.reactions}
           />
-          <MenuOptions onEdit={editMessage} onDelete={openDeletionModal} />
+          <MenuOptions onEdit={editMessage} onDelete={openDeletionModal} onSelect={selectMessage} />
         </MessageMenuContainer>
       </Menu>
       <ChatMessages openMessageMenu={openMessageMenu} />
-      <Modal active={isDeleteOpen} onClose={onDeleteModalClose}>
+      <Modal active={isModalOpen} onClose={closeDeletionModal}>
         <DeletionConfirm confirm={deleteMessage} cancel={closeDeletionModal} />
       </Modal>
     </>
