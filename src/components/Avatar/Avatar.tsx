@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
+import React, { FC, ReactElement } from 'react';
 import styled from 'styled-components';
 
 type IAvatar = {
   src?: string;
   fullName?: string;
   styles?: React.CSSProperties;
-};
+} & React.HTMLAttributes<HTMLDivElement>;
 
 const AvatarContainer = styled.div`
   border-radius: 50%;
@@ -26,7 +26,7 @@ export const AvatarImg = styled.img`
 `;
 
 const Avatar: FC<IAvatar> = (props) => {
-  const { fullName, src, styles } = props;
+  const { fullName, src, styles, ...restProps } = props;
 
   const lattersInsteadOfPicture = (fullName: string) => {
     const arr = fullName.split(' ');
@@ -55,7 +55,11 @@ const Avatar: FC<IAvatar> = (props) => {
     return null;
   };
 
-  return <AvatarContainer style={styles}>{content()}</AvatarContainer>;
+  return (
+    <AvatarContainer {...restProps} style={styles}>
+      {content()}
+    </AvatarContainer>
+  );
 };
 
 export default Avatar;

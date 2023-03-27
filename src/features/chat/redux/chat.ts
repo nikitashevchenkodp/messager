@@ -60,10 +60,10 @@ export const messages = createSlice({
     },
     addReaction: (
       state,
-      action: PayloadAction<{ chatId: string; messageId: string; reaction: IReaction }>
+      action: PayloadAction<{ chatId: string; messageId: string; reactions: IReaction[] }>
     ) => {
-      const { chatId, messageId, reaction } = action.payload;
-      state.byChatId[chatId].messages[messageId].reactions.push(reaction);
+      const { chatId, messageId, reactions } = action.payload;
+      state.byChatId[chatId].messages[messageId].reactions = reactions;
     },
     deleteReaction: (
       state,

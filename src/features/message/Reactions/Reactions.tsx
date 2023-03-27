@@ -1,7 +1,9 @@
 import Avatar from 'components/Avatar';
+import { mockMessage } from 'mock/message';
 import React, { FC } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { ReactionButton, ReactionsContainer } from './styled';
+import styled from 'styled-components';
+import { ReactionAvatar, ReactionButton, ReactionsContainer } from './styled';
 
 export interface IReaction {
   _id: string;
@@ -20,29 +22,75 @@ interface IReactionsProps {
   chatId: string;
 }
 
+interface TransformedReaction {
+  _id: string;
+  reaction: string;
+  by: {
+    id: string;
+    fullName: string;
+    avatar: string;
+  }[];
+}
+
 const Reactions: FC<IReactionsProps> = ({ reactions, type, messageId, chatId }) => {
   const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.authentication.user._id);
 
-  const deleteReaction = (reaction: IReaction) => {
-    if (reaction.by.id !== userId) return;
-    dispatch({ type: 'deleteReaction', payload: { reactionId: reaction._id, messageId, chatId } });
+  const deleteReaction = (delReaction: TransformedReaction) => {
+    if (!delReaction.by.find((user) => user.id === userId)) return;
+    const deletedReaction = reactions?.find(
+      (reaction) => reaction.by.id === userId && reaction.reaction === delReaction.reaction
+    );
+    if (deletedReaction) {
+      dispatch({
+        type: 'deleteReaction',
+        payload: { reactionId: deletedReaction._id, messageId, chatId }
+      });
+    }
+  };
+
+  const transformReactions = (reactions?: IReaction[]): TransformedReaction[] | undefined => {
+    if (!reactions?.length) return;
+    const ht = {} as Record<string, { id: string; fullName: string; avatar: string }[]>;
+    for (const reaction of reactions) {
+      const current = reaction.reaction;
+      if (ht[current]) ht[current].push(reaction.by);
+      else ht[current] = [reaction.by];
+    }
+
+    const newReactions = reactions.map((reaction) => {
+      const currentReaction = reaction.reaction;
+      return {
+        ...reaction,
+        by: ht[currentReaction]
+      };
+    });
+
+    const resultIds = new Set();
+
+    const result = newReactions.filter((reaction) => {
+      const currentReaction = reaction.reaction;
+      const isDublicate = resultIds.has(currentReaction);
+      resultIds.add(currentReaction);
+      if (isDublicate) return false;
+      return true;
+    });
+
+    return result;
   };
 
   return (
     <ReactionsContainer>
-      {reactions?.map((reaction) => (
+      {transformReactions(reactions)?.map((reaction) => (
         <ReactionButton
           key={reaction._id}
           messageType={type}
           onClick={() => deleteReaction(reaction)}>
           <div>{reaction.reaction}</div>
-          <div>
-            <Avatar
-              src={reaction.by.avatar}
-              fullName={reaction.by.fullName}
-              styles={{ width: '20px', height: '20px', fontSize: '10px' }}
-            />
+          <div style={{ display: 'flex' }}>
+            {reaction.by.map((user) => (
+              <ReactionAvatar key={user.id} src={user.avatar} fullName={user.fullName} />
+            ))}
           </div>
         </ReactionButton>
       ))}

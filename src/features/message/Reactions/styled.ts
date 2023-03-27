@@ -1,3 +1,4 @@
+import Avatar from 'components/Avatar';
 import styled from 'styled-components';
 
 export const ReactionsContainer = styled.div`
@@ -28,5 +29,15 @@ export const ReactionButton = styled.button<{ messageType: 'sent' | 'recieved' }
       rgba(0, 0, 0, 0.1) 100%,
       rgba(255, 255, 255, 0.17833070728291311) 100%
     );
+  }
+`;
+
+export const ReactionAvatar = styled(Avatar)`
+  width: 20px;
+  height: 20px;
+  font-size: 10px;
+  &:not(:first-child) {
+    position: relative;
+    left: -5px;
   }
 `;

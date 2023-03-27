@@ -67,8 +67,8 @@ function socketChanel(socket: Socket) {
     const messageEdited = ({ message }: any) => {
       emit(messagesActions.editMessage(message));
     };
-    const reactionAdded = ({ chatId, messageId, reaction }: any) => {
-      emit(messagesActions.addReaction({ chatId, messageId, reaction }));
+    const reactionAdded = ({ chatId, messageId, reactions }: any) => {
+      emit(messagesActions.addReaction({ chatId, messageId, reactions }));
     };
     const reactionDeleted = ({ chatId, messageId, reactionId }: any) => {
       console.log('get response');
