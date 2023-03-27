@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import {
   MessageContainer,
-  MessageContent,
+  MessageBody,
   MessageWrapper,
   RecieveTailContainer,
   SentTailContainer
@@ -17,8 +17,14 @@ interface IMessageProps {
   selected: boolean;
   toggleFromSelected?: () => void;
 }
-import MessageTextContent from '../MessageTextContent';
 import FastReaction from '../FastReaction';
+import { MessageMainContent } from '../MessageTextContent/styled';
+import Reactions from '../Reactions';
+import styled from 'styled-components';
+import MessageMeta from '../MessageMeta';
+import { mockMessage } from 'mock/message';
+
+const Text = styled.p``;
 
 const Message = forwardRef<HTMLDivElement, IMessageProps>(
   ({ messageId, openMessageMenu, selected, toggleFromSelected }, ref) => {
@@ -37,28 +43,31 @@ const Message = forwardRef<HTMLDivElement, IMessageProps>(
           type={type}
           onClick={toggleFromSelected}>
           <MessageContainer ref={ref} type={type}>
-            <MessageContent>
-              {/* <MediaMessage media={mockMessage.attachment?.media} /> */}
-              <MessageTextContent
-                chatId={message.chatId}
-                messageId={message._id}
-                type={type}
-                text={message?.text}
-                meta={{
-                  createdAt: message?.createdAt,
-                  delivered: false,
-                  edited: message.edited || false
-                }}
-                reactions={message.reactions}
-              />
-            </MessageContent>
+            <MessageBody>
+              <MediaMessage media={message.attachment?.media} />
+              <MessageMainContent>
+                <Text data-testid="message-text">{message.text}</Text>
+                <Reactions
+                  type={type}
+                  reactions={mockMessage.reactions}
+                  messageId={message._id}
+                  chatId={message.chatId}
+                />
+                <MessageMeta
+                  meta={{
+                    edited: message.createdAt,
+                    createdAt: message.createdAt
+                  }}
+                />
+              </MessageMainContent>
+            </MessageBody>
             {message?.from !== _id ? (
-              <RecieveTailContainer>
+              <RecieveTailContainer data-testid="message-tail-recieved">
                 <MessageRecieveTail />
               </RecieveTailContainer>
             ) : (
               <SentTailContainer>
-                <MessageSentTail />
+                <MessageSentTail data-testid="message-tail-sent" />
               </SentTailContainer>
             )}
             <FastReaction position={message?.from !== _id ? 'right' : 'left'} />

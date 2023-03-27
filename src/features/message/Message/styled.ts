@@ -33,7 +33,7 @@ export const MessageContainer = styled.div<{ type: 'sent' | 'recieved' }>`
   max-width: 464px;
 `;
 
-export const MessageContent = styled.div`
+export const MessageBody = styled.div`
   overflow: hidden;
   border-radius: 10px 10px 0 0;
 `;

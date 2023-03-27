@@ -21,9 +21,9 @@ export interface IMessage {
   chatId: string;
   to: string;
   updatedAt: string;
-  delivered?: boolean;
+  delivered: boolean;
   unreaded?: boolean;
-  edited?: boolean;
+  edited: boolean;
   reactions: IReaction[];
   attachment?: {
     media: IMediaItem[];

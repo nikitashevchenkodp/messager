@@ -19,7 +19,7 @@ interface IMessage {
   from: string;
   to: string;
   createdAt: string;
-  edited?: boolean;
+  edited: boolean;
   reactions?: IReaction[];
   attachment?: {
     media: IMediaItem[];

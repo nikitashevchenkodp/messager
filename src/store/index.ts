@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import persistStore from 'redux-persist/es/persistStore';
 import persistReducer from 'redux-persist/lib/persistReducer';
@@ -43,9 +44,10 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const sagaMiddleware = createSagaMiddleware();
 
-export const createStore = () => {
+export const createStore = (initState = {}) => {
   return configureStore({
     reducer: persistedReducer,
+    preloadedState: initState,
     middleware: (getDefaultMiddleware) => [
       ...getDefaultMiddleware({
         serializableCheck: false

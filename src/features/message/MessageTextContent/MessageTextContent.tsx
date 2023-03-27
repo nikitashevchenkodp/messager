@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { DoubleCheck } from 'components/icons';
-import { MessageMeta, MessageText } from './styled';
+import { MessageMeta, MessageMainContent } from './styled';
 import { formatTime } from 'helpers/formatMessageTime';
 import Reactions from '../Reactions';
 import { IReaction } from '../Reactions/Reactions';
@@ -27,17 +27,17 @@ const MessageTextContent: FC<IMessageTextContent> = ({
   chatId
 }) => {
   return (
-    <MessageText>
+    <MessageMainContent data-testid="message-text">
       {text}
       <Reactions type={type} reactions={reactions} messageId={messageId} chatId={chatId} />
-      <MessageMeta>
+      <MessageMeta data-testid="message-meta">
         {meta.edited && <span>edited</span>}
         <span>{formatTime(meta?.createdAt)}</span>
         <span>
           <DoubleCheck width="19px" height="19px" />
         </span>
       </MessageMeta>
-    </MessageText>
+    </MessageMainContent>
   );
 };
 

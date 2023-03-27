@@ -1,8 +1,5 @@
-import Avatar from 'components/Avatar';
-import { mockMessage } from 'mock/message';
 import React, { FC } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import styled from 'styled-components';
 import { ReactionAvatar, ReactionButton, ReactionsContainer } from './styled';
 
 export interface IReaction {
@@ -80,16 +77,22 @@ const Reactions: FC<IReactionsProps> = ({ reactions, type, messageId, chatId }) 
   };
 
   return (
-    <ReactionsContainer>
+    <ReactionsContainer data-testid="message-reactions">
       {transformReactions(reactions)?.map((reaction) => (
         <ReactionButton
+          data-testid={`reaction-btn${reaction._id}`}
           key={reaction._id}
           messageType={type}
           onClick={() => deleteReaction(reaction)}>
           <div>{reaction.reaction}</div>
           <div style={{ display: 'flex' }}>
             {reaction.by.map((user) => (
-              <ReactionAvatar key={user.id} src={user.avatar} fullName={user.fullName} />
+              <ReactionAvatar
+                data-testid={`reaction-avatar${user.id}`}
+                key={user.id}
+                src={user.avatar}
+                fullName={user.fullName}
+              />
             ))}
           </div>
         </ReactionButton>

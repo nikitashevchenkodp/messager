@@ -1,15 +1,6 @@
 import styled from 'styled-components';
 
-export const MessageMainContent = styled.div`
-  font-size: 14px;
-  padding: 8px 12px 0px 12px;
-  line-height: 1.2;
-  font-weight: 500;
-  position: relative;
-  hyphens: auto;
-`;
-
-export const MessageMeta = styled.div`
+export const MessageMetaStyled = styled.div`
   position: relative;
   top: 2px;
   font-size: 12px;
