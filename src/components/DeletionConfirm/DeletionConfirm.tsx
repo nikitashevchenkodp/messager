@@ -31,7 +31,7 @@ const DeletionConfirm = ({ cancel }: any) => {
   };
 
   return (
-    <DeletionConfirmContainer>
+    <DeletionConfirmContainer data-testid="delete-message-confirmation">
       <p>DeletionConfirm</p>
       <p>
         Do you really want to delete{' '}

@@ -2,6 +2,10 @@ import { rest } from 'msw';
 import { mockChatMessages83d, mockMessaged066f, mockMessages2ae7f } from './mockMessages';
 
 export const handlers = [
+  // rest.get(`http://localhost:5002/socket.io/`, (req, res, ctx) => {
+  //   const handshakeResponse = '0';
+  //   return res(ctx.status(200), ctx.text('0'));
+  // }),
   rest.get('http://localhost:5002/api/chats', (req, res, ctx) => {
     return res(
       ctx.json([

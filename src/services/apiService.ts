@@ -22,10 +22,10 @@ export const axiosInst = axios.create({
 });
 
 axiosInst.interceptors.request.use((config: any) => {
-  const { _id } = store.getState().authentication.user;
+  const userId = store.getState().authentication.user?._id;
   return {
     ...config,
-    headers: { ...config.headers, authorization: _id || '' }
+    headers: { ...config.headers, authorization: userId || '' }
   };
 });
 
