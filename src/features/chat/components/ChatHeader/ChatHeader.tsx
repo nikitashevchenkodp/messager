@@ -8,7 +8,7 @@ const ChatHeader = () => {
   const online = useAppSelector((state) => state.users.statusesById[userWithWhomChat?.id || '']);
 
   return (
-    <ChatHeaderStyled>
+    <ChatHeaderStyled data-testid="chat-header">
       <ChatHeaderInner>
         <div
           style={{

@@ -11,8 +11,6 @@ interface IReactionsMenuProps {
 const reactions = ['🤪', '😀', '😂', '💋', '🇺🇦', '🧠', '💐', '🥹', '🥳', '❤️', '❤️‍🩹', '🥟', '🥫'];
 
 const ReactionsMenu: FC<IReactionsMenuProps> = ({ addReaction, alreadeMadeReactions }) => {
-  console.log(alreadeMadeReactions);
-
   const userId = useAppSelector((state) => state.authentication.user._id);
   const availableReactions = useMemo(() => {
     return reactions.filter((reaction) => {
@@ -23,9 +21,12 @@ const ReactionsMenu: FC<IReactionsMenuProps> = ({ addReaction, alreadeMadeReacti
   }, [alreadeMadeReactions]);
 
   return (
-    <Reactions>
+    <Reactions data-testid="reactions-menu">
       {availableReactions.map((reaction) => (
-        <ReactionItem key={reaction} onClick={addReaction}>
+        <ReactionItem
+          data-testid={`reaction-menu-item${reaction}`}
+          key={reaction}
+          onClick={addReaction}>
           {reaction}
         </ReactionItem>
       ))}

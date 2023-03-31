@@ -21,9 +21,9 @@ export interface IMessage {
   chatId: string;
   to: string;
   updatedAt: string;
-  delivered?: boolean;
+  // delivered: boolean;
   unreaded?: boolean;
-  edited?: boolean;
+  edited: boolean;
   reactions: IReaction[];
   attachment?: {
     media: IMediaItem[];
@@ -34,7 +34,7 @@ export type MessageShort = Pick<IMessage, 'text' | 'createdAt' | 'from' | '_id'>
 
 export interface IChat {
   chatId: string;
-  lastMessage: MessageShort;
+  // lastMessage: MessageShort;
   user: {
     avatar: string;
     fullName: string;

@@ -59,7 +59,9 @@ const SelectedMessagesMenu = () => {
   const dispatch = useAppDispatch();
 
   return (
-    <SelectedMessagesMenuContainer isSelectedMessages={Boolean(selectedMessagesQuantity)}>
+    <SelectedMessagesMenuContainer
+      isSelectedMessages={Boolean(selectedMessagesQuantity)}
+      data-testid="selected-messages-menu">
       <PrimaryButton>Forward {selectedMessagesQuantity}</PrimaryButton>
       <PrimaryButton onClick={() => dispatch(activeEntitiesActions.setIsOpenDeleteModal(true))}>
         Delete {selectedMessagesQuantity}

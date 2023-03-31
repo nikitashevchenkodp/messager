@@ -34,7 +34,7 @@ const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
   );
 
   return (
-    <ChatListItemContainer isActive={active} onClick={onClick}>
+    <ChatListItemContainer isActive={active} onClick={onClick} data-testid="chat-list-item">
       <AvatarContainer>
         <Avatar src={chatItem?.user.avatar} />
         <NetworkStatus online={Boolean(online)} />
@@ -53,7 +53,7 @@ const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
             {online?.typing ? (
               <span style={{ color: 'blue' }}>Typing...</span>
             ) : (
-              <>{lastMessage?.text}</>
+              <span data-testid="chat-list-item-lastmessage">{lastMessage?.text}</span>
             )}
           </LastMessage>
         </ExtraInformation>

@@ -5,7 +5,6 @@ import { messagesActions } from 'features/chat/redux/chat';
 import { chatsActions } from 'features/chat-list';
 import { call, CallEffect, put, PutEffect, take, TakeEffect } from 'redux-saga/effects';
 import { getChatList } from 'services/apiService';
-import { authenticationActions } from 'store/slices/authentication';
 import { IChat } from 'types';
 
 export function* getChatListSaga(): Generator<

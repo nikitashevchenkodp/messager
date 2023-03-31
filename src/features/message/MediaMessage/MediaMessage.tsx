@@ -9,10 +9,10 @@ const MediaMessage = ({ media }: { media?: IMediaItem[] }) => {
 
   return (
     <>
-      {' '}
       <GridContainer>
         {media?.map((item: any, i: number) => (
           <MessageMedia
+            data-testid="message-media-item"
             key={i}
             onClick={() => {
               setSrc(item.src);
@@ -23,7 +23,7 @@ const MediaMessage = ({ media }: { media?: IMediaItem[] }) => {
         ))}
       </GridContainer>
       <Modal active={isOpen} onClose={() => setIsOpen(false)}>
-        <MessageImage src={src} />
+        <MessageImage data-testid="message-media-fullscreen" src={src} />
       </Modal>
     </>
   );

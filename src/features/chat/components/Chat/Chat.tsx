@@ -11,7 +11,7 @@ const Chat = () => {
   const activeChat = useAppSelector((state) => state.entities.active.activeChat);
 
   return (
-    <ChatStyled>
+    <ChatStyled data-testid="chat">
       {activeChat.user ? (
         <>
           {' '}

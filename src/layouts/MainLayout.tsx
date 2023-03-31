@@ -17,7 +17,7 @@ const MainLayout = () => {
   }, []);
 
   return (
-    <MainLayoutStyled isHideChatList={isHideChatList}>
+    <MainLayoutStyled isHideChatList={isHideChatList} data-testid="main-layout">
       <Folders />
       <MainContainer>
         <ChatList />

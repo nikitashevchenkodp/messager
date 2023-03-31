@@ -32,7 +32,6 @@ const Folders = () => {
     return folders.map((folder) => {
       return (
         <>
-          {' '}
           <TabsButton
             isActive={folder.name === activeFolder}
             key={folder.name}
@@ -57,7 +56,7 @@ const Folders = () => {
 
   return (
     <>
-      <FoldersContainer>
+      <FoldersContainer data-testid="folders">
         <BurgerButton onClick={() => setIsOpen(true)}>
           <Burger />
         </BurgerButton>

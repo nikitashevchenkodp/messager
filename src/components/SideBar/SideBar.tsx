@@ -53,7 +53,7 @@ const SideBar = ({ openMenuItem }: any) => {
   });
 
   return (
-    <SidebarContainer>
+    <SidebarContainer data-testid="sidebar-menu">
       <SidebarHeader>
         <div style={{ marginBottom: '20px' }}>
           <Avatar src={user.avatar} fullName={user.fullName} />

@@ -42,7 +42,7 @@ const ChatList = () => {
     <>
       <ChatListContainer>
         <ResizableContainer>
-          <ChatListStyled>
+          <ChatListStyled data-testid="chat-list">
             <ChatListHeader>
               {chatListState === 'expanded' ? (
                 <SearchInput value={val} onChange={(e) => setVal(e.target.value)} label="Search" />
@@ -64,7 +64,7 @@ const ChatList = () => {
                   );
                 })
               ) : (
-                <>Nothing</>
+                <p data-testid="chat-list-loading-descktop">Nothing</p>
               )}
             </List>
           </ChatListStyled>
@@ -72,31 +72,35 @@ const ChatList = () => {
       </ChatListContainer>
 
       <ChatListContainerSmallScreen isHide={isHideChatList}>
-        <ChatListStyled>
-          <ChatListHeader>
-            <SearchInput value={val} onChange={(e) => setVal(e.target.value)} label="Search" />
-          </ChatListHeader>
-          <List>
-            {chatList.length ? (
-              chatList?.map((chatItem) => {
-                return (
-                  <ChatListItem
-                    chatItem={chatItem}
-                    key={chatItem.chatId}
-                    active={chatItem.chatId === activeChat?.chatId}
-                    type="expanded"
-                    onClick={() => {
-                      setupActiveChat(chatItem);
-                      dispatch(uiSettingsActions.hideChatList());
-                    }}
-                  />
-                );
-              })
-            ) : (
-              <>Nothing</>
-            )}
-          </List>
-        </ChatListStyled>
+        {!isHideChatList && (
+          <>
+            <ChatListStyled>
+              <ChatListHeader>
+                <SearchInput value={val} onChange={(e) => setVal(e.target.value)} label="Search" />
+              </ChatListHeader>
+              <List>
+                {chatList.length ? (
+                  chatList?.map((chatItem) => {
+                    return (
+                      <ChatListItem
+                        chatItem={chatItem}
+                        key={chatItem.chatId}
+                        active={chatItem.chatId === activeChat?.chatId}
+                        type="expanded"
+                        onClick={() => {
+                          setupActiveChat(chatItem);
+                          dispatch(uiSettingsActions.hideChatList());
+                        }}
+                      />
+                    );
+                  })
+                ) : (
+                  <>Nothing</>
+                )}
+              </List>
+            </ChatListStyled>
+          </>
+        )}
       </ChatListContainerSmallScreen>
     </>
   );
