@@ -1,6 +1,5 @@
-import { MenuItem } from '@mui/material';
 import React, { FC } from 'react';
-import { MenuItems } from './styled';
+import { MenuItems, MenuItem } from './styled';
 
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
@@ -16,7 +15,7 @@ interface IMenuOptionsProps {
 const MenuOptions: FC<IMenuOptionsProps> = ({ onEdit, onDelete, onSelect }) => {
   return (
     <MenuItems>
-      <MenuItem onClick={onDelete}>
+      <MenuItem data-testid="delete-option" onClick={onDelete}>
         <DeleteOutlineIcon />
         Delete
       </MenuItem>
@@ -28,7 +27,7 @@ const MenuOptions: FC<IMenuOptionsProps> = ({ onEdit, onDelete, onSelect }) => {
         <ReplyIcon />
         Reply
       </MenuItem>
-      <MenuItem onClick={onSelect}>
+      <MenuItem data-testid="select-option" onClick={onSelect}>
         <CheckCircleOutlineIcon />
         Select
       </MenuItem>

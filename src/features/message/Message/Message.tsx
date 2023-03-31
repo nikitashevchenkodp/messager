@@ -41,7 +41,8 @@ const Message = forwardRef<HTMLDivElement, IMessageProps>(
           selected={selected}
           onContextMenu={(e) => openMessageMenu(e, message)}
           type={type}
-          onClick={toggleFromSelected}>
+          onClick={toggleFromSelected}
+          data-testid={`message-container-${message._id}`}>
           <MessageContainer ref={ref} type={type}>
             <MessageBody>
               <MediaMessage media={message.attachment?.media} />
@@ -49,7 +50,7 @@ const Message = forwardRef<HTMLDivElement, IMessageProps>(
                 <Text data-testid="message-text">{message.text}</Text>
                 <Reactions
                   type={type}
-                  reactions={mockMessage.reactions}
+                  reactions={message.reactions}
                   messageId={message._id}
                   chatId={message.chatId}
                 />

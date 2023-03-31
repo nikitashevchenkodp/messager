@@ -86,7 +86,7 @@ const ChatArea = () => {
   return (
     <>
       <Menu isOpen={isMenuOpen} coordinates={coordinates} onClose={() => setIsMenuOpen(false)}>
-        <MessageMenuContainer>
+        <MessageMenuContainer data-testid="message-menu">
           <ReactionsMenu
             addReaction={addReaction}
             alreadeMadeReactions={activeMessage?.reactions}

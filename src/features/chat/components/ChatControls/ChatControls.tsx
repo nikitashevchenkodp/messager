@@ -85,8 +85,6 @@ const ChatControls = () => {
     handleTyping();
   };
 
-  console.log(val);
-
   return (
     <ChatFooter>
       {editableMessage && <EditableMessage message={editableMessage} setInputValue={setVal} />}
