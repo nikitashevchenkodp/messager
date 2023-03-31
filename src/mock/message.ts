@@ -10,7 +10,7 @@ export const mockMessage: IMessage = {
   chatId: '64131975af9da4d549f3a47f',
   to: '63e7b7c8d2c2586ba49c4ba9',
   updatedAt: '2023-03-17T08:28:08.472Z',
-  delivered: false,
+  // delivered: false,
   unreaded: true,
   edited: false,
   reactions: [

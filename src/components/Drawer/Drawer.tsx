@@ -42,7 +42,7 @@ const Drawer: FC<DrawerProps> = ({ open, onClose, children }) => {
             transform: open ? `translateX(0)` : `translateX(-${drawerWidth}px)`,
             transition: 'transform 225ms cubic-bezier(0, 0, 0.2, 1) 0ms'
           }}>
-          <div onClick={(e) => e.stopPropagation()}>{children}</div>
+          <div onClick={(e) => e.stopPropagation()}>{open && children}</div>
         </div>
       </DrawerContainer>
     </Portal>

@@ -4,7 +4,8 @@ import {
   MessageBody,
   MessageWrapper,
   RecieveTailContainer,
-  SentTailContainer
+  SentTailContainer,
+  MessageMainContent
 } from './styled';
 import { MessageRecieveTail, MessageSentTail } from 'components/icons';
 import { useAppSelector } from 'store/hooks';
@@ -18,7 +19,6 @@ interface IMessageProps {
   toggleFromSelected?: () => void;
 }
 import FastReaction from '../FastReaction';
-import { MessageMainContent } from '../MessageTextContent/styled';
 import Reactions from '../Reactions';
 import styled from 'styled-components';
 import MessageMeta from '../MessageMeta';
@@ -55,7 +55,7 @@ const Message = forwardRef<HTMLDivElement, IMessageProps>(
                 />
                 <MessageMeta
                   meta={{
-                    edited: message.createdAt,
+                    edited: message.edited,
                     createdAt: message.createdAt
                   }}
                 />

@@ -30,7 +30,9 @@ import { deleteReaction } from './messages/deleteReaction';
 let socket;
 
 function* connect(): Generator<SelectEffect, Socket, string> {
-  const userId = yield select((state: RootState) => state.authentication.user._id);
+  const userId = yield select((state: RootState) => state.authentication.user?._id);
+  console.log(userId);
+
   socket = io(serverLink, {
     reconnectionAttempts: 5,
     reconnectionDelay: 1000,
@@ -38,6 +40,7 @@ function* connect(): Generator<SelectEffect, Socket, string> {
       id: userId
     }
   });
+
   return socket;
 }
 

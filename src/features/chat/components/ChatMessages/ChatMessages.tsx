@@ -18,7 +18,7 @@ const ChatMessages = memo(({ openMessageMenu }: any) => {
   const isSelectedModeOn = Object.keys(selectedMessagesIds).length > 0;
 
   return (
-    <ChatMessagesStyled>
+    <ChatMessagesStyled data-testid="chat-messages">
       {messagesIds?.map((id: string) => {
         return (
           <Message

@@ -90,12 +90,13 @@ const ChatControls = () => {
   return (
     <ChatFooter>
       {editableMessage && <EditableMessage message={editableMessage} setInputValue={setVal} />}
-      <ChatControlsContainer>
+      <ChatControlsContainer data-testid="chat-controls">
         <Button>
           <PaperclipIcon width="24px" height="24px" />
           <input type="file" hidden />
         </Button>
         <ChatInput
+          data-testid="chat-controls-input"
           ref={inputRef}
           label="Write a message..."
           value={val}
@@ -107,7 +108,12 @@ const ChatControls = () => {
         </Button>
         <Button>
           {val.length ? (
-            <SendIcon width="24px" height="24px" onClick={sendMesage} />
+            <SendIcon
+              width="24px"
+              height="24px"
+              onClick={sendMesage}
+              data-testid="chat-controls-send-button"
+            />
           ) : (
             <MicrophoneIcon width="24px" height="24px" />
           )}
