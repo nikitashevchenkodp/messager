@@ -41,7 +41,7 @@ const EditableMessage: FC<IEditableMessageProps> = ({ message, setInputValue }) 
   };
 
   return (
-    <EditableMessageContainer>
+    <EditableMessageContainer data-testid="editable-message">
       <IconButton>
         <EditIcon width="13px" height="13px" />
       </IconButton>

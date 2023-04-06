@@ -185,7 +185,84 @@ describe('Chat', () => {
     waitFor(async () => {
       const chatMessages = await container.findAllByTestId(/message-container/);
       expect(chatMessages.length).toBe(2);
-      console.log(store.getState().entities.messages.byChatId[chatId]);
     });
+  });
+
+  it('edit message', async () => {
+    const { container, store } = renderWithRedux(<Chat />, mockStore);
+    const message = await container.findByTestId(/642683fe7571e92726bdbcf1/);
+    let editableMessage = container.queryByTestId('editable-message');
+    expect(editableMessage).toBeNull();
+    fireEvent.contextMenu(message);
+    // Select message for opening selected messages menu
+    const edittMessageOption = await container.findByTestId('edit-option');
+    userEvent.click(edittMessageOption);
+    editableMessage = await container.findByTestId('editable-message');
+    expect(editableMessage).toBeInTheDocument();
+
+    // Check input
+    const input = container.getByTestId('chat-controls-input') as HTMLInputElement;
+    expect(input.value).toEqual('Hello');
+
+    //Change text in input
+    userEvent.type(input, 'Heelo, I am edited');
+
+    // Send edited text
+    const sendButton = container.getByTestId('chat-controls-send-button');
+    userEvent.click(sendButton);
+    const editedMessage = {
+      text: 'Heelo, I am edited',
+      createdAt: '2023-03-31T06:26:02.851Z',
+      from: '63e7b7bfd2c2586ba49c4ba5',
+      to: '63e7b7b5d2c2586ba49c4ba3',
+      chatId: '642683897571e92726bdbcd1',
+      edited: false,
+      _id: '642683fe7571e92726bdbcf1',
+      reactions: [],
+      updatedAt: ''
+    };
+
+    act(() => store.dispatch(messagesActions.editMessage(editedMessage)));
+    expect(message.querySelector('[data-testid="message-text"]')?.textContent).toEqual(
+      'Heelo, I am edited'
+    );
+
+    // Expect "edited" indicator in message
+    waitFor(() => {
+      const edited = message.querySelector('[data-testid="message-meta-edited"]');
+      expect(edited).not.toBeNull();
+    });
+  });
+
+  it('Send message', async () => {
+    const { container, store } = renderWithRedux(<Chat />, mockStore);
+    const input = (await container.findByTestId('chat-controls-input')) as HTMLInputElement;
+    expect(input.value).toEqual('');
+
+    //Type text in input
+    userEvent.type(input, 'Heelo, It is new message');
+    waitFor(() => expect(input.value).toEqual('Heelo, It is new message'));
+
+    // Send message
+    const sendButton = container.getByTestId('chat-controls-send-button');
+    userEvent.click(sendButton);
+    const newdMessage = {
+      text: 'Heelo, It is new message',
+      createdAt: '2023-03-31T06:26:02.851Z',
+      from: '63e7b7bfd2c2586ba49c4ba5',
+      to: '63e7b7b5d2c2586ba49c4ba3',
+      chatId: '642683897571e92726bdbcd1',
+      edited: false,
+      _id: '642683fe7571e92726bdbcf123432',
+      reactions: [],
+      updatedAt: ''
+    };
+
+    store.dispatch(messagesActions.newMessage(newdMessage));
+
+    const newMessages = await container.findByText(/Heelo, It is new message/);
+    expect(newMessages).toBeInTheDocument();
+    const messages = await container.findAllByTestId(/message-container/);
+    expect(messages.length).toBe(5);
   });
 });

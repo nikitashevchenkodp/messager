@@ -3,7 +3,6 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import persistStore from 'redux-persist/es/persistStore';
 import persistReducer from 'redux-persist/lib/persistReducer';
 import storage from 'redux-persist/lib/storage';
-import { foldersReducer } from 'features/folders';
 import createSagaMiddleware from 'redux-saga';
 
 import { uiSettingsReducer } from './slices/UI';
@@ -14,6 +13,7 @@ import { usersReducer as users } from './slices/usersStatuses';
 import { snackbarReducer } from './slices/snackbar';
 import { chatsReducer } from 'features/chat-list';
 import { activeEntitiesReducer } from './slices/activeEntities';
+import { foldersReducer } from 'features/folders/redux/folders';
 
 const ui = combineReducers({
   uiSettings: uiSettingsReducer,

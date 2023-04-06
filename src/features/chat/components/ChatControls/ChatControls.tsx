@@ -5,7 +5,6 @@ import ChatInput from '../ChatInput/ChatInput';
 import { ChatControlsContainer, ChatFooter } from './styled';
 import Button from 'components/shared/Button';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { sendMessage } from 'services/apiService';
 import EditableMessage from '../EditableMessage';
 import { messagesActions } from 'features/chat/redux/chat';
 
@@ -37,7 +36,6 @@ const ChatControls = () => {
       }
     }
     try {
-      sendMessage();
       if (editableMessage) {
         dispatch({
           type: 'editMessage',

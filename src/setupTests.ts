@@ -11,4 +11,6 @@ beforeAll(() => server.listen({ onUnhandledRequest: 'bypass' }));
 // so they don't affect other tests.
 afterEach(() => server.resetHandlers());
 // Clean up after the tests are finished.
-afterAll(() => server.close());
+afterAll(() => {
+  server.close();
+});

@@ -19,7 +19,7 @@ const MenuOptions: FC<IMenuOptionsProps> = ({ onEdit, onDelete, onSelect }) => {
         <DeleteOutlineIcon />
         Delete
       </MenuItem>
-      <MenuItem onClick={onEdit}>
+      <MenuItem data-testid="edit-option" onClick={onEdit}>
         <EditIcon />
         Edit
       </MenuItem>
