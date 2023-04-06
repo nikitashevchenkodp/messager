@@ -19,7 +19,7 @@ import { usersActions } from 'store/slices/usersStatuses';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
 import * as events from 'consts/events';
 import { deleteMessageSaga } from './messages/deleteMessage';
-import { messagesActions } from 'features/chat';
+import { messagesActions } from 'blocks/chat';
 import { connectToNewChat } from './chats/connectToNewChatSaga';
 import { sendMessage } from './messages/sendMessage';
 import { typingSaga } from './messages/typingSaga';

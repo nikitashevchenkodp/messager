@@ -1,7 +1,7 @@
 import { FOLDERS_WIDTH } from 'consts';
 import styled from 'styled-components';
 
-export const MainLayoutStyled = styled.div<{ isHideChatList: boolean }>`
+export const MainLayoutStyled = styled.div`
   display: flex;
   max-width: 100vw;
 `;

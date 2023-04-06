@@ -1,5 +1,5 @@
 import { PayloadAction } from '@reduxjs/toolkit';
-import { messagesActions } from 'features/chat';
+import { messagesActions } from 'blocks/chat';
 import { put, PutEffect, select, SelectEffect, take, TakeEffect } from 'redux-saga/effects';
 import { RootState } from 'store';
 import { snackbarActions } from 'store/slices/snackbar';

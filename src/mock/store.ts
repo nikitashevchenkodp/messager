@@ -10,6 +10,9 @@ export const mockStore: Omit<RootState, '_persist'> = {
       isHideChatList: true,
       chatListState: 'expanded',
       chatListWidth: 350
+    },
+    sidebar: {
+      isOpen: false
     }
   },
   authentication: {

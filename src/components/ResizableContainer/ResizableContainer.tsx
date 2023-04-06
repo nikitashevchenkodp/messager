@@ -8,8 +8,8 @@ interface ResizableContainerStyledProps {
   readonly defaultWidth?: number;
 }
 
-export const ResizableContainerStyled = styled.div<ResizableContainerStyledProps>`
-  width: ${(props) => (props.defaultWidth ? `${props.defaultWidth}px` : '350px')};
+export const ResizableContainerStyled = styled.div`
+  width: '350px';
   max-width: 100%;
 `;
 
@@ -23,7 +23,9 @@ const ResizableContainer: FC<IResizableContainer> = (props) => {
 
   return (
     <>
-      <ResizableContainerStyled defaultWidth={chatListWidth}>{children}</ResizableContainerStyled>
+      <ResizableContainerStyled style={{ width: `${chatListWidth}px` }}>
+        {children}
+      </ResizableContainerStyled>
       <Resizer
         minWidth={CHAT_LIST_MIN_WIDTH}
         edgeCaseWidth={CHAT_LIST_WIDTH_COLAPSED}

@@ -1,6 +1,6 @@
 import React, { ReactElement, useState } from 'react';
-import Avatar from 'components/Avatar';
-import Divider from 'components/Divider';
+import Avatar from 'components/shared/Avatar';
+import Divider from 'components/shared/Divider';
 import { useAppSelector } from 'store/hooks';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PersonIcon from '@mui/icons-material/Person';
@@ -14,7 +14,7 @@ import {
   UserFullname
 } from './styled';
 import { InsertEmoticonSharp } from '@mui/icons-material';
-import Modal from 'components/Modal';
+import Modal from 'components/shared/Modal';
 
 interface IMenuItem {
   Icon: ReactElement;

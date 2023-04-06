@@ -1,4 +1,4 @@
-import { IReaction } from 'features/message/Reactions/Reactions';
+import { IReaction } from 'blocks/message/Reactions/Reactions';
 
 export interface ILoginResponse {
   _id: string;

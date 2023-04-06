@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { Chat, messagesActions } from 'features/chat';
+import { Chat, messagesActions } from 'blocks/chat';
 import { mockUser } from 'mock/user';
 import { Provider } from 'react-redux';
 import persistStore from 'redux-persist/es/persistStore';

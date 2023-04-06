@@ -1,5 +1,5 @@
 import Button from 'components/shared/Button';
-import { messagesActions } from 'features/chat';
+import { messagesActions } from 'blocks/chat';
 import React from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
@@ -9,16 +9,18 @@ const DeletionConfirm = ({ cancel }: any) => {
   const selectedMessages = useAppSelector(
     (state) => state.entities.active.activeChat.selectedMessagesIds
   );
+  const activeMessage = useAppSelector((state) => state.entities.active.activeChat.activeMessage);
   const selectedMessagesLength = Object.keys(selectedMessages).length;
   const activeChatId = useAppSelector((state) => state.entities.active.activeChat.chatId);
-
   const dispatch = useAppDispatch();
 
   const deleteMessages = () => {
     dispatch(
       messagesActions.startDeleteMessages({
         chatId: activeChatId,
-        messagesIds: Object.keys(selectedMessages)
+        messagesIds: !selectedMessagesLength
+          ? [activeMessage?._id || '']
+          : Object.keys(selectedMessages)
       })
     );
     dispatch(activeEntitiesActions.setIsOpenDeleteModal(false));

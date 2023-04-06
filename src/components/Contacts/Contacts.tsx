@@ -2,11 +2,11 @@ import Button from 'components/shared/Button';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SortByAlphaIcon from '@mui/icons-material/SortByAlpha';
-import SearchInput from 'components/Input/Input';
+import SearchInput from 'components/shared/Input/Input';
 import SearchIcon from '@mui/icons-material/Search';
-import Divider from 'components/Divider';
+import Divider from 'components/shared/Divider';
 import { getAllUsers } from 'services/apiService';
-import Avatar from 'components/Avatar';
+import Avatar from 'components/shared/Avatar';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
 

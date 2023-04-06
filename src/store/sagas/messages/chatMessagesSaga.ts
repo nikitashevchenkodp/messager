@@ -1,7 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { AxiosResponse } from 'axios';
-import { messagesActions } from 'features/chat';
-import { chatsActions } from 'features/chat-list';
+import { messagesActions } from 'blocks/chat';
+import { chatsActions } from 'blocks/chat-list';
 import {
   call,
   CallEffect,

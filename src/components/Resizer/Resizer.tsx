@@ -1,7 +1,10 @@
+import { LocalDrinkSharp } from '@mui/icons-material';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { uiSettingsActions } from 'store/slices/UI';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import './Resizer.scss';
+import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 
 interface ResizerProps {
   minWidth: number;
@@ -17,7 +20,15 @@ const Resizer: FC<ResizerProps> = ({ minWidth, edgeCaseWidth = 0, delayInPixels 
   const [initWidth, setInitWidth] = useState<number | null>(null);
   const [initiPosition, setInitPosition] = useState<number | null>(null);
   const dispatch = useAppDispatch();
-  // const chatListS = useRef<'colapsed' | 'expanded'>(chatListState);
+
+  const setChatListWidth = debounce(() => {
+    if (!resizableElem.current) return;
+    dispatch(
+      uiSettingsActions.setChatListWidth(
+        parseInt(window.getComputedStyle(resizableElem.current as HTMLElement).width)
+      )
+    );
+  }, 10);
 
   const resetAll = () => {
     resizableElem.current = null;
@@ -60,21 +71,20 @@ const Resizer: FC<ResizerProps> = ({ minWidth, edgeCaseWidth = 0, delayInPixels 
       if (newWidth < minWidth) {
         if (newWidth > initWidth) {
           resizableElement.style.width = `${minWidth}px`;
+          setChatListWidth();
         } else {
           resizableElement.style.width = `${edgeCaseWidth}px`;
+          setChatListWidth();
         }
       } else {
         resizableElement.style.width = `${newWidth}px`;
+        setChatListWidth();
       }
     };
 
     const onMouseUp = () => {
       if (resizableElem.current) {
-        dispatch(
-          uiSettingsActions.setChatListWidth(
-            parseInt(window.getComputedStyle(resizableElem.current as HTMLElement).width)
-          )
-        );
+        setChatListWidth();
       }
       resetAll();
       root.current?.removeEventListener('mousemove', handleMouseMove);

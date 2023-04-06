@@ -6,18 +6,20 @@ import storage from 'redux-persist/lib/storage';
 import createSagaMiddleware from 'redux-saga';
 
 import { uiSettingsReducer } from './slices/UI';
-import { messagesReducer } from 'features/chat/redux/chat';
+import { messagesReducer } from 'blocks/chat/redux/chat';
 import { authenticationReducer as authentication } from './slices/authentication';
 import { rootSaga } from './sagas';
 import { usersReducer as users } from './slices/usersStatuses';
 import { snackbarReducer } from './slices/snackbar';
-import { chatsReducer } from 'features/chat-list';
+import { chatsReducer } from 'blocks/chat-list';
 import { activeEntitiesReducer } from './slices/activeEntities';
-import { foldersReducer } from 'features/folders/redux/folders';
+import { foldersReducer } from 'blocks/folders/redux/folders';
+import { sidebarReducer } from './slices/sidebar';
 
 const ui = combineReducers({
   uiSettings: uiSettingsReducer,
-  snackbar: snackbarReducer
+  snackbar: snackbarReducer,
+  sidebar: sidebarReducer
 });
 
 const entities = combineReducers({
