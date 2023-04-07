@@ -1,3 +1,7 @@
+body {
+  background-image: url('./assets/bg-chat.jpg');
+  background-size: cover;
+}
 .App {
   text-align: center;
 }

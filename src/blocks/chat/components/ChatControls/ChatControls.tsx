@@ -13,6 +13,14 @@ const ChatControls = () => {
   const editableMessage = useAppSelector(
     (state) => state.entities.messages.byChatId[activeChat?.chatId || '']?.editableMessage
   );
+  const lastMessage = useAppSelector((state) => {
+    const allIds = state.entities?.messages?.byChatId[activeChat.chatId]?.messagesIds;
+    if (!allIds?.length) return;
+    const lastMessageId =
+      state.entities.messages.byChatId[activeChat.chatId]?.messagesIds?.[allIds.length - 1];
+    const lastmesage = state.entities.messages.byChatId[activeChat.chatId]?.messages[lastMessageId];
+    return lastmesage;
+  });
   const [val, setVal] = useState('');
   const { _id } = useAppSelector((state) => state.authentication.user);
   const isTiping = useAppSelector((state) => state.users.statusesById[_id]?.typing);
@@ -21,44 +29,37 @@ const ChatControls = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    if (inputRef.current) inputRef.current.focus();
     if (!editableMessage) {
       setVal('');
       return;
     }
     setVal(editableMessage?.text);
-    if (inputRef.current) inputRef.current.focus();
-  }, [editableMessage]);
+  }, [editableMessage, activeChat]);
 
-  const sendMesage = (e: React.MouseEvent | React.KeyboardEvent) => {
-    if ('key' in e) {
-      if (e.key !== 'Enter') {
-        return;
-      }
-    }
-    try {
-      if (editableMessage) {
-        dispatch({
-          type: 'editMessage',
-          payload: {
-            messageId: editableMessage._id,
-            text: val
-          }
-        });
-        dispatch(messagesActions.setEditableMessage({ chatId: activeChat?.chatId || '' }));
-      } else {
-        dispatch({
-          type: 'sendMessage',
-          payload: {
-            from: `${_id}`,
-            to: activeChat.user?.id || '',
-            chatId: activeChat?.chatId || '',
-            text: val
-          }
-        });
-        setVal('');
-      }
-    } catch (error) {
-      console.log(error);
+  const sendMessage = () => {
+    if (editableMessage) {
+      dispatch({
+        type: 'editMessage',
+        payload: {
+          messageId: editableMessage._id,
+          text: val
+        }
+      });
+      dispatch(
+        messagesActions.setEditableMessage({ chatId: activeChat?.chatId || '', messageId: '' })
+      );
+    } else {
+      dispatch({
+        type: 'sendMessage',
+        payload: {
+          from: `${_id}`,
+          to: activeChat.user?.id || '',
+          chatId: activeChat?.chatId || '',
+          text: val
+        }
+      });
+      setVal('');
     }
   };
 
@@ -78,9 +79,30 @@ const ChatControls = () => {
     });
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    sendMesage(e);
-    handleTyping();
+  const setEditableMessage = () => {
+    lastMessage &&
+      dispatch(
+        messagesActions.setEditableMessage({
+          chatId: activeChat.chatId,
+          messageId: lastMessage._id
+        })
+      );
+  };
+  const clearEditableMessage = () => {
+    lastMessage &&
+      dispatch(messagesActions.setEditableMessage({ chatId: activeChat.chatId, messageId: '' }));
+  };
+
+  const keyboardEventHandler = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    } else if (e.key === 'ArrowUp') {
+      setEditableMessage();
+    } else if (e.key === 'Escape') {
+      clearEditableMessage();
+    } else {
+      handleTyping();
+    }
   };
 
   return (
@@ -97,7 +119,7 @@ const ChatControls = () => {
           label="Write a message..."
           value={val}
           onChange={(e) => setVal(e.target.value)}
-          onKeyDown={handleKeyDown}
+          onKeyDown={keyboardEventHandler}
         />
         <Button>
           <EmojiIcon width="24px" height="24px" />
@@ -107,7 +129,7 @@ const ChatControls = () => {
             <SendIcon
               width="24px"
               height="24px"
-              onClick={sendMesage}
+              onClick={sendMessage}
               data-testid="chat-controls-send-button"
             />
           ) : (

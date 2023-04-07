@@ -13,8 +13,10 @@ export function* getChatListSaga(): Generator<
   AxiosResponse<Array<IChat>>
 > {
   try {
+    yield put(chatsActions.setIsLoading(true));
     const res = yield call(getChatList);
     yield put(chatsActions.setChats(res.data));
+    yield put(chatsActions.setIsLoading(false));
     return res;
   } catch (error) {
     console.log(error);

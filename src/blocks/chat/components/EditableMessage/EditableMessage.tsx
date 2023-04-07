@@ -37,7 +37,7 @@ const EditableMessage: FC<IEditableMessageProps> = ({ message, setInputValue }) 
   const activeChatId = useAppSelector((state) => state.entities.active.activeChat?.chatId);
   const onClose = () => {
     setInputValue('');
-    dispatch(messagesActions.setEditableMessage({ chatId: activeChatId! }));
+    dispatch(messagesActions.setEditableMessage({ chatId: activeChatId!, messageId: '' }));
   };
 
   return (
