@@ -14,6 +14,7 @@ export const authenticationSlice = createSlice({
   initialState,
   reducers: {
     loginStart: (state, action: PayloadAction<any>) => {},
+    signupStart: (state, action: PayloadAction<any>) => {},
     loginUser: (state, action: PayloadAction<any>) => {
       state.user = action.payload;
     }

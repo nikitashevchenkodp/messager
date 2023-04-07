@@ -11,6 +11,7 @@ import swDEV from './swDev';
 import Button from 'components/shared/Button';
 import { snackbarActions } from 'store/slices/snackbar';
 import NetworkChecker from 'components/utils-components/NetworkChecker';
+import { BrowserRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
@@ -30,7 +31,9 @@ root.render(
               Close
             </Button>
           )}>
-          <App />
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
         </SnackbarProvider>
       </PersistGate>
     </Provider>

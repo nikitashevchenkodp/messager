@@ -16,6 +16,12 @@ export interface ILogin {
   email: string;
   password: string;
 }
+export interface ISignup {
+  email: string;
+  password: string;
+  nickname: string;
+  fullName: string;
+}
 
 export const axiosInst = axios.create({
   baseURL: serverLink
@@ -31,6 +37,9 @@ axiosInst.interceptors.request.use((config: any) => {
 
 export const login = async (body: ILogin) => {
   return axios.post(`${serverLink}/api/users/login`, body);
+};
+export const createUser = async (body: ISignup) => {
+  return axios.post(`${serverLink}/api/users/create`, body);
 };
 
 export const getChatList = async () => {

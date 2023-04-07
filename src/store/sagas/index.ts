@@ -4,7 +4,8 @@ import { loginSaga } from './auth/loginSaga';
 
 import { socketSaga } from './sockets';
 import { messagesFlow } from './messages';
+import { signupSaga } from './auth/signupSaga';
 
 export function* rootSaga() {
-  yield all([loginSaga(), initSaga(), socketSaga(), messagesFlow()]);
+  yield all([loginSaga(), signupSaga(), initSaga(), socketSaga(), messagesFlow()]);
 }
