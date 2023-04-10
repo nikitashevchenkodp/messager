@@ -1,3 +1,4 @@
+import { CircularProgress } from '@mui/material';
 import { SearchIcon } from 'components/icons';
 import ResizableContainer from 'components/ResizableContainer';
 import { log } from 'console';
@@ -22,6 +23,7 @@ const ChatList = () => {
   const isHideChatList = useAppSelector((state) => state.ui.uiSettings.isHideChatList);
   const chatListState = useAppSelector((state) => state.ui.uiSettings.chatListState);
   const chatList = useAppSelector((state) => state.entities.chats.items);
+  const loading = useAppSelector((state) => state.entities.chats.isLoading);
   const activeChat = useAppSelector((state) => state.entities.active.activeChat);
   const [val, setVal] = useState('');
 
@@ -39,6 +41,44 @@ const ChatList = () => {
     );
   };
 
+  const list = () => {
+    if (loading) {
+      return (
+        <div
+          style={{ textAlign: 'center', marginTop: '20px' }}
+          data-testid="chat-list-loading-descktop">
+          <CircularProgress />
+        </div>
+      );
+    }
+
+    if (!chatList.length) {
+      return (
+        <div
+          style={{ textAlign: 'center', marginTop: '20px' }}
+          data-testid="chat-list-loading-descktop">
+          You do not have any chats yet
+        </div>
+      );
+    }
+
+    return (
+      <>
+        {chatList?.map((chatItem) => {
+          return (
+            <ChatListItem
+              chatItem={chatItem}
+              key={chatItem.chatId}
+              active={chatItem.chatId === activeChat?.chatId}
+              onClick={() => setupActiveChat(chatItem)}
+              type={chatListState}
+            />
+          );
+        })}
+      </>
+    );
+  };
+
   return (
     <>
       <ChatListContainer>
@@ -51,23 +91,7 @@ const ChatList = () => {
                 <SearchIcon onClick={handleClick} cursor="pointer" />
               )}
             </ChatListHeader>
-            <List>
-              {chatList.length ? (
-                chatList?.map((chatItem) => {
-                  return (
-                    <ChatListItem
-                      chatItem={chatItem}
-                      key={chatItem.chatId}
-                      active={chatItem.chatId === activeChat?.chatId}
-                      onClick={() => setupActiveChat(chatItem)}
-                      type={chatListState}
-                    />
-                  );
-                })
-              ) : (
-                <p data-testid="chat-list-loading-descktop">Nothing</p>
-              )}
-            </List>
+            <List>{list()}</List>
           </ChatListStyled>
         </ResizableContainer>
       </ChatListContainer>
@@ -79,26 +103,7 @@ const ChatList = () => {
               <ChatListHeader>
                 <SearchInput value={val} onChange={(e) => setVal(e.target.value)} label="Search" />
               </ChatListHeader>
-              <List>
-                {chatList.length ? (
-                  chatList?.map((chatItem) => {
-                    return (
-                      <ChatListItem
-                        chatItem={chatItem}
-                        key={chatItem.chatId}
-                        active={chatItem.chatId === activeChat?.chatId}
-                        type="expanded"
-                        onClick={() => {
-                          setupActiveChat(chatItem);
-                          dispatch(uiSettingsActions.hideChatList());
-                        }}
-                      />
-                    );
-                  })
-                ) : (
-                  <>Nothing</>
-                )}
-              </List>
+              <List>{list()}</List>
             </ChatListStyled>
           </>
         )}

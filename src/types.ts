@@ -1,11 +1,14 @@
 import { IReaction } from 'blocks/message/Reactions/Reactions';
 
 export interface ILoginResponse {
-  _id: string;
-  avatar: string;
-  fullName: string;
-  email: string;
-  chats: Array<string>;
+  accessToken: string;
+  user: {
+    _id: string;
+    avatar: string;
+    fullName: string;
+    email: string;
+    chats: Array<string>;
+  };
 }
 
 export type Attachment = 'img' | 'video';

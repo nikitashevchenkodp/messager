@@ -9,11 +9,14 @@ export function* loginSaga(): Generator<
   void,
   { payload: { email: string; password: string } } & AxiosResponse<ILoginResponse>
 > {
-  try {
-    const { payload } = yield take(authenticationActions.loginStart.type);
-    const res = yield call(login, payload);
-    yield put(authenticationActions.loginUser(res.data));
-  } catch (error) {
-    console.log(error);
+  while (true) {
+    try {
+      const { payload } = yield take(authenticationActions.loginStart.type);
+      const res = yield call(login, payload);
+      localStorage.setItem('accessToken', res.data.accessToken);
+      yield put(authenticationActions.loginUser(res.data));
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

@@ -74,7 +74,7 @@ export const messages = createSlice({
         messageId
       ].reactions.filter((reaction) => reaction._id !== reactionId);
     },
-    setEditableMessage: (state, action: PayloadAction<{ chatId: string; messageId?: string }>) => {
+    setEditableMessage: (state, action: PayloadAction<{ chatId: string; messageId: string }>) => {
       const { chatId, messageId } = action.payload;
       if (!messageId) {
         state.byChatId[chatId].editableMessage = null;

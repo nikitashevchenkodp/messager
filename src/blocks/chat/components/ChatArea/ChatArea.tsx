@@ -38,7 +38,7 @@ const ChatArea = () => {
   const editMessage = useCallback(() => {
     dispatch(
       messagesActions.setEditableMessage({
-        messageId: activeMessage?._id,
+        messageId: activeMessage?._id || '',
         chatId: activeChatId!
       })
     );
