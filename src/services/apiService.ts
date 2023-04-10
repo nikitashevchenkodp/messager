@@ -44,7 +44,9 @@ axiosInst.interceptors.response.use(
     if (err.response.status == 401 && err.config && !err.config._isRetry) {
       originalRequest._isRetry = true;
       try {
-        const res = await axios.get(`${serverLink}/api/users/refresh`, { withCredentials: true });
+        const res = await axios.get(`${serverLink}/api/users/refresh`, {
+          withCredentials: true
+        });
         localStorage.setItem('accessToken', res.data.accessToken);
         store.dispatch(authenticationActions.loginUser(res.data));
         return axiosInst.request(originalRequest);
