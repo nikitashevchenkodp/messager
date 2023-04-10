@@ -20,7 +20,7 @@ jobs:
           CI: true
       - name: Build project
         if: github.event_name == 'push'
-        run: npm run build
+        run: CI= npm run build
       - name: Deploy to staging Netlify
         if: github.event_name == 'push'
         uses: South-Paw/action-netlify-deploy@v1.2.0
