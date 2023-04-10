@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        run: ls -a
       - name: Cache node_modules
         uses: actions/cache@v3
         with:
@@ -18,6 +17,8 @@ jobs:
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
+      - name: Show directory Fieles
+        run: ls -a
       - name: Use NodeJS
         uses: actions/setup-node@v3
         with:
