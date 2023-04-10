@@ -7,8 +7,8 @@ interface AuthenticatedProps {
   children: React.ReactNode;
 }
 const Guest: FC<AuthenticatedProps> = (props) => {
-  const user = useAppSelector((state) => state.authentication.user);
-  if (user) {
+  const isAuth = useAppSelector((state) => state.authentication.isAuth);
+  if (isAuth) {
     return <Navigate to="/" />;
   }
 

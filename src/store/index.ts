@@ -39,7 +39,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key: 'root',
   storage,
-  blacklist: ['entities', 'online', 'ui']
+  blacklist: ['authentication.isAuth', 'entities', 'online', 'ui']
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

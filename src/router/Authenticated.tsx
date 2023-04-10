@@ -7,11 +7,11 @@ interface AuthenticatedProps {
   children: React.ReactNode;
 }
 const Authenticated: FC<AuthenticatedProps> = (props) => {
-  const user = useAppSelector((state) => state.authentication.user);
+  const isAuth = useAppSelector((state) => state.authentication.isAuth);
   const location = useLocation();
   const [requestedLocation, setRequestedLocation] = useState<string | null>(null);
 
-  if (!user) {
+  if (!isAuth) {
     if (location.pathname !== requestedLocation) {
       setRequestedLocation(location.pathname);
     }

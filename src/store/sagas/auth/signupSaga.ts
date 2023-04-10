@@ -14,6 +14,7 @@ export function* signupSaga(): Generator<
   try {
     const { payload } = yield take(authenticationActions.signupStart.type);
     const res = yield call(createUser, payload);
+    localStorage.setItem('accessToken', res.data.accessToken);
     yield put(authenticationActions.loginUser(res.data));
   } catch (error) {
     console.log(error);
