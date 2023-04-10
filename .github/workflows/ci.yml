@@ -3,7 +3,7 @@ name: CI
 on:
   pull_request:
     branches: ['develop']
-  pusH:
+  push:
     branches: ['develop']
 jobs:
   build:
