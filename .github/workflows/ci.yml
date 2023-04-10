@@ -15,7 +15,7 @@ jobs:
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-key: |
+          restore-keys: |
             ${{ runner.os }}-node-
       - name: Use NodeJS
         uses: actions/setup-node@v3
@@ -26,6 +26,7 @@ jobs:
         env:
           CI: true
       - name: Install Netlify CLI
+        if: github.event_name == 'push'
         run: npm install -g netlify-cli
       - name: Build project
         if: github.event_name == 'push'
