@@ -39,7 +39,7 @@ const Login = () => {
           </Fieldset>
           <Button type="submit">Submit</Button>
           <p>
-            Dont have an account? <Link to="/signup">Signup</Link>
+            Dont have an accounttttt? <Link to="/signup">Signup</Link>
           </p>
         </FormContainer>
       </Form>
