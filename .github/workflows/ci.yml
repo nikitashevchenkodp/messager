@@ -18,6 +18,8 @@ jobs:
       # - run: npm run test -- --coverage
       #   env:
       #     CI: true
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
       - name: Build project
         if: github.event_name == 'push'
         run: npm run build
@@ -28,5 +30,5 @@ jobs:
         # uses: South-Paw/action-netlify-deploy@v1.2.0
         run: netlify deploy --dir=public --prod
         env:
-          NETLIFY_AUTH_TOKEN: ${{secrets.NETLIFY_AUTH_TOKEN}}
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
