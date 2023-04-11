@@ -2,16 +2,17 @@ name: CI
 
 on:
   pull_request:
-    branches: ['develop']
+    branches: [develop, master]
   push:
-    branches: ['develop']
+    branches: [develop, master]
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - uses: actions/checkout@v3
       - name: Cache node_modules
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -20,7 +21,7 @@ jobs:
       - name: Use NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
+          node-version: '18.x'
       - run: npm ci
       - run: npm run test -- --coverage
         env:
@@ -44,10 +45,20 @@ jobs:
         with:
           name: build
           path: build
-      - uses: actions/download-artifact@v3
+      - name: Zip assets
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          zip -r build.zip ./build
+          zip -r coverage.zip ./coverage
+      - name: Create a Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Deploy to staging Netlify
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         run: netlify deploy --dir=build --prod
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          CI: false
