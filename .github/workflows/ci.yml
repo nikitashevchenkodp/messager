@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - uses: actions/checkout@v3
       - name: Cache node_modules
@@ -46,7 +47,6 @@ jobs:
           path: build
       - name: Create a Release
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        permissions: write-all
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
