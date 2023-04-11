@@ -39,11 +39,12 @@ jobs:
         env:
           CI: false
       - name: Upload Build Folder
+        if: github.event_name == 'push'
         uses: actions/upload-artifact@v3
         with:
           name: build
           path: build
-      - uses: actions/download-artifact
+      - uses: actions/download-artifact@v3
       - name: Deploy to staging Netlify
         if: github.event_name == 'push'
         run: netlify deploy --dir=build --prod
