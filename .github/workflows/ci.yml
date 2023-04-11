@@ -46,6 +46,7 @@ jobs:
           path: build
       - name: Create a Release
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        permissions: write-all
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
