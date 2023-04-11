@@ -1,0 +1,9 @@
+{
+  "branches": "master",
+  "reposirotyUrl": "https://github.com/nikitashevchenkodp/messager",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/github"
+  ]
+}
