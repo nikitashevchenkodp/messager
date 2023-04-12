@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 export const MessageWrapper = styled.div<{ type: 'sent' | 'recieved'; selected: boolean }>`
   display: inline-flex;

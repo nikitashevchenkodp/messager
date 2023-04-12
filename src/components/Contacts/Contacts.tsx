@@ -6,7 +6,7 @@ import SearchInput from 'components/shared/Input/Input';
 import SearchIcon from '@mui/icons-material/Search';
 import Divider from 'components/shared/Divider';
 import { getAllUsers } from 'services/apiService';
-import Avatar from 'components/shared/Avatar';
+import { Avatar } from 'components/shared/Avatar';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
 

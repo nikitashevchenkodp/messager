@@ -11,7 +11,8 @@ const AvatarContainer = styled.div`
   border-radius: 50%;
   width: 60px;
   height: 60px;
-  background-color: rgb(79, 158, 230);
+  background: rgb(3, 101, 250);
+  background: linear-gradient(0deg, rgba(3, 101, 250, 1) 5%, rgba(255, 255, 255, 1) 100%);
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -40,7 +41,7 @@ const Avatar: FC<IAvatar> = (props) => {
       res += firstTwoLetters;
     }
 
-    return <p style={{ textTransform: 'uppercase' }}>{res}</p>;
+    return <p style={{ textTransform: 'uppercase', background: 'transparent' }}>{res}</p>;
   };
 
   const content = () => {

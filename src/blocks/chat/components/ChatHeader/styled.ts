@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { CHAT_HEADER_HEIGHT } from 'consts';
+import { CHAT_HEADER_HEIGHT, SM_SCREEN_WIDTH } from 'consts';
+import Button from 'components/shared/Button';
 
 export const ChatHeaderStyled = styled.div`
   height: ${CHAT_HEADER_HEIGHT}px;
@@ -26,4 +27,12 @@ export const ChatExtraInfo = styled.div`
 export const ChatActions = styled.div`
   display: flex;
   gap: 20px;
+`;
+
+export const BackButton = styled(Button)`
+  display: none;
+
+  @media screen and (max-width: ${SM_SCREEN_WIDTH}px) {
+    display: block;
+  }
 `;

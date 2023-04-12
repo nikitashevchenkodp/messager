@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Avatar as BaseAvatar } from 'components/shared/Avatar';
 
 export const NotifficationQuantity = styled.p`
   position: absolute;
@@ -32,15 +33,23 @@ export const ChatListItemContainer = styled.div<{ isActive: boolean }>`
     color: ${(props) => (props.isActive ? '#fff' : 'black')};
     background-color: ${(props) => props.isActive && ' rgb(65,159,217)'};
   }
+
+  &:hover {
+    background-color: ${(props) =>
+      props.isActive ? ' rgb(65,159,217)' : 'rgba(65, 159, 217, 0.2)'};
+  }
 `;
-export const Avatar = styled.img`
+export const Avatar = styled(BaseAvatar)`
   border-radius: 50%;
   width: 47px;
   min-width: 47px;
   max-width: 47px;
   min-height: 47px;
   max-height: 47px;
-  background-color: teal;
+  background-color: rgb(79, 158, 230);
+  & p {
+    color: white !important;
+  }
 `;
 export const ChatListItemInfoContainer = styled.div`
   width: 100%;

@@ -25,6 +25,7 @@ const SelectedMessagesMenuContainer = styled.div<{ isSelectedMessages: boolean }
   transition: 0.2s;
   transform: ${(props) => (props.isSelectedMessages ? 'none' : 'translateY(-100%)')};
   opacity: ${(props) => (props.isSelectedMessages ? '1' : '0')};
+  z-index: 1;
 `;
 
 const TextButton = styled(Button)`

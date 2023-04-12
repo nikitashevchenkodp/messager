@@ -3,16 +3,16 @@ import { CHAT_LIST_MIN_WIDTH } from 'consts';
 
 interface UIInitState {
   windowWidth: number;
-  isHideChatList: boolean;
   chatListState: 'expanded' | 'colapsed';
   chatListWidth: number;
+  isChatOpen: boolean;
 }
 
 const initialState: UIInitState = {
   windowWidth: window.innerWidth,
-  isHideChatList: true,
   chatListState: 'expanded',
-  chatListWidth: CHAT_LIST_MIN_WIDTH
+  chatListWidth: CHAT_LIST_MIN_WIDTH,
+  isChatOpen: true
 };
 
 export const uiSettings = createSlice({
@@ -22,11 +22,8 @@ export const uiSettings = createSlice({
     setWindowWidth: (state, action: PayloadAction<number>) => {
       state.windowWidth = action.payload;
     },
-    hideChatList: (state) => {
-      state.isHideChatList = true;
-    },
-    showChatList: (state) => {
-      state.isHideChatList = false;
+    setChatState: (state, action: PayloadAction<boolean>) => {
+      state.isChatOpen = action.payload;
     },
     setChatListState: (state, action: PayloadAction<'expanded' | 'colapsed'>) => {
       if (action.payload === 'colapsed') {

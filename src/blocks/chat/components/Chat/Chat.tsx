@@ -9,9 +9,11 @@ import { ChatStyled, NoActveChats, SelectChat } from './styled';
 
 const Chat = () => {
   const activeChat = useAppSelector((state) => state.entities.active.activeChat);
+  const isChatOpen = useAppSelector((state) => state.ui.uiSettings.isChatOpen);
+  console.log('isChatOpen', isChatOpen);
 
   return (
-    <ChatStyled data-testid="chat">
+    <ChatStyled data-testid="chat" isChatOpen={isChatOpen}>
       {activeChat.user ? (
         <>
           {' '}

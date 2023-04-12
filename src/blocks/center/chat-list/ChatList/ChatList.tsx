@@ -1,35 +1,18 @@
 import { CircularProgress } from '@mui/material';
-import { SearchIcon } from 'components/icons';
-import ResizableContainer from 'components/ResizableContainer';
-import { log } from 'console';
-import { CHAT_LIST_MIN_WIDTH } from 'consts';
-import React, { useCallback, useRef, useState } from 'react';
+import React from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
 import { uiSettingsActions } from 'store/slices/UI';
 import { IChat } from 'types';
 import ChatListItem from '../ChatListItem/ChatListItem';
-import SearchInput from '../SearchInput/SearchInput';
-import {
-  ChatListContainer,
-  ChatListContainerSmallScreen,
-  ChatListHeader,
-  ChatListStyled,
-  List
-} from './styled';
+import { List } from './styled';
 
 const ChatList = () => {
   const dispatch = useAppDispatch();
-  const isHideChatList = useAppSelector((state) => state.ui.uiSettings.isHideChatList);
   const chatListState = useAppSelector((state) => state.ui.uiSettings.chatListState);
   const chatList = useAppSelector((state) => state.entities.chats.items);
   const loading = useAppSelector((state) => state.entities.chats.isLoading);
   const activeChat = useAppSelector((state) => state.entities.active.activeChat);
-  const [val, setVal] = useState('');
-
-  const handleClick = () => {
-    dispatch(uiSettingsActions.setChatListWidth(CHAT_LIST_MIN_WIDTH));
-  };
 
   const setupActiveChat = (chatItem: IChat) => {
     const { chatId, user } = chatItem;
@@ -39,6 +22,7 @@ const ChatList = () => {
         user
       })
     );
+    dispatch(uiSettingsActions.setChatState(true));
   };
 
   const list = () => {
@@ -81,33 +65,7 @@ const ChatList = () => {
 
   return (
     <>
-      <ChatListContainer>
-        <ResizableContainer>
-          <ChatListStyled data-testid="chat-list">
-            <ChatListHeader>
-              {chatListState === 'expanded' ? (
-                <SearchInput value={val} onChange={(e) => setVal(e.target.value)} label="Search" />
-              ) : (
-                <SearchIcon onClick={handleClick} cursor="pointer" />
-              )}
-            </ChatListHeader>
-            <List>{list()}</List>
-          </ChatListStyled>
-        </ResizableContainer>
-      </ChatListContainer>
-
-      <ChatListContainerSmallScreen isHide={isHideChatList}>
-        {!isHideChatList && (
-          <>
-            <ChatListStyled>
-              <ChatListHeader>
-                <SearchInput value={val} onChange={(e) => setVal(e.target.value)} label="Search" />
-              </ChatListHeader>
-              <List>{list()}</List>
-            </ChatListStyled>
-          </>
-        )}
-      </ChatListContainerSmallScreen>
+      <List>{list()}</List>
     </>
   );
 };

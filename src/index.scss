@@ -21,3 +21,13 @@ code {
 img {
   max-width: 100%;
 }
+
+.fade-out {
+  transform: translateX(-100%);
+  opacity: 0.6;
+  z-index: -1;
+  max-width: 0;
+  transition: all 0.3s;
+  transition-property: transform max-width;
+  transition-duration: 0.2s 0.5s;
+}

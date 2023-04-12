@@ -19,8 +19,9 @@ const Folders = () => {
 
   const clickHandler = (e: React.MouseEvent<HTMLButtonElement>, folderName: string) => {
     e.stopPropagation();
+    console.log('hide chat list');
     dispatch(activeEntitiesActions.setActiveFolder(folderName));
-    dispatch(uiSettingsActions.showChatList());
+    dispatch(uiSettingsActions.setChatState(false));
   };
 
   const foldersTabs = useMemo(() => {

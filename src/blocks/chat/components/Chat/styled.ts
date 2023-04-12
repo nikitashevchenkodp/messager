@@ -1,15 +1,19 @@
 import styled from 'styled-components';
-import { CHAT_AREA_WIDTH } from 'consts';
+import { CHAT_AREA_WIDTH, SM_SCREEN_WIDTH } from 'consts';
 import chatBg from 'assets/bg-chat.jpg';
 
-export const ChatStyled = styled.div`
+export const ChatStyled = styled.div<{ isChatOpen: boolean }>`
   flex-grow: 1;
   max-height: 100vh;
-  position: relative;
   overflow-x: hidden;
-  min-width: ${CHAT_AREA_WIDTH};
-  max-width: 100%;
-  background-image: url(${chatBg});
+  transition: all 0.3s;
+
+  @media screen and (max-width: ${SM_SCREEN_WIDTH}px) {
+    transition: all 0.3s;
+    position: absolute;
+    inset: 0px;
+    left: ${(props) => (props.isChatOpen ? '0' : '100%')};
+  }
 `;
 
 export const NoActveChats = styled.div`

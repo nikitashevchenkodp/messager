@@ -33,10 +33,12 @@ const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
     (state) => state.entities.messages.byChatId[chatItem.chatId]?.messages[lastMessageId]
   );
 
+  const newMessages = 0;
+
   return (
     <ChatListItemContainer isActive={active} onClick={onClick} data-testid="chat-list-item">
       <AvatarContainer>
-        <Avatar src={chatItem?.user.avatar} />
+        <Avatar src={chatItem?.user.avatar} fullName={chatItem.user.fullName} />
         <NetworkStatus online={Boolean(online)} />
       </AvatarContainer>
       <ChatListItemInfoContainer>
@@ -60,7 +62,7 @@ const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
         <LastMessageTime hide={chatListState === 'colapsed'}>
           {parseDate(lastMessage?.createdAt)}
         </LastMessageTime>
-        <NotifficationQuantity>2</NotifficationQuantity>
+        {Boolean(newMessages) && <NotifficationQuantity>2</NotifficationQuantity>}
       </ChatListItemInfoContainer>
     </ChatListItemContainer>
   );

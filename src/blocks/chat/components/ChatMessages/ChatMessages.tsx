@@ -1,6 +1,8 @@
+import { messagesActions } from 'blocks/chat/redux/chat';
 import Message from 'blocks/message/Message/Message';
 import { useScrollToBottom } from 'hooks/useScrollToBottom';
-import React, { memo } from 'react';
+import debounce from 'lodash.debounce';
+import React, { memo, useEffect, useMemo, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
 import styled from 'styled-components';
@@ -15,6 +17,8 @@ const NotMessages = styled.div`
 `;
 
 const ChatMessages = memo(({ openMessageMenu }: any) => {
+  console.log('rerender');
+
   const dispatch = useAppDispatch();
   const activeChatId = useAppSelector((state) => state.entities.active.activeChat?.chatId);
   const messagesIds = useAppSelector(
@@ -23,10 +27,59 @@ const ChatMessages = memo(({ openMessageMenu }: any) => {
   const selectedMessagesIds = useAppSelector(
     (state) => state.entities.active.activeChat.selectedMessagesIds
   );
-  const scrollRef = useScrollToBottom(messagesIds);
+  const scrolOffset = useAppSelector(
+    (state) => state.entities.messages.byChatId[activeChatId].lastScrollOffset
+  );
+  // const scrollRef = useScrollToBottom(messagesIds);
+  const listRef = useRef<HTMLDivElement | null>(null);
   const isSelectedModeOn = Object.keys(selectedMessagesIds).length > 0;
 
-  const messages = () => {
+  useEffect(() => {
+    console.log('scrollHeight', listRef?.current?.scrollHeight);
+    console.log('scrolOffset', scrolOffset);
+    console.log('when to scroll', listRef!.current!.scrollHeight! - (scrolOffset || 0));
+    const point =
+      listRef!.current!.scrollHeight! - (scrolOffset || 0) - listRef!.current!.offsetHeight;
+    if (listRef?.current) {
+      listRef.current.scrollTo(0, point);
+    }
+
+    const handleScroll = debounce((e: Event) => {
+      const scrollHeight = (e.target as HTMLDivElement).scrollHeight;
+      const offsetBottom =
+        scrollHeight -
+        (e.target as HTMLDivElement).scrollTop -
+        (e.target as HTMLDivElement).offsetHeight;
+      dispatch(messagesActions.setLastScrollOffset({ chatId: activeChatId, offset: offsetBottom }));
+      console.log(offsetBottom);
+    }, 100);
+    if (listRef?.current) {
+      listRef.current.addEventListener('scroll', handleScroll);
+    }
+
+    return () => {
+      if (listRef?.current) {
+        listRef.current.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, [activeChatId]);
+
+  useEffect(() => {
+    console.log('scrolOffset', scrolOffset);
+
+    if (Number(scrolOffset) <= 1) {
+      console.log('true');
+
+      if (listRef?.current) {
+        listRef.current.scrollTo({
+          top: listRef!.current!.scrollHeight!,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, [messagesIds]);
+
+  const messages = useMemo(() => {
     if (!messagesIds?.length) {
       return (
         <NotMessages>
@@ -34,7 +87,7 @@ const ChatMessages = memo(({ openMessageMenu }: any) => {
         </NotMessages>
       );
     }
-    return messagesIds?.map((id: string) => {
+    return messagesIds?.map((id: string, idx: number) => {
       return (
         <Message
           toggleFromSelected={
@@ -44,15 +97,23 @@ const ChatMessages = memo(({ openMessageMenu }: any) => {
           }
           selected={Boolean(selectedMessagesIds[id])}
           messageId={id}
-          ref={scrollRef}
+          // ref={idx === messagesIds.length - 1 ? scrollRef : null}
           key={id}
           openMessageMenu={openMessageMenu}
         />
       );
     });
-  };
+  }, [messagesIds]);
 
-  return <ChatMessagesStyled data-testid="chat-messages">{messages()}</ChatMessagesStyled>;
+  return (
+    <ChatMessagesStyled data-testid="chat-messages" ref={listRef}>
+      <div
+        ref={listRef}
+        style={{ height: 'auto', maxWidth: '100%', display: 'flex', flexDirection: 'column' }}>
+        {messages}
+      </div>
+    </ChatMessagesStyled>
+  );
 });
 
 ChatMessages.displayName = 'ChatMessages';
