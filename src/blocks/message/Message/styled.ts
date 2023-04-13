@@ -1,36 +1,38 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
-export const MessageWrapper = styled.div<{ type: 'sent' | 'recieved'; isSelected: boolean }>`
+export const MessageWrapper = styled.div<{
+  type: 'sent' | 'recieved';
+  isSelected: boolean;
+  isSelectionMode: boolean;
+}>`
   display: inline-flex;
   width: 100%;
   flex-direction: ${(props) => (props.type === 'sent' ? 'row-reverse' : 'row')};
   position: relative;
-  padding: 0 10px;
-  ${(props) => {
-    if (props.isSelected) {
-      return `
-        &::before {
-          content: '';
-        
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background-color: rgba(0,0,0, 0.3)
-        }
-      `;
-    }
-  }};
+  padding: 3px 10px;
+  padding-left: ${(props) => (props.isSelectionMode ? '50px' : '10px')};
+  cursor: ${(props) => (props.isSelectionMode ? 'pointer' : 'default')};
+  transition: 0.3s;
+  &::before {
+    transition: 0.15s;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: ${(props) => (props.isSelected ? '1' : '0')};
+  }
 `;
 
 export const MessageContainer = styled.div<{ type: 'sent' | 'recieved' }>`
   background-color: ${(props) => (props.type === 'sent' ? 'rgb(244, 251, 227)' : '#fff')};
   border-radius: ${(props) => (props.type === 'sent' ? '10px 10px 0 10px' : '10px 10px 10px 0;')};
   align-self: ${(props) => (props.type === 'sent' ? 'flex-end' : 'flex-start')};
-  margin-bottom: 8px;
   position: relative;
   max-width: 464px;
+  transition: 0.5s;
 `;
 
 export const MessageBody = styled.div`

@@ -11,7 +11,8 @@ import { MessageRecieveTail, MessageSentTail } from 'components/icons';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { IMessage } from 'types';
 import MediaMessage from '../MediaMessage';
-
+import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 interface IMessageProps {
   messageId: string;
   openMessageMenu: (e: React.MouseEvent, message: IMessage) => void;
@@ -27,7 +28,7 @@ const Text = styled.p``;
 const Message = forwardRef<HTMLDivElement, IMessageProps>(({ messageId, openMessageMenu }, ref) => {
   const { _id } = useAppSelector((state) => state.authentication.user);
   const activechatId = useAppSelector((state) => state.entities.active.activeChat?.chatId);
-  const isSelectedModeOn = useAppSelector(
+  const isSelectiondModeOn = useAppSelector(
     (state) => Object.values(state.entities.active.activeChat.selectedMessagesIds).length > 0
   );
   const isSelected = useAppSelector((state) =>
@@ -38,20 +39,33 @@ const Message = forwardRef<HTMLDivElement, IMessageProps>(({ messageId, openMess
     (state) => state.entities.messages.byChatId[activechatId || ''].messages[messageId]
   );
   const type = message?.from === _id ? 'sent' : 'recieved';
-  console.log('render');
 
   return (
     <>
       <MessageWrapper
+        isSelectionMode={isSelectiondModeOn}
         isSelected={isSelected}
         onContextMenu={(e) => openMessageMenu(e, message)}
         type={type}
         onClick={
-          isSelectedModeOn
+          isSelectiondModeOn
             ? () => dispatch(activeEntitiesActions.toggleItemInSelectedMessagesIds(messageId))
             : undefined
         }
         data-testid={`message-container-${message._id}`}>
+        {isSelectiondModeOn && (
+          <div style={{ position: 'absolute', top: '20px', left: '20px' }}>
+            {isSelected ? (
+              <div style={{ color: 'green' }}>
+                <CheckCircleOutlineIcon color="inherit" />
+              </div>
+            ) : (
+              <div style={{ color: 'white' }}>
+                <RadioButtonUncheckedIcon />
+              </div>
+            )}
+          </div>
+        )}
         <MessageContainer ref={ref} type={type}>
           <MessageBody>
             <MediaMessage media={message.attachment?.media} />

@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import { messagesActions } from 'blocks/chat/redux/chat';
 import Message from 'blocks/message/Message/Message';
 import debounce from 'lodash.debounce';
@@ -12,6 +13,10 @@ const NotMessages = styled.div`
   padding: 10px;
   border-radius: 8px;
   text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const ChatMessages = memo(({ openMessageMenu }: any) => {
@@ -23,7 +28,7 @@ const ChatMessages = memo(({ openMessageMenu }: any) => {
   );
 
   const scrolOffset = useAppSelector(
-    (state) => state.entities.messages.byChatId[activeChatId].lastScrollOffset
+    (state) => state.entities.messages.byChatId[activeChatId]?.lastScrollOffset
   );
 
   const listRef = useRef<HTMLDivElement | null>(null);
@@ -66,13 +71,6 @@ const ChatMessages = memo(({ openMessageMenu }: any) => {
   }, [messagesIds]);
 
   const messages = useMemo(() => {
-    if (!messagesIds?.length) {
-      return (
-        <NotMessages>
-          No messages here yet... Send a message or tap on the greeting below.
-        </NotMessages>
-      );
-    }
     return messagesIds?.map((id: string) => {
       return <Message messageId={id} key={id} openMessageMenu={openMessageMenu} />;
     });
@@ -80,11 +78,34 @@ const ChatMessages = memo(({ openMessageMenu }: any) => {
 
   return (
     <ChatMessagesStyled data-testid="chat-messages" ref={listRef}>
-      <div
-        ref={listRef}
-        style={{ height: 'auto', maxWidth: '100%', display: 'flex', flexDirection: 'column' }}>
-        {messages}
-      </div>
+      {!messagesIds?.length ? (
+        <NotMessages>
+          No messages here yet... Send a message or tap on the greeting below.
+        </NotMessages>
+      ) : (
+        <div
+          ref={listRef}
+          style={{
+            height: 'auto',
+            maxWidth: '100%',
+            display: 'flex',
+            flexDirection: 'column'
+          }}>
+          {/* <div
+            style={{
+              padding: '4px 8px',
+              background: 'rgba(255,255,255,0.2)',
+              borderRadius: '5px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textAlign: 'center'
+            }}>
+            14 august 2023
+          </div> */}
+          {messages}
+        </div>
+      )}
     </ChatMessagesStyled>
   );
 });

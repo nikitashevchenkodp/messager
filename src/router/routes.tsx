@@ -1,4 +1,4 @@
-import { RouteObject } from 'react-router-dom';
+import { Navigate, RouteObject } from 'react-router-dom';
 import * as paths from './paths';
 import React from 'react';
 import MainLayout from 'layouts/MainLayout';
@@ -26,7 +26,8 @@ export const routes: RouteObject[] = [
     ),
     children: [
       { path: paths.LOGIN, element: <Login /> },
-      { path: paths.SIGNUP, element: <Signup /> }
+      { path: paths.SIGNUP, element: <Signup /> },
+      { path: '*', element: <Navigate to="login" /> }
     ]
   }
 ];

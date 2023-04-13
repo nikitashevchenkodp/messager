@@ -9,6 +9,7 @@ import { getAllUsers } from 'services/apiService';
 import { Avatar } from 'components/shared/Avatar';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
+import { uiSettingsActions } from 'store/slices/UI';
 
 const ContactsContainer = styled.div`
   width: 400px;
@@ -126,6 +127,7 @@ const Contacts = ({ onClose }: any) => {
       <ContactsBody>
         <List>
           {users.map((item) => {
+            console.log(item);
             return (
               <UserListItem
                 key={item.id}
@@ -136,6 +138,7 @@ const Contacts = ({ onClose }: any) => {
                       user: { id: item.id, fullName: item.fullName, avatar: item.avatar }
                     })
                   );
+                  dispatch(uiSettingsActions.setChatState(true));
                   onClose();
                 }}>
                 <Avatar src={item.avatar} fullName={item.fullName} />

@@ -7,6 +7,7 @@ export const ChatStyled = styled.div<{ isChatOpen: boolean }>`
   max-height: 100vh;
   overflow-x: hidden;
   transition: all 0.3s;
+  position: relative;
 
   @media screen and (max-width: ${SM_SCREEN_WIDTH}px) {
     transition: all 0.3s;
