@@ -1,13 +1,13 @@
 import styled, { keyframes } from 'styled-components';
 
-export const MessageWrapper = styled.div<{ type: 'sent' | 'recieved'; selected: boolean }>`
+export const MessageWrapper = styled.div<{ type: 'sent' | 'recieved'; isSelected: boolean }>`
   display: inline-flex;
   width: 100%;
   flex-direction: ${(props) => (props.type === 'sent' ? 'row-reverse' : 'row')};
   position: relative;
   padding: 0 10px;
   ${(props) => {
-    if (props.selected) {
+    if (props.isSelected) {
       return `
         &::before {
           content: '';
