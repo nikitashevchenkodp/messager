@@ -11,7 +11,7 @@ import { authenticationReducer as authentication } from './slices/authentication
 import { rootSaga } from './sagas';
 import { usersReducer as users } from './slices/usersStatuses';
 import { snackbarReducer } from './slices/snackbar';
-import { chatsReducer } from 'blocks/chat-list';
+import { chatsReducer } from 'blocks/center/chat-list';
 import { activeEntitiesReducer } from './slices/activeEntities';
 import { foldersReducer } from 'blocks/folders/redux/folders';
 import { sidebarReducer } from './slices/sidebar';

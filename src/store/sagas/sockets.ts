@@ -32,7 +32,7 @@ let socket;
 function* connect(): Generator<SelectEffect, Socket, string> {
   const userId = yield select((state: RootState) => state.authentication.user?._id);
 
-  socket = io(serverLink, {
+  socket = io(serverLink!, {
     reconnectionAttempts: 5,
     reconnectionDelay: 1000,
     query: {

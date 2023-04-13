@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import Avatar from 'components/shared/Avatar';
+import { Avatar } from 'components/shared/Avatar';
 import Divider from 'components/shared/Divider';
 import { useAppSelector } from 'store/hooks';
 import SettingsIcon from '@mui/icons-material/Settings';

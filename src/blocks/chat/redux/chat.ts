@@ -13,6 +13,7 @@ interface UIInitState {
       };
       messagesIds: string[];
       editableMessage: IMessage | null;
+      lastScrollOffset?: number;
     };
   };
 }
@@ -81,6 +82,10 @@ export const messages = createSlice({
       } else {
         state.byChatId[chatId].editableMessage = state.byChatId[chatId].messages[messageId];
       }
+    },
+    setLastScrollOffset: (state, action: PayloadAction<{ chatId: string; offset: number }>) => {
+      const { chatId, offset } = action.payload;
+      state.byChatId[chatId].lastScrollOffset = offset;
     }
   }
 });

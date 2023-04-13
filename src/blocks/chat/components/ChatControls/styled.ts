@@ -16,4 +16,5 @@ export const ChatFooter = styled.div`
   left: 0;
   background-color: #fff;
   height: auto;
+  border-top: rgba(0, 0, 0, 0.3);
 `;

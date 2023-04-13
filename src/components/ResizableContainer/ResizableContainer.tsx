@@ -9,8 +9,10 @@ interface ResizableContainerStyledProps {
 }
 
 export const ResizableContainerStyled = styled.div`
-  width: '350px';
+  width: 100%;
   max-width: 100%;
+  height: 100%;
+  transition: none;
 `;
 
 interface IResizableContainer {
@@ -20,10 +22,14 @@ interface IResizableContainer {
 const ResizableContainer: FC<IResizableContainer> = (props) => {
   const { children } = props;
   const chatListWidth = useAppSelector((state) => state.ui.uiSettings.chatListWidth);
+  const isChatOpen = useAppSelector((state) => state.ui.uiSettings.isChatOpen);
 
   return (
     <>
-      <ResizableContainerStyled style={{ width: `${chatListWidth}px` }}>
+      <ResizableContainerStyled
+        style={{
+          width: !isChatOpen ? '100%' : `${chatListWidth}px`
+        }}>
         {children}
       </ResizableContainerStyled>
       <Resizer

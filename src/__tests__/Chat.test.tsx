@@ -12,6 +12,7 @@ import { act } from 'react-dom/test-utils';
 import { renderWithRedux } from 'wrapper';
 
 describe('Chat', () => {
+  window.HTMLElement.prototype.scrollTo = jest.fn();
   it('Renders without any info if not active chat', async () => {
     const store = createStore({ authentication: { user: mockUser } });
     const persistor = persistStore(store);

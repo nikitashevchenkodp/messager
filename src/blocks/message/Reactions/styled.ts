@@ -1,4 +1,4 @@
-import Avatar from 'components/shared/Avatar';
+import { Avatar } from 'components/shared/Avatar';
 import styled from 'styled-components';
 
 export const ReactionsContainer = styled.div`

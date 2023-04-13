@@ -7,9 +7,9 @@ export const mockStore: Omit<RootState, '_persist'> = {
     },
     uiSettings: {
       windowWidth: 1642,
-      isHideChatList: true,
       chatListState: 'expanded',
-      chatListWidth: 350
+      chatListWidth: 350,
+      isChatOpen: true
     },
     sidebar: {
       isOpen: false
