@@ -5,19 +5,16 @@ import debounce from 'lodash.debounce';
 import React, { memo, useEffect, useMemo, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import styled from 'styled-components';
-import { ChatMessagesStyled } from './styled';
-
-const NotMessages = styled.div`
-  width: 170px;
-  background-color: rgba(255, 255, 255, 0.3);
-  padding: 10px;
-  border-radius: 8px;
-  text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
+import { IMessage } from 'types';
+import {
+  ChatMessagesStyled,
+  DateGroupContainer,
+  DateLabel,
+  DateLabelContainer,
+  NotMessages
+} from './styled';
+import { formatToHumanDate } from 'helpers/formatToHumanDate';
+import { groupMessages } from 'helpers/groupMessages';
 
 const ChatMessages = memo(({ openMessageMenu }: any) => {
   const dispatch = useAppDispatch();
@@ -26,18 +23,18 @@ const ChatMessages = memo(({ openMessageMenu }: any) => {
   const messagesIds = useAppSelector(
     (state) => state.entities.messages.byChatId[activeChatId || '']?.messagesIds
   );
+  const messages = useAppSelector(
+    (state) => state.entities.messages.byChatId[activeChatId || '']?.messages
+  );
 
   const scrolOffset = useAppSelector(
     (state) => state.entities.messages.byChatId[activeChatId]?.lastScrollOffset
   );
 
   const listRef = useRef<HTMLDivElement | null>(null);
-  console.log('render chat messages');
 
   useEffect(() => {
     if (listRef?.current) {
-      console.log('initial scroll');
-
       const point =
         listRef.current.scrollHeight - (scrolOffset || 0) - listRef.current.offsetHeight;
       listRef.current.scrollTo(0, point);
@@ -70,11 +67,40 @@ const ChatMessages = memo(({ openMessageMenu }: any) => {
     }
   }, [messagesIds]);
 
-  const messages = useMemo(() => {
-    return messagesIds?.map((id: string) => {
-      return <Message messageId={id} key={id} openMessageMenu={openMessageMenu} />;
-    });
+  const messagesGroups = useMemo<ReturnType<typeof groupMessages>>(() => {
+    return groupMessages(messages, messagesIds);
   }, [messagesIds]);
+
+  const renderedMessages = useMemo(() => {
+    return Object.keys(messagesGroups).map((date, i) => {
+      return (
+        <DateGroupContainer key={date + i}>
+          <DateLabelContainer key={date}>
+            <DateLabel>{formatToHumanDate(date)}</DateLabel>
+          </DateLabelContainer>
+          {messagesGroups[date]
+            .map((senderGroup) => {
+              return senderGroup
+                .map((message, i, arr) => {
+                  const firstInGroup = i === 0;
+                  const lastInGroup = i === arr.length - 1;
+                  return (
+                    <Message
+                      messageId={message._id}
+                      key={message._id}
+                      openMessageMenu={openMessageMenu}
+                      firstInGroup={firstInGroup}
+                      lastInGroup={lastInGroup}
+                    />
+                  );
+                })
+                .flat(Infinity);
+            })
+            .flat(Infinity)}
+        </DateGroupContainer>
+      );
+    });
+  }, [messagesGroups]);
 
   return (
     <ChatMessagesStyled data-testid="chat-messages" ref={listRef}>
@@ -91,19 +117,7 @@ const ChatMessages = memo(({ openMessageMenu }: any) => {
             display: 'flex',
             flexDirection: 'column'
           }}>
-          {/* <div
-            style={{
-              padding: '4px 8px',
-              background: 'rgba(255,255,255,0.2)',
-              borderRadius: '5px',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              textAlign: 'center'
-            }}>
-            14 august 2023
-          </div> */}
-          {messages}
+          {renderedMessages}
         </div>
       )}
     </ChatMessagesStyled>
