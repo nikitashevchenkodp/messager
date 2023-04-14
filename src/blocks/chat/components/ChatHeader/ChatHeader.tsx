@@ -12,6 +12,7 @@ import { useAppSelector, useAppDispatch } from 'store/hooks';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Button from 'components/shared/Button';
 import { uiSettingsActions } from 'store/slices/UI';
+import TypingIndicator from 'components/TypingIndicator';
 
 const ChatHeader = () => {
   const userWithWhomChat = useAppSelector((state) => state.entities.active.activeChat?.user);
@@ -38,7 +39,7 @@ const ChatHeader = () => {
           <ChatExtraInfo>
             {online ? (
               online.typing ? (
-                <p style={{ color: 'blue' }}>typing...</p>
+                <TypingIndicator />
               ) : (
                 <p style={{ color: 'green' }}>online</p>
               )
