@@ -5,7 +5,7 @@ export const MessageWrapper = styled.div<{
   isSelected: boolean;
   isSelectionMode: boolean;
 }>`
-  display: inline-flex;
+  display: flex;
   width: 100%;
   flex-direction: ${(props) => (props.type === 'sent' ? 'row-reverse' : 'row')};
   position: relative;
@@ -26,13 +26,16 @@ export const MessageWrapper = styled.div<{
   }
 `;
 
-export const MessageContainer = styled.div<{ type: 'sent' | 'recieved' }>`
+export const MessageContainer = styled.div<{ type: 'sent' | 'recieved'; hasTail: boolean }>`
   background-color: ${(props) => (props.type === 'sent' ? 'rgb(244, 251, 227)' : '#fff')};
-  border-radius: ${(props) => (props.type === 'sent' ? '10px 10px 0 10px' : '10px 10px 10px 0;')};
+  border-radius: ${(props) =>
+    props.type === 'sent'
+      ? `12px 12px ${props.hasTail ? '0' : '4px'} 12px`
+      : `12px 12px 12px ${props.hasTail ? '0' : '4px'}`};
   align-self: ${(props) => (props.type === 'sent' ? 'flex-end' : 'flex-start')};
   position: relative;
   max-width: 464px;
-  transition: 0.5s;
+  transition: 0.3s;
 `;
 
 export const MessageBody = styled.div`
@@ -86,4 +89,10 @@ export const MessageMeta = styled.div`
   align-items: center;
   gap: 2px;
   color: rgb(160, 172, 182);
+`;
+
+export const SelectedIconContainer = styled.div`
+  position: absolute;
+  top: 20px;
+  left: 20px;
 `;
