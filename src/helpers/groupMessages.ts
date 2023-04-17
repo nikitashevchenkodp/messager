@@ -22,7 +22,6 @@ export const groupMessages = (messages: { [id: string]: IMessage }, messagesIds:
   }
   const groupedByDateAndSender = {} as GroupedMessages;
   for (const date in messagesByDateGroup) {
-    console.log(date);
     const current = messagesByDateGroup[date];
     const groupedBySenderGroups = [] as IMessage[][];
     for (let i = 0; i < current.length; i++) {

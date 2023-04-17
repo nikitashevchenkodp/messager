@@ -67,11 +67,13 @@ const ChatMessages = memo(({ openMessageMenu }: any) => {
     }
   }, [messagesIds]);
 
-  const messagesGroups = useMemo<ReturnType<typeof groupMessages>>(() => {
+  const messagesGroups = useMemo<ReturnType<typeof groupMessages> | undefined>(() => {
+    if (!messagesIds?.length) return;
     return groupMessages(messages, messagesIds);
   }, [messagesIds]);
 
   const renderedMessages = useMemo(() => {
+    if (!messagesGroups) return;
     return Object.keys(messagesGroups).map((date, i) => {
       return (
         <DateGroupContainer key={date + i}>

@@ -1,5 +1,5 @@
 import Button from 'components/shared/Button';
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SortByAlphaIcon from '@mui/icons-material/SortByAlpha';
 import SearchInput from 'components/shared/Input/Input';
@@ -86,10 +86,15 @@ const Contacts = ({ onClose }: any) => {
   const dispatch = useAppDispatch();
   const online = useAppSelector((state) => state.users.statusesById);
 
+  let initialized = false;
+
   useEffect(() => {
-    getAllUsers()
-      .then((res) => setUsers(res.data))
-      .catch((e) => console.log(e));
+    if (!initialized) {
+      initialized = true;
+      getAllUsers()
+        .then((res) => setUsers(res.data))
+        .catch((e) => console.log(e));
+    }
   }, []);
 
   return (
@@ -127,7 +132,6 @@ const Contacts = ({ onClose }: any) => {
       <ContactsBody>
         <List>
           {users.map((item) => {
-            console.log(item);
             return (
               <UserListItem
                 key={item.id}
@@ -166,4 +170,4 @@ const Contacts = ({ onClose }: any) => {
   );
 };
 
-export default Contacts;
+export default memo(Contacts);

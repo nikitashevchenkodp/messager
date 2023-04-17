@@ -15,14 +15,10 @@ declare module 'notistack' {
 function App() {
   const dispatch = useAppDispatch();
   const router = useRoutes(routes);
+  console.log('render app');
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    if (accessToken) {
-      dispatch(authenticationActions.setIsAuth(true));
-    } else {
-      dispatch(authenticationActions.setIsAuth(false));
-    }
+    dispatch(authenticationActions.checkAuth());
   }, []);
 
   return <>{router}</>;
