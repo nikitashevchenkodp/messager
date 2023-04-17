@@ -38,6 +38,7 @@ export const DateLabelContainer = styled.div`
   justify-content: center;
   position: sticky;
   top: 10px;
+  margin-bottom: 10px;
 `;
 
 export const DateGroupContainer = styled.div`

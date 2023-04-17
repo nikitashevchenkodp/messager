@@ -1,7 +1,6 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import EditIcon from '@mui/icons-material/Edit';
-import MuiIconWrapper from 'components/shared/MuiIconWrapper/MuiIconWrapper';
 
 const apperance = keyframes`
     0%{
@@ -51,7 +50,7 @@ const Dot = styled.span`
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background-color: grey;
+  background-color: grey !important;
   position: relative;
   &::before,
   &::after {

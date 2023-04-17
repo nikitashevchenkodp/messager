@@ -27,6 +27,8 @@ export const formatToHumanDate = (date: string) => {
     const year = dateToFormat.getFullYear();
     const currentYear = start.getFullYear();
     const yearsDifferense = currentYear - year;
-    return yearsDifferense > 0 ? `${day} ${months[month]}, ${year}` : `${day} ${months[month]}`;
+    return yearsDifferense > 0
+      ? `${day} ${months[month + 1]}, ${year}`
+      : `${day} ${months[month + 1]}`;
   }
 };

@@ -64,7 +64,7 @@ export const Title = styled.p`
   white-space: nowrap;
   font-size: 14px;
 `;
-export const LastMessage = styled.p`
+export const LastMessage = styled.div`
   max-width: 100%;
   /* white-space: nowrap; */
   font-size: 15px;

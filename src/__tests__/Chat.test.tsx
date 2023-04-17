@@ -10,6 +10,7 @@ import { mockStore } from 'mock/store';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react-dom/test-utils';
 import { renderWithRedux } from 'wrapper';
+import { activeEntities } from 'store/slices/activeEntities';
 
 describe('Chat', () => {
   window.HTMLElement.prototype.scrollTo = jest.fn();
@@ -191,7 +192,7 @@ describe('Chat', () => {
 
   it('edit message', async () => {
     const { container, store } = renderWithRedux(<Chat />, mockStore);
-    const message = await container.findByTestId(/642683fe7571e92726bdbcf1/);
+    const message = await container.findByTestId(/642683897571e92726bdbcd3/);
     let editableMessage = container.queryByTestId('editable-message');
     expect(editableMessage).toBeNull();
     fireEvent.contextMenu(message);
@@ -203,29 +204,29 @@ describe('Chat', () => {
 
     // Check input
     const input = container.getByTestId('chat-controls-input') as HTMLInputElement;
-    expect(input.value).toEqual('Hello');
+    expect(input.value).toEqual('Hi!');
 
     //Change text in input
-    userEvent.type(input, 'Heelo, I am edited');
+    userEvent.type(input, 'H!! I am edited');
 
     // Send edited text
     const sendButton = container.getByTestId('chat-controls-send-button');
     userEvent.click(sendButton);
     const editedMessage = {
-      text: 'Heelo, I am edited',
+      _id: '642683897571e92726bdbcd3',
+      text: 'Hi! I am edited',
       createdAt: '2023-03-31T06:26:02.851Z',
-      from: '63e7b7bfd2c2586ba49c4ba5',
-      to: '63e7b7b5d2c2586ba49c4ba3',
+      from: '63e7b7b5d2c2586ba49c4ba3',
+      to: '63e7b7bfd2c2586ba49c4ba5',
       chatId: '642683897571e92726bdbcd1',
-      edited: false,
-      _id: '642683fe7571e92726bdbcf1',
+      edited: true,
       reactions: [],
       updatedAt: ''
     };
 
     act(() => store.dispatch(messagesActions.editMessage(editedMessage)));
     expect(message.querySelector('[data-testid="message-text"]')?.textContent).toEqual(
-      'Heelo, I am edited'
+      'Hi! I am edited'
     );
 
     // Expect "edited" indicator in message

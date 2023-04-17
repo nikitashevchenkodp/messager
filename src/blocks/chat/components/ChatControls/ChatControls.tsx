@@ -7,6 +7,7 @@ import Button from 'components/shared/Button';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import EditableMessage from '../EditableMessage';
 import { messagesActions } from 'blocks/chat/redux/chat';
+import debounce from 'lodash.debounce';
 
 const ChatControls = () => {
   const activeChat = useAppSelector((state) => state.entities.active.activeChat);
@@ -70,7 +71,7 @@ const ChatControls = () => {
 
     typingRef.current = setTimeout(() => {
       dispatch({ type: 'typing', payload: { userId: _id, typing: false } });
-    }, 1000);
+    }, 2000);
 
     if (isTiping) return;
     dispatch({
@@ -95,13 +96,13 @@ const ChatControls = () => {
 
   const keyboardEventHandler = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      sendMessage();
+      return sendMessage();
     } else if (e.key === 'ArrowUp') {
-      setEditableMessage();
+      return setEditableMessage();
     } else if (e.key === 'Escape') {
-      clearEditableMessage();
+      return clearEditableMessage();
     } else {
-      handleTyping();
+      return handleTyping();
     }
   };
 

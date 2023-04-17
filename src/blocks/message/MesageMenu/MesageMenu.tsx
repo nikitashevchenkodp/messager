@@ -5,6 +5,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import EditIcon from '@mui/icons-material/Edit';
 import ReplyIcon from '@mui/icons-material/Reply';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { useAppSelector } from 'store/hooks';
 
 interface IMenuOptionsProps {
   onEdit: () => void;
@@ -13,16 +14,23 @@ interface IMenuOptionsProps {
 }
 
 const MenuOptions: FC<IMenuOptionsProps> = ({ onEdit, onDelete, onSelect }) => {
+  const currentUserId = useAppSelector((state) => state.authentication.user._id);
+  const activeMessageFromId = useAppSelector(
+    (state) => state.entities.active.activeChat.activeMessage?.from
+  );
+  const isEditAvailable = currentUserId === activeMessageFromId;
   return (
     <MenuItems>
       <MenuItem data-testid="delete-option" onClick={onDelete}>
         <DeleteOutlineIcon />
         Delete
       </MenuItem>
-      <MenuItem data-testid="edit-option" onClick={onEdit}>
-        <EditIcon />
-        Edit
-      </MenuItem>
+      {isEditAvailable && (
+        <MenuItem data-testid="edit-option" onClick={onEdit}>
+          <EditIcon />
+          Edit
+        </MenuItem>
+      )}
       <MenuItem onClick={() => console.log('reply')}>
         <ReplyIcon />
         Reply
