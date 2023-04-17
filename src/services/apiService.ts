@@ -29,36 +29,6 @@ export const axiosInst = axios.create({
   withCredentials: true
 });
 
-axiosInst.interceptors.request.use((config: any) => {
-  const token = localStorage.getItem('accessToken');
-  return {
-    ...config,
-    headers: { ...config.headers, authorization: token }
-  };
-});
-
-axiosInst.interceptors.response.use(
-  (config) => config,
-  async (err) => {
-    const originalRequest = err.config;
-    if (err.response.status == 401 && err.config && !err.config._isRetry) {
-      originalRequest._isRetry = true;
-      try {
-        const res = await axios.get(`${serverLink}/api/users/refresh`, {
-          withCredentials: true
-        });
-        localStorage.setItem('accessToken', res.data.accessToken);
-        store.dispatch(authenticationActions.loginUser(res.data));
-        return axiosInst.request(originalRequest);
-      } catch (error) {
-        localStorage.removeItem('accessToken');
-        store.dispatch(authenticationActions.setIsAuth(false));
-      }
-    }
-    return Promise.reject(err);
-  }
-);
-
 export const login = async (body: ILogin) => {
   return axios.post(`${serverLink}/api/users/login`, body, { withCredentials: true });
 };
@@ -80,3 +50,36 @@ export const getChatMessages = async (chatId = '') => {
 export const getAllUsers = async () => {
   return axiosInst.get(`/api/users/`);
 };
+export const refreshAccessToken = () => {
+  return axios.get(`${serverLink}/api/users/refresh`, {
+    withCredentials: true
+  });
+};
+
+axiosInst.interceptors.request.use((config: any) => {
+  const token = store.getState().authentication.accessToken;
+  return {
+    ...config,
+    headers: { ...config.headers, authorization: token }
+  };
+});
+
+axiosInst.interceptors.response.use(
+  (config) => config,
+  async (err) => {
+    const originalRequest = err.config;
+    if (err.response.status == 401 && originalRequest && !originalRequest._isRetry) {
+      originalRequest._isRetry = true;
+      try {
+        const res = await refreshAccessToken();
+        store.dispatch(authenticationActions.setAccessToken(res.data.accessToken));
+        store.dispatch(authenticationActions.setUser(res.data.user));
+        return axiosInst.request(originalRequest);
+      } catch (error) {
+        store.dispatch(authenticationActions.setIsAuth(false));
+        store.dispatch({ type: 'CHANEL_OFF' });
+      }
+    }
+    return Promise.reject(err);
+  }
+);

@@ -87,6 +87,7 @@ export const messages = createSlice({
     },
     setLastScrollOffset: (state, action: PayloadAction<{ chatId: string; offset: number }>) => {
       const { chatId, offset } = action.payload;
+      console.log(chatId);
       state.byChatId[chatId].lastScrollOffset = offset;
     }
   }

@@ -17,6 +17,7 @@ export const mockStore: Omit<RootState, '_persist'> = {
   },
   authentication: {
     isAuth: true,
+    accessToken: '1324asgdfqr45trfd2regtrf',
     user: {
       _id: '63e7b7b5d2c2586ba49c4ba3',
       fullName: 'Mykyta Shevchenko',

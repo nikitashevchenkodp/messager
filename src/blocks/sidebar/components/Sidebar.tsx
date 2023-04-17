@@ -2,7 +2,7 @@ import Contacts from 'components/Contacts';
 import Drawer from 'components/shared/Drawer';
 import Modal from 'components/shared/Modal';
 import SideBar from 'components/SideBar';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { sidebarActions } from 'store/slices/sidebar';
 
@@ -10,6 +10,8 @@ const Sidebar = () => {
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const isOpenSidebar = useAppSelector((state) => state.ui.sidebar.isOpen);
+  const onClose = useCallback(() => setIsOpen(false), []);
+
   return (
     <>
       <Drawer open={isOpenSidebar} onClose={() => dispatch(sidebarActions.close())}>
@@ -21,7 +23,7 @@ const Sidebar = () => {
         />
       </Drawer>
       <Modal active={isOpen} onClose={() => setIsOpen(false)}>
-        <Contacts onClose={() => setIsOpen(false)} />
+        <Contacts onClose={onClose} />
       </Modal>
     </>
   );

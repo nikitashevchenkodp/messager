@@ -26,8 +26,9 @@ import { typingSaga } from './messages/typingSaga';
 import { editMessageSaga } from './messages/editMessageSaga';
 import { addReaction } from './messages/addReaction';
 import { deleteReaction } from './messages/deleteReaction';
+import { id } from 'date-fns/locale';
 
-let socket;
+let socket: Socket | undefined;
 
 function* connect(): Generator<SelectEffect, Socket, string> {
   const userId = yield select((state: RootState) => state.authentication.user?._id);
@@ -41,6 +42,15 @@ function* connect(): Generator<SelectEffect, Socket, string> {
   });
 
   return socket;
+}
+
+function* listenDisconnect() {
+  while (true) {
+    yield take('CHANEL_OFF');
+    if (socket) {
+      socket.disconnect();
+    }
+  }
 }
 
 function socketChanel(socket: Socket) {
@@ -133,12 +143,15 @@ function* runSocketEmmiters(socket: Socket) {
 }
 
 export function* socketSaga(): Generator<TakeEffect | CallEffect | ForkEffect, void, Socket> {
-  try {
-    yield take('CHANEL_ON');
-    const socket = yield call(connect);
-    yield fork(runChanel, socket);
-    yield fork(runSocketEmmiters, socket);
-  } catch (error) {
-    console.log(error);
+  while (true) {
+    try {
+      yield take('CHANEL_ON');
+      const socket = yield call(connect);
+      yield fork(listenDisconnect);
+      yield fork(runChanel, socket);
+      yield fork(runSocketEmmiters, socket);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
