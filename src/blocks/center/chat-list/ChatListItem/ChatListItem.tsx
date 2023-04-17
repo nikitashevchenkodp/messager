@@ -1,3 +1,4 @@
+import TypingIndicator from 'components/TypingIndicator';
 import React, { FC } from 'react';
 import { useAppSelector } from 'store/hooks';
 import { IChat } from 'types';
@@ -53,7 +54,7 @@ const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
         <ExtraInformation>
           <LastMessage>
             {online?.typing ? (
-              <span style={{ color: 'blue' }}>Typing...</span>
+              <TypingIndicator />
             ) : (
               <span data-testid="chat-list-item-lastmessage">{lastMessage?.text}</span>
             )}
