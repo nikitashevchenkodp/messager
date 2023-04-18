@@ -4,12 +4,15 @@ import Modal from 'components/shared/Modal';
 import SideBar from 'components/SideBar';
 import React, { useCallback, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { getIsSidebarOpen } from 'store/selectors';
 import { sidebarActions } from 'store/slices/sidebar';
 
 const Sidebar = () => {
   const dispatch = useAppDispatch();
+
   const [isOpen, setIsOpen] = useState(false);
-  const isOpenSidebar = useAppSelector((state) => state.ui.sidebar.isOpen);
+  const isOpenSidebar = useAppSelector(getIsSidebarOpen);
+
   const onClose = useCallback(() => setIsOpen(false), []);
 
   return (

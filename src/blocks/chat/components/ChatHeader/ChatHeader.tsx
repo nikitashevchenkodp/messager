@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { DotsIcon, SearchIcon, SideBarIcon } from 'components/icons';
 import {
   BackButton,
@@ -10,19 +10,17 @@ import {
 } from './styled';
 import { useAppSelector, useAppDispatch } from 'store/hooks';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Button from 'components/shared/Button';
 import { uiSettingsActions } from 'store/slices/UI';
 import TypingIndicator from 'components/TypingIndicator';
 import { fomatLastTimeOnline } from 'helpers/formatLastOnlineTime';
+import { getActiveChatUser, getUserStatusById } from 'store/selectors';
 
 const ChatHeader = () => {
-  const userWithWhomChat = useAppSelector((state) => state.entities.active.activeChat?.user);
-  const userStatus = useAppSelector(
-    (state) => state.users.statusesById[userWithWhomChat?.id || '']
-  );
-
-  const isChatOpen = useAppSelector((state) => state.ui.uiSettings.isChatOpen);
   const dispatch = useAppDispatch();
+
+  const userWithWhomChat = useAppSelector(getActiveChatUser);
+  const userStatus = useAppSelector((state) => getUserStatusById(state, userWithWhomChat!.id));
+
   return (
     <ChatHeaderStyled data-testid="chat-header">
       <ChatHeaderInner>

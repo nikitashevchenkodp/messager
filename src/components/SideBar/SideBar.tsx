@@ -15,6 +15,7 @@ import {
 } from './styled';
 import { InsertEmoticonSharp } from '@mui/icons-material';
 import Modal from 'components/shared/Modal';
+import { getCurrentUser } from 'store/selectors';
 
 interface IMenuItem {
   Icon: ReactElement;
@@ -35,8 +36,8 @@ const menuItems: IMenuItem[] = [
   }
 ];
 
-const SideBar = ({ openMenuItem }: any) => {
-  const user = useAppSelector((state) => state.authentication.user);
+const SideBar = ({ openMenuItem }: { openMenuItem: () => void }) => {
+  const user = useAppSelector(getCurrentUser);
 
   const items = menuItems.map((menuItem) => {
     const { Icon, iconContainerColor, title } = menuItem;

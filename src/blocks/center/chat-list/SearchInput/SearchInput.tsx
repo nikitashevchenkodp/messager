@@ -1,4 +1,4 @@
-import React, { FC, forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 import { CloseIcon } from 'components/icons';
 import { Input, InputContainer, InputIconEnd, InputLabel } from './styled';
 

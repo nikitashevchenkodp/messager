@@ -3,10 +3,7 @@ import { CHAT_LIST_MIN_WIDTH, CHAT_LIST_WIDTH_COLAPSED, SM_SCREEN_WIDTH } from '
 import React, { FC } from 'react';
 import { useAppSelector } from 'store/hooks';
 import styled from 'styled-components';
-
-interface ResizableContainerStyledProps {
-  readonly defaultWidth?: number;
-}
+import { getChatIsOpen, getChatListWidth } from 'store/selectors';
 
 export const ResizableContainerStyled = styled.div<{ isChatOpen: boolean }>`
   max-width: 100%;
@@ -22,14 +19,13 @@ interface IResizableContainer {
 }
 
 const ResizableContainer: FC<IResizableContainer> = (props) => {
-  const { children } = props;
-  const chatListWidth = useAppSelector((state) => state.ui.uiSettings.chatListWidth);
-  const isChatOpen = useAppSelector((state) => state.ui.uiSettings.isChatOpen);
+  const chatListWidth = useAppSelector(getChatListWidth);
+  const isChatOpen = useAppSelector(getChatIsOpen);
 
   return (
     <>
       <ResizableContainerStyled isChatOpen={isChatOpen} style={{ width: `${chatListWidth}px` }}>
-        {children}
+        {props.children}
       </ResizableContainerStyled>
       <Resizer
         minWidth={CHAT_LIST_MIN_WIDTH}

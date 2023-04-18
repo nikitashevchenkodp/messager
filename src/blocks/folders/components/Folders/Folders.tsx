@@ -11,15 +11,15 @@ import { FoldersContainer } from './styled';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
 import { uiSettingsActions } from 'store/slices/UI';
 import { sidebarActions } from 'store/slices/sidebar';
+import { getActiveFolder, getFolders } from 'store/selectors';
 
 const Folders = () => {
   const dispatch = useDispatch();
-  const folders = useAppSelector((state) => state.entities.folders.items);
-  const activeFolder = useAppSelector((state) => state.entities.active.activeFolder);
+  const folders = useAppSelector(getFolders);
+  const activeFolder = useAppSelector(getActiveFolder);
 
   const clickHandler = (e: React.MouseEvent<HTMLButtonElement>, folderName: string) => {
     e.stopPropagation();
-    console.log('hide chat list');
     dispatch(activeEntitiesActions.setActiveFolder(folderName));
     dispatch(uiSettingsActions.setChatState(false));
   };

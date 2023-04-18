@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import './Resizer.scss';
 import throttle from 'lodash.throttle';
 import debounce from 'lodash.debounce';
+import { getChatListState } from 'store/selectors';
 
 interface ResizerProps {
   minWidth: number;
@@ -13,7 +14,7 @@ interface ResizerProps {
 }
 
 const Resizer: FC<ResizerProps> = ({ minWidth, edgeCaseWidth = 0, delayInPixels = 0 }) => {
-  const chatListState = useAppSelector((state) => state.ui.uiSettings.chatListState);
+  const chatListState = useAppSelector(getChatListState);
   const resizableElem = useRef<ChildNode | null>(null);
   const resizerRef = useRef<HTMLElement | null>(null);
   const root = useRef<HTMLElement | null>(document.querySelector('#root'));

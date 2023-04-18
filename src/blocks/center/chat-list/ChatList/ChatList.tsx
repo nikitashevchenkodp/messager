@@ -6,13 +6,14 @@ import { uiSettingsActions } from 'store/slices/UI';
 import { IChat } from 'types';
 import ChatListItem from '../ChatListItem/ChatListItem';
 import { List } from './styled';
+import { getActiveChat, getChatList, getChatListLoading, getChatListState } from 'store/selectors';
 
 const ChatList = () => {
   const dispatch = useAppDispatch();
-  const chatListState = useAppSelector((state) => state.ui.uiSettings.chatListState);
-  const chatList = useAppSelector((state) => state.entities.chats.items);
-  const loading = useAppSelector((state) => state.entities.chats.isLoading);
-  const activeChat = useAppSelector((state) => state.entities.active.activeChat);
+  const chatListState = useAppSelector(getChatListState);
+  const chatList = useAppSelector(getChatList);
+  const loading = useAppSelector(getChatListLoading);
+  const activeChat = useAppSelector(getActiveChat);
 
   const setupActiveChat = (chatItem: IChat) => {
     const { chatId, user } = chatItem;

@@ -1,5 +1,5 @@
 import Button from 'components/shared/Button';
-import React, { memo, useEffect, useState } from 'react';
+import React, { FC, memo, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import SortByAlphaIcon from '@mui/icons-material/SortByAlpha';
 import SearchInput from 'components/shared/Input/Input';
@@ -10,6 +10,8 @@ import { Avatar } from 'components/shared/Avatar';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
 import { uiSettingsActions } from 'store/slices/UI';
+import { getUsersById, getUsersIds, getUserStatuses } from 'store/selectors';
+import { fomatLastTimeOnline } from 'helpers/formatLastOnlineTime';
 
 const ContactsContainer = styled.div`
   width: 400px;
@@ -73,29 +75,17 @@ const UserMeta = styled.p`
   font-size: 15px;
 `;
 
-interface IContactItem {
-  id: string;
-  fullName: string;
-  avatar: string;
-  chatId: string;
+interface IContactsProps {
+  onClose: () => void;
 }
-
-const Contacts = ({ onClose }: any) => {
-  const [serachQuery, setSearchQuery] = useState('');
-  const [users, setUsers] = useState<IContactItem[]>([]);
+const Contacts: FC<IContactsProps> = ({ onClose }) => {
   const dispatch = useAppDispatch();
-  const online = useAppSelector((state) => state.users.statusesById);
 
-  let initialized = false;
+  const [serachQuery, setSearchQuery] = useState('');
 
-  useEffect(() => {
-    if (!initialized) {
-      initialized = true;
-      getAllUsers()
-        .then((res) => setUsers(res.data))
-        .catch((e) => console.log(e));
-    }
-  }, []);
+  const userStatuses = useAppSelector(getUserStatuses);
+  const usersIds = useAppSelector(getUsersIds);
+  const usersById = useAppSelector(getUsersById);
 
   return (
     <ContactsContainer>
@@ -131,7 +121,8 @@ const Contacts = ({ onClose }: any) => {
       <Divider />
       <ContactsBody>
         <List>
-          {users.map((item) => {
+          {usersIds.map((userId) => {
+            const item = usersById[userId];
             return (
               <UserListItem
                 key={item.id}
@@ -149,10 +140,10 @@ const Contacts = ({ onClose }: any) => {
                 <UserInfo>
                   <UserName>{item.fullName}</UserName>
                   <UserMeta>
-                    {online[item.id] ? (
+                    {userStatuses[item.id].online ? (
                       <span style={{ color: 'blue' }}>online</span>
                     ) : (
-                      'last seen 4 hours ago'
+                      <> {fomatLastTimeOnline(userStatuses[item.id].lastTimeOnline)}</>
                     )}
                   </UserMeta>
                 </UserInfo>
@@ -164,7 +155,7 @@ const Contacts = ({ onClose }: any) => {
       <Divider />
       <ContactsFooter>
         <ContactsButton>Add Contact</ContactsButton>
-        <ContactsButton>Close</ContactsButton>
+        <ContactsButton onClick={onClose}>Close</ContactsButton>
       </ContactsFooter>
     </ContactsContainer>
   );
