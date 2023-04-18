@@ -10,7 +10,7 @@ export function* initSaga(): any {
 
     if (!payload) return;
     console.log('works condition');
-    yield put({ type: 'CHANEL_ON' });
     yield call(loadInitDataSaga);
+    yield put({ type: 'CHANEL_ON' });
   }
 }
