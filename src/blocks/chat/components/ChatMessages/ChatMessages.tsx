@@ -1,10 +1,9 @@
-/* eslint-disable prefer-const */
+/* eslint-disable react/prop-types */
 import { messagesActions } from 'blocks/chat/redux/chat';
 import Message from 'blocks/message/Message/Message';
 import debounce from 'lodash.debounce';
-import React, { memo, useEffect, useMemo, useRef } from 'react';
+import React, { FC, memo, useEffect, useMemo, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import styled from 'styled-components';
 import { IMessage } from 'types';
 import {
   ChatMessagesStyled,
@@ -15,21 +14,24 @@ import {
 } from './styled';
 import { formatToHumanDate } from 'helpers/formatToHumanDate';
 import { groupMessages } from 'helpers/groupMessages';
+import {
+  getActiveChatId,
+  getActiveChatMessages,
+  getActiveChatMessagesIds,
+  getScrollOffsetByChatId
+} from 'store/selectors';
 
-const ChatMessages = memo(({ openMessageMenu }: any) => {
+interface IChatMessagesProps {
+  openMessageMenu: (e: React.MouseEvent, message: IMessage) => void;
+}
+
+const ChatMessages: FC<IChatMessagesProps> = memo(({ openMessageMenu }) => {
   const dispatch = useAppDispatch();
-  const activeChatId = useAppSelector((state) => state.entities.active.activeChat?.chatId);
+  const activeChatId = useAppSelector(getActiveChatId);
+  const messagesIds = useAppSelector(getActiveChatMessagesIds);
+  const messages = useAppSelector(getActiveChatMessages);
 
-  const messagesIds = useAppSelector(
-    (state) => state.entities.messages.byChatId[activeChatId || '']?.messagesIds
-  );
-  const messages = useAppSelector(
-    (state) => state.entities.messages.byChatId[activeChatId || '']?.messages
-  );
-
-  const scrolOffset = useAppSelector(
-    (state) => state.entities.messages.byChatId[activeChatId]?.lastScrollOffset
-  );
+  const scrolOffset = useAppSelector(getScrollOffsetByChatId);
 
   const listRef = useRef<HTMLDivElement | null>(null);
 

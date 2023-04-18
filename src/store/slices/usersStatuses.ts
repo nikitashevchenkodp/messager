@@ -28,11 +28,13 @@ interface UIInitState {
     [id: string]: IUser;
   };
   statusesById: IStatusesById;
+  userIds: string[];
 }
 
 const initialState: UIInitState = {
   usersById: {},
-  statusesById: {}
+  statusesById: {},
+  userIds: []
 };
 
 export const users = createSlice({
@@ -46,6 +48,10 @@ export const users = createSlice({
         acc[user.id] = { online: false, lastTimeOnline: user.lastTimeOnline || 0, typing: false };
         return acc;
       }, {} as IStatusesById);
+      state.userIds = action.payload.reduce((acc, user) => {
+        acc.push(user.id);
+        return acc;
+      }, [] as string[]);
     },
     setOnlineList: (state, action: PayloadAction<string[]>) => {
       action.payload.forEach((userId) => {

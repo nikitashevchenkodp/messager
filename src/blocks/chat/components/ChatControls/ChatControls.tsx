@@ -7,24 +7,21 @@ import Button from 'components/shared/Button';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import EditableMessage from '../EditableMessage';
 import { messagesActions } from 'blocks/chat/redux/chat';
-import debounce from 'lodash.debounce';
+import {
+  getActiveChat,
+  getCurrentUser,
+  getEditableMessage,
+  getLastMessageFromActiveChat,
+  getTypingStatusByUserId
+} from 'store/selectors';
 
 const ChatControls = () => {
-  const activeChat = useAppSelector((state) => state.entities.active.activeChat);
-  const editableMessage = useAppSelector(
-    (state) => state.entities.messages.byChatId[activeChat?.chatId || '']?.editableMessage
-  );
-  const lastMessage = useAppSelector((state) => {
-    const allIds = state.entities?.messages?.byChatId[activeChat.chatId]?.messagesIds;
-    if (!allIds?.length) return;
-    const lastMessageId =
-      state.entities.messages.byChatId[activeChat.chatId]?.messagesIds?.[allIds.length - 1];
-    const lastmesage = state.entities.messages.byChatId[activeChat.chatId]?.messages[lastMessageId];
-    return lastmesage;
-  });
+  const { chatId, user } = useAppSelector(getActiveChat);
+  const editableMessage = useAppSelector(getEditableMessage);
+  const lastMessage = useAppSelector(getLastMessageFromActiveChat);
   const [val, setVal] = useState('');
-  const { _id } = useAppSelector((state) => state.authentication.user);
-  const isTiping = useAppSelector((state) => state.users.statusesById[_id]?.typing);
+  const { _id } = useAppSelector(getCurrentUser);
+  const isTiping = useAppSelector((state) => getTypingStatusByUserId(state, _id));
   const typingRef = useRef<ReturnType<typeof setTimeout>>();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
@@ -36,7 +33,7 @@ const ChatControls = () => {
       return;
     }
     setVal(editableMessage?.text);
-  }, [editableMessage, activeChat]);
+  }, [editableMessage, chatId]);
 
   const sendMessage = () => {
     if (editableMessage) {
@@ -47,16 +44,14 @@ const ChatControls = () => {
           text: val
         }
       });
-      dispatch(
-        messagesActions.setEditableMessage({ chatId: activeChat?.chatId || '', messageId: '' })
-      );
+      dispatch(messagesActions.setEditableMessage({ chatId: chatId || '', messageId: '' }));
     } else {
       dispatch({
         type: 'sendMessage',
         payload: {
           from: `${_id}`,
-          to: activeChat.user?.id || '',
-          chatId: activeChat?.chatId || '',
+          to: user?.id || '',
+          chatId: chatId || '',
           text: val
         }
       });
@@ -84,14 +79,13 @@ const ChatControls = () => {
     lastMessage &&
       dispatch(
         messagesActions.setEditableMessage({
-          chatId: activeChat.chatId,
+          chatId: chatId,
           messageId: lastMessage._id
         })
       );
   };
   const clearEditableMessage = () => {
-    lastMessage &&
-      dispatch(messagesActions.setEditableMessage({ chatId: activeChat.chatId, messageId: '' }));
+    lastMessage && dispatch(messagesActions.setEditableMessage({ chatId: chatId, messageId: '' }));
   };
 
   const keyboardEventHandler = (e: React.KeyboardEvent) => {

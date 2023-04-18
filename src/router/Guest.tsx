@@ -1,13 +1,13 @@
-import Login from 'blocks/login/Login';
-import React, { FC, useState } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import React, { FC } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useAppSelector } from 'store/hooks';
+import { getIsAuth } from 'store/selectors';
 
 interface AuthenticatedProps {
   children: React.ReactNode;
 }
 const Guest: FC<AuthenticatedProps> = (props) => {
-  const isAuth = useAppSelector((state) => state.authentication.isAuth);
+  const isAuth = useAppSelector(getIsAuth);
   if (isAuth) {
     return <Navigate to="/" />;
   }

@@ -1,6 +1,4 @@
-/* eslint-disable react/prop-types */
-import React, { FC, useCallback, useState } from 'react';
-import { useScrollToBottom } from 'hooks/useScrollToBottom';
+import React, { useCallback, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import Menu from 'components/shared/Menu';
 import Modal from 'components/shared/Modal';
@@ -8,25 +6,22 @@ import DeletionConfirm from 'components/DeletionConfirm';
 import { IMessage } from 'types';
 import { messagesActions } from 'blocks/chat/redux/chat';
 import ChatMessages from '../ChatMessages';
-import styled from 'styled-components';
 import ReactionsMenu from 'blocks/message/ReactionsMenu';
 import MenuOptions from 'blocks/message/MesageMenu';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
-
-const MessageMenuContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+import { getActiveChatId, getActiveMessage, getCurrentUser, getIsModalOpen } from 'store/selectors';
+import { MessageMenuContainer } from './styled';
 
 const ChatArea = () => {
-  const activeChatId = useAppSelector((state) => state.entities.active.activeChat?.chatId);
+  const dispatch = useAppDispatch();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
-  const { _id, avatar, fullName } = useAppSelector((state) => state.authentication.user);
-  const activeMessage = useAppSelector((state) => state.entities.active.activeChat.activeMessage);
-  const isModalOpen = useAppSelector((state) => state.entities.active.activeChat.isOpenDeleteModal);
-  const dispatch = useAppDispatch();
+
+  const activeChatId = useAppSelector(getActiveChatId);
+  const { _id, avatar, fullName } = useAppSelector(getCurrentUser);
+  const activeMessage = useAppSelector(getActiveMessage);
+  const isModalOpen = useAppSelector(getIsModalOpen);
 
   const openMessageMenu = useCallback((e: React.MouseEvent, message: IMessage) => {
     e.preventDefault();
@@ -39,7 +34,7 @@ const ChatArea = () => {
     dispatch(
       messagesActions.setEditableMessage({
         messageId: activeMessage?._id || '',
-        chatId: activeChatId!
+        chatId: activeChatId
       })
     );
   }, [activeMessage]);

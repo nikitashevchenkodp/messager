@@ -1,6 +1,7 @@
 import TypingIndicator from 'components/TypingIndicator';
 import React, { FC } from 'react';
 import { useAppSelector } from 'store/hooks';
+import { getChatListState, getLastMessage, getUserStatusById } from 'store/selectors';
 import { IChat } from 'types';
 import { parseDate } from 'utils';
 import {
@@ -24,16 +25,9 @@ interface ChatListItemProps {
 }
 
 const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
-  const chatListState = useAppSelector((state) => state.ui.uiSettings.chatListState);
-  const userStatus = useAppSelector((state) => state.users.statusesById[chatItem.user.id]);
-  const messagesIds = useAppSelector(
-    (state) => state.entities.messages.byChatId[chatItem.chatId]?.messagesIds
-  );
-  const lastMessageId = messagesIds?.[messagesIds.length - 1];
-  const lastMessage = useAppSelector(
-    (state) => state.entities.messages.byChatId[chatItem.chatId]?.messages[lastMessageId]
-  );
-
+  const chatListState = useAppSelector(getChatListState);
+  const userStatus = useAppSelector((state) => getUserStatusById(state, chatItem.user.id));
+  const lastMessage = useAppSelector((state) => getLastMessage(state, chatItem.chatId));
   const newMessages = 0;
 
   return (

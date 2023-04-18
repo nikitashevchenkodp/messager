@@ -1,5 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import { useAppSelector } from 'store/hooks';
+import { getCurrentUserId } from 'store/selectors';
 import { IReaction } from '../Reactions/Reactions';
 import { ReactionItem, Reactions } from './styled';
 
@@ -11,7 +12,8 @@ interface IReactionsMenuProps {
 const reactions = ['🤪', '😀', '😂', '💋', '🇺🇦', '🧠', '💐', '🥹', '🥳', '❤️', '❤️‍🩹', '🥟', '🥫'];
 
 const ReactionsMenu: FC<IReactionsMenuProps> = ({ addReaction, alreadeMadeReactions }) => {
-  const userId = useAppSelector((state) => state.authentication.user._id);
+  const userId = useAppSelector(getCurrentUserId);
+
   const availableReactions = useMemo(() => {
     return reactions.filter((reaction) => {
       const alredyMade = alreadeMadeReactions?.find((react) => react.reaction === reaction);

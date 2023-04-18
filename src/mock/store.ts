@@ -168,6 +168,7 @@ export const mockStore: Omit<RootState, '_persist'> = {
   },
   users: {
     statusesById: {},
-    usersById: {}
+    usersById: {},
+    userIds: []
   }
 };

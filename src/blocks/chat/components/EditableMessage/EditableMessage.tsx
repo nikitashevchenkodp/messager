@@ -6,35 +6,19 @@ import EditIcon from '@mui/icons-material/Edit';
 import CloseIcon from '@mui/icons-material/Close';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { messagesActions } from 'blocks/chat/redux/chat';
+import { getActiveChatId } from 'store/selectors';
+import { CentrContainer, EditableMessageContainer, IconButton, MessageText, Title } from './styled';
 
 interface IEditableMessageProps {
   message: IMessage;
   setInputValue: (val: string) => void;
 }
 
-const IconButton = styled(Button)`
-  padding: 10px 15px;
-`;
-
-const EditableMessageContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
-const CentrContainer = styled.div`
-  flex: 1;
-  overflow: hidden;
-`;
-const Title = styled.p``;
-const MessageText = styled.p`
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  max-width: 100%;
-`;
-
 const EditableMessage: FC<IEditableMessageProps> = ({ message, setInputValue }) => {
   const dispatch = useAppDispatch();
-  const activeChatId = useAppSelector((state) => state.entities.active.activeChat?.chatId);
+
+  const activeChatId = useAppSelector(getActiveChatId);
+
   const onClose = () => {
     setInputValue('');
     dispatch(messagesActions.setEditableMessage({ chatId: activeChatId!, messageId: '' }));

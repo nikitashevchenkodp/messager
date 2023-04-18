@@ -5,6 +5,7 @@ import React, { FC } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
 import styled from 'styled-components';
+import { getSelectedMessagesLength } from 'store/selectors';
 
 interface ISelectedMessagesMenuProps {
   selectedMessagesIds: Record<PropertyKey, string>;
@@ -51,13 +52,9 @@ const PrimaryButton = styled(Button)`
 `;
 
 const SelectedMessagesMenu = () => {
-  const selectedMessages = useAppSelector(
-    (state) => state.entities.active.activeChat.selectedMessagesIds
-  );
-
-  const selectedMessagesQuantity = Object.keys(selectedMessages).length;
-
   const dispatch = useAppDispatch();
+
+  const selectedMessagesQuantity = useAppSelector(getSelectedMessagesLength);
 
   return (
     <SelectedMessagesMenuContainer

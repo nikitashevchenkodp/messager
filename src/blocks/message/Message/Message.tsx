@@ -26,24 +26,27 @@ import styled from 'styled-components';
 import MessageMeta from '../MessageMeta';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
 import MuiIconWrapper from 'components/shared/MuiIconWrapper/MuiIconWrapper';
+import {
+  getActiveChatId,
+  getCurrentUserId,
+  getMessageById,
+  isMessageSelected,
+  isSelectionModeOn
+} from 'store/selectors';
 
 const Text = styled.p``;
 
 const Message = forwardRef<HTMLDivElement, IMessageProps>(
   ({ messageId, openMessageMenu, firstInGroup, lastInGroup }, ref) => {
-    const { _id } = useAppSelector((state) => state.authentication.user);
-    const activechatId = useAppSelector((state) => state.entities.active.activeChat?.chatId);
-    const isSelectiondModeOn = useAppSelector(
-      (state) => Object.values(state.entities.active.activeChat.selectedMessagesIds).length > 0
-    );
-    const isSelected = useAppSelector((state) =>
-      Boolean(state.entities.active.activeChat?.selectedMessagesIds[messageId])
-    );
     const dispatch = useAppDispatch();
-    const message = useAppSelector(
-      (state) => state.entities.messages.byChatId[activechatId || ''].messages[messageId]
-    );
-    const type = message?.from === _id ? 'sent' : 'recieved';
+
+    const currentUserId = useAppSelector(getCurrentUserId);
+    const activechatId = useAppSelector(getActiveChatId);
+    const isSelectiondModeOn = useAppSelector(isSelectionModeOn);
+    const isSelected = useAppSelector((state) => isMessageSelected(state, messageId));
+    const message = useAppSelector((state) => getMessageById(state, activechatId, messageId));
+
+    const type = message?.from === currentUserId ? 'sent' : 'recieved';
 
     return (
       <>
@@ -94,7 +97,7 @@ const Message = forwardRef<HTMLDivElement, IMessageProps>(
               </MessageMainContent>
             </MessageBody>
             {((firstInGroup && lastInGroup) || lastInGroup) &&
-              (message?.from !== _id ? (
+              (message?.from !== currentUserId ? (
                 <RecieveTailContainer data-testid="message-tail-recieved">
                   <MessageRecieveTail />
                 </RecieveTailContainer>
@@ -103,7 +106,7 @@ const Message = forwardRef<HTMLDivElement, IMessageProps>(
                   <MessageSentTail data-testid="message-tail-sent" />
                 </SentTailContainer>
               ))}
-            <FastReaction position={message?.from !== _id ? 'right' : 'left'} />
+            <FastReaction position={message?.from !== currentUserId ? 'right' : 'left'} />
           </MessageContainer>
         </MessageWrapper>
       </>

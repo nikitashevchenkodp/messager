@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { getCurrentUserId } from 'store/selectors';
 import { ReactionAvatar, ReactionButton, ReactionsContainer } from './styled';
 
 export interface IReaction {
@@ -31,7 +32,7 @@ interface TransformedReaction {
 
 const Reactions: FC<IReactionsProps> = ({ reactions, type, messageId, chatId }) => {
   const dispatch = useAppDispatch();
-  const userId = useAppSelector((state) => state.authentication.user._id);
+  const userId = useAppSelector(getCurrentUserId);
 
   const deleteReaction = (delReaction: TransformedReaction) => {
     if (!delReaction.by.find((user) => user.id === userId)) return;

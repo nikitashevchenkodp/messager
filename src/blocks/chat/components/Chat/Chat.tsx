@@ -6,10 +6,11 @@ import ChatHeader from '../ChatHeader/ChatHeader';
 import SelectedMessagesMenu from '../SelectedMessagesMenu';
 
 import { ChatStyled, NoActveChats, SelectChat } from './styled';
+import { getActiveChat, getChatIsOpen } from 'store/selectors';
 
 const Chat = () => {
-  const activeChat = useAppSelector((state) => state.entities.active.activeChat);
-  const isChatOpen = useAppSelector((state) => state.ui.uiSettings.isChatOpen);
+  const activeChat = useAppSelector(getActiveChat);
+  const isChatOpen = useAppSelector(getChatIsOpen);
 
   return (
     <ChatStyled data-testid="chat" isChatOpen={isChatOpen}>
