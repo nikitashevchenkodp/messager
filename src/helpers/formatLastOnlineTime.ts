@@ -3,7 +3,6 @@ export const fomatLastTimeOnline = (timestamp: number) => {
   const currTimestamp = Date.now();
   const differense = currTimestamp - timestamp;
   const seconds = differense / 1000;
-  console.log(differense);
   const withEnding = (timeEntity: number) => (timeEntity > 1 ? 's' : '');
 
   if (seconds < 60) {

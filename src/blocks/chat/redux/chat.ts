@@ -48,8 +48,6 @@ export const messages = createSlice({
     ) => {},
     deleteMessages: (state, action: PayloadAction<{ chatId: string; messagesIds: string[] }>) => {
       const { chatId, messagesIds } = action.payload;
-      console.log(messagesIds);
-
       messagesIds.forEach((id) => {
         delete state.byChatId[chatId].messages[id];
         state.byChatId[chatId].messagesIds = state.byChatId[chatId].messagesIds.filter(
@@ -87,7 +85,6 @@ export const messages = createSlice({
     },
     setLastScrollOffset: (state, action: PayloadAction<{ chatId: string; offset: number }>) => {
       const { chatId, offset } = action.payload;
-      console.log(chatId);
       state.byChatId[chatId].lastScrollOffset = offset;
     }
   }

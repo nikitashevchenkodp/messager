@@ -17,10 +17,9 @@ import { fomatLastTimeOnline } from 'helpers/formatLastOnlineTime';
 
 const ChatHeader = () => {
   const userWithWhomChat = useAppSelector((state) => state.entities.active.activeChat?.user);
-  const { lastTimeOnline, online, typing } = useAppSelector(
+  const userStatus = useAppSelector(
     (state) => state.users.statusesById[userWithWhomChat?.id || '']
   );
-  console.log('render chat header', new Date(Date.now() - lastTimeOnline).toLocaleTimeString());
 
   const isChatOpen = useAppSelector((state) => state.ui.uiSettings.isChatOpen);
   const dispatch = useAppDispatch();
@@ -42,14 +41,14 @@ const ChatHeader = () => {
           }}>
           <ChatTitle>{userWithWhomChat?.fullName}</ChatTitle>
           <ChatExtraInfo>
-            {online ? (
-              typing ? (
+            {userStatus?.online ? (
+              userStatus?.typing ? (
                 <TypingIndicator />
               ) : (
                 <p style={{ color: 'green' }}>online</p>
               )
             ) : (
-              <>{fomatLastTimeOnline(lastTimeOnline)}</>
+              <>{fomatLastTimeOnline(userStatus?.lastTimeOnline)}</>
             )}
           </ChatExtraInfo>
         </div>
