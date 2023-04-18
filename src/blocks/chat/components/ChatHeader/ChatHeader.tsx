@@ -13,10 +13,14 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Button from 'components/shared/Button';
 import { uiSettingsActions } from 'store/slices/UI';
 import TypingIndicator from 'components/TypingIndicator';
+import { fomatLastTimeOnline } from 'helpers/formatLastOnlineTime';
 
 const ChatHeader = () => {
   const userWithWhomChat = useAppSelector((state) => state.entities.active.activeChat?.user);
-  const online = useAppSelector((state) => state.users.statusesById[userWithWhomChat?.id || '']);
+  const userStatus = useAppSelector(
+    (state) => state.users.statusesById[userWithWhomChat?.id || '']
+  );
+
   const isChatOpen = useAppSelector((state) => state.ui.uiSettings.isChatOpen);
   const dispatch = useAppDispatch();
   return (
@@ -37,14 +41,14 @@ const ChatHeader = () => {
           }}>
           <ChatTitle>{userWithWhomChat?.fullName}</ChatTitle>
           <ChatExtraInfo>
-            {online ? (
-              online.typing ? (
+            {userStatus?.online ? (
+              userStatus?.typing ? (
                 <TypingIndicator />
               ) : (
                 <p style={{ color: 'green' }}>online</p>
               )
             ) : (
-              <>Last seen 4 hours ago</>
+              <>{fomatLastTimeOnline(userStatus?.lastTimeOnline)}</>
             )}
           </ChatExtraInfo>
         </div>

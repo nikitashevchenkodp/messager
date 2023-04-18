@@ -25,7 +25,7 @@ interface ChatListItemProps {
 
 const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
   const chatListState = useAppSelector((state) => state.ui.uiSettings.chatListState);
-  const online = useAppSelector((state) => state.users.statusesById[chatItem.user.id]);
+  const userStatus = useAppSelector((state) => state.users.statusesById[chatItem.user.id]);
   const messagesIds = useAppSelector(
     (state) => state.entities.messages.byChatId[chatItem.chatId]?.messagesIds
   );
@@ -40,7 +40,7 @@ const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
     <ChatListItemContainer isActive={active} onClick={onClick} data-testid="chat-list-item">
       <AvatarContainer>
         <Avatar src={chatItem?.user.avatar} fullName={chatItem.user.fullName} />
-        <NetworkStatus online={Boolean(online)} />
+        <NetworkStatus online={userStatus.online} />
       </AvatarContainer>
       <ChatListItemInfoContainer>
         <div
@@ -53,7 +53,7 @@ const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
         </div>
         <ExtraInformation>
           <LastMessage>
-            {online?.typing ? (
+            {userStatus?.typing ? (
               <TypingIndicator />
             ) : (
               <span data-testid="chat-list-item-lastmessage">{lastMessage?.text}</span>

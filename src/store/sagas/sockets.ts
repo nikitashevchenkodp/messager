@@ -67,7 +67,13 @@ function socketChanel(socket: Socket) {
     };
 
     const online = (data: string[]) => {
-      emit(usersActions.updateOnline(data));
+      emit(usersActions.setOnlineList(data));
+    };
+    const newUserConnected = (data: { userId: string }) => {
+      emit(usersActions.addOnlineUser(data.userId));
+    };
+    const disconnectUser = (data: { userId: string; lastTimeOnline: number }) => {
+      emit(usersActions.delOnlineUser(data));
     };
 
     const typing = ({ typing, userId }: TypingStatusObject) => {
@@ -83,7 +89,6 @@ function socketChanel(socket: Socket) {
       emit(messagesActions.addReaction({ chatId, messageId, reactions }));
     };
     const reactionDeleted = ({ chatId, messageId, reactionId }: any) => {
-      console.log('get response');
       emit(messagesActions.deleteReaction({ chatId, messageId, reactionId }));
     };
 
@@ -91,6 +96,8 @@ function socketChanel(socket: Socket) {
     socket.on(events.MESSAGE_FROM_NEW_CONTACT, messageFromNewContact);
     socket.on(events.NEW_CHAT_CREATED, newChatCreated);
     socket.on(events.ONLINE_USERS, online);
+    socket.on('USER_DISCONNECTED', disconnectUser);
+    socket.on('NEW_USER_CONNECTED', newUserConnected);
     socket.on(events.TYPING_ON, typing);
     socket.on('messageDeleted', messagesDeleted);
     socket.on('messageEdited', messageEdited);
@@ -107,6 +114,9 @@ function socketChanel(socket: Socket) {
       socket.off('messageEdited', messageEdited);
       socket.off('reactionAdded', reactionAdded);
       socket.off('reactionDeleted', reactionDeleted);
+      socket.off(events.ONLINE_USERS, online);
+      socket.off('USER_DISCONNECTED', disconnectUser);
+      socket.off('NEW_USER_CONNECTED', newUserConnected);
     };
   });
 }
