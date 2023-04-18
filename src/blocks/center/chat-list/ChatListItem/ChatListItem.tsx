@@ -40,7 +40,7 @@ const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
     <ChatListItemContainer isActive={active} onClick={onClick} data-testid="chat-list-item">
       <AvatarContainer>
         <Avatar src={chatItem?.user.avatar} fullName={chatItem.user.fullName} />
-        <NetworkStatus online={userStatus.online} />
+        <NetworkStatus online={userStatus?.online} />
       </AvatarContainer>
       <ChatListItemInfoContainer>
         <div
