@@ -30,12 +30,9 @@ export const mockStore: Omit<RootState, '_persist'> = {
     active: {
       activeChat: {
         activeMessage: null,
-        chatId: '642683897571e92726bdbcd1',
-        user: {
-          fullName: 'Daria Shevchenko',
-          id: '63e7b7bfd2c2586ba49c4ba5',
-          avatar: 'https://picsum.photos/id/18/200/300'
-        },
+        id: '642683897571e92726bdbcd1',
+        title: 'Daria Shevchenko',
+        avatar: 'https://picsum.photos/id/18/200/300',
         selectedMessagesIds: {},
         isOpenDeleteModal: false
       },
@@ -44,28 +41,19 @@ export const mockStore: Omit<RootState, '_persist'> = {
     chats: {
       items: [
         {
-          chatId: '642683897571e92726bdbcd1',
-          user: {
-            fullName: 'Daria Shevchenko',
-            id: '63e7b7bfd2c2586ba49c4ba5',
-            avatar: 'https://picsum.photos/id/18/200/300'
-          }
+          id: '642683897571e92726bdbcd1',
+          title: 'Daria Shevchenko',
+          avatar: 'https://picsum.photos/id/18/200/300'
         },
         {
-          chatId: '641c76ee2d63029c0e92ae7f',
-          user: {
-            fullName: 'Dmitro Huk',
-            id: '63e7b7c4d2c2586ba49c4ba7',
-            avatar: 'https://picsum.photos/id/21/200/300'
-          }
+          id: '641c76ee2d63029c0e92ae7f',
+          title: 'Dmitro Huk',
+          avatar: 'https://picsum.photos/id/21/200/300'
         },
         {
-          chatId: '64214f93a6ad862f069d066f',
-          user: {
-            fullName: 'Irina Shevchenko',
-            id: '63e7b7c8d2c2586ba49c4ba9',
-            avatar: 'https://picsum.photos/id/23/200/300'
-          }
+          id: '64214f93a6ad862f069d066f',
+          title: 'Irina Shevchenko',
+          avatar: 'https://picsum.photos/id/23/200/300'
         }
       ],
       isLoading: false,

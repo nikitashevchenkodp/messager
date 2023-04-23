@@ -26,14 +26,14 @@ interface ChatListItemProps {
 
 const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
   const chatListState = useAppSelector(getChatListState);
-  const userStatus = useAppSelector((state) => getUserStatusById(state, chatItem.user.id));
-  const lastMessage = useAppSelector((state) => getLastMessage(state, chatItem.chatId));
+  const userStatus = useAppSelector((state) => getUserStatusById(state, chatItem.id));
+  const lastMessage = useAppSelector((state) => getLastMessage(state, chatItem.id));
   const newMessages = 0;
 
   return (
     <ChatListItemContainer isActive={active} onClick={onClick} data-testid="chat-list-item">
       <AvatarContainer>
-        <Avatar src={chatItem?.user.avatar} fullName={chatItem.user.fullName} />
+        <Avatar src={chatItem?.avatar} fullName={chatItem.title} />
         <NetworkStatus online={userStatus?.online} />
       </AvatarContainer>
       <ChatListItemInfoContainer>
@@ -43,7 +43,7 @@ const ChatListItem: FC<ChatListItemProps> = ({ chatItem, active, onClick }) => {
             justifyContent: 'space-between',
             width: '100%'
           }}>
-          <Title>{chatItem?.user.fullName}</Title>
+          <Title>{chatItem?.title}</Title>
         </div>
         <ExtraInformation>
           <LastMessage>

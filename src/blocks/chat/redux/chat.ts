@@ -39,6 +39,8 @@ export const messages = createSlice({
     },
     newMessage: (state, action: PayloadAction<IMessage>) => {
       const { chatId, _id } = action.payload;
+      console.log(action.payload);
+
       state.byChatId[chatId].messages[_id] = action.payload;
       state.byChatId[chatId].messagesIds.push(_id);
     },
@@ -57,6 +59,8 @@ export const messages = createSlice({
     },
     editMessage: (state, action: PayloadAction<IMessage>) => {
       const { chatId, _id } = action.payload;
+      console.log(action.payload);
+
       state.byChatId[chatId].messages[_id] = action.payload;
     },
     addReaction: (

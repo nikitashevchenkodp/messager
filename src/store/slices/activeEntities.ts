@@ -5,12 +5,9 @@ import { IMessage, IChat } from 'types';
 
 interface UIInitState {
   activeChat: {
-    chatId: string;
-    user: {
-      avatar: string;
-      fullName: string;
-      id: string;
-    } | null;
+    id: string;
+    avatar: string;
+    title: string;
     selectedMessagesIds: { [id: string]: string };
     activeMessage: IMessage | null;
     isOpenDeleteModal: boolean;
@@ -20,8 +17,9 @@ interface UIInitState {
 
 const initialState: UIInitState = {
   activeChat: {
-    chatId: '',
-    user: null,
+    id: '',
+    avatar: '',
+    title: '',
     selectedMessagesIds: {},
     activeMessage: null,
     isOpenDeleteModal: false
@@ -65,11 +63,7 @@ export const activeEntities = createSlice({
     setActiveFolder: (state, action: PayloadAction<any>) => {
       state.activeFolder = action.payload;
     },
-    newChatCreated: (state, action: PayloadAction<string>) => {
-      if (state.activeChat) {
-        state.activeChat.chatId = action.payload;
-      }
-    }
+    newChatCreated: (state, action: PayloadAction<string>) => {}
   }
 });
 

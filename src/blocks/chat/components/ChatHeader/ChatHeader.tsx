@@ -13,13 +13,13 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { uiSettingsActions } from 'store/slices/UI';
 import TypingIndicator from 'components/TypingIndicator';
 import { fomatLastTimeOnline } from 'helpers/formatLastOnlineTime';
-import { getActiveChatUser, getUserStatusById } from 'store/selectors';
+import { getActiveChat, getUserStatusById } from 'store/selectors';
 
 const ChatHeader = () => {
   const dispatch = useAppDispatch();
 
-  const userWithWhomChat = useAppSelector(getActiveChatUser);
-  const userStatus = useAppSelector((state) => getUserStatusById(state, userWithWhomChat!.id));
+  const activeChat = useAppSelector(getActiveChat);
+  const userStatus = useAppSelector((state) => getUserStatusById(state, activeChat.id));
 
   return (
     <ChatHeaderStyled data-testid="chat-header">
@@ -37,7 +37,7 @@ const ChatHeader = () => {
             height: '100%',
             flexGrow: 1
           }}>
-          <ChatTitle>{userWithWhomChat?.fullName}</ChatTitle>
+          <ChatTitle>{activeChat?.title}</ChatTitle>
           <ChatExtraInfo>
             {userStatus?.online ? (
               userStatus?.typing ? (

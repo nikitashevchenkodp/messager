@@ -16,11 +16,9 @@ const ChatList = () => {
   const activeChat = useAppSelector(getActiveChat);
 
   const setupActiveChat = (chatItem: IChat) => {
-    const { chatId, user } = chatItem;
     dispatch(
       activeEntitiesActions.setActiveChat({
-        chatId,
-        user
+        ...chatItem
       })
     );
     dispatch(uiSettingsActions.setChatState(true));
@@ -53,8 +51,8 @@ const ChatList = () => {
           return (
             <ChatListItem
               chatItem={chatItem}
-              key={chatItem.chatId}
-              active={chatItem.chatId === activeChat?.chatId}
+              key={chatItem.id}
+              active={chatItem.id === activeChat?.id}
               onClick={() => setupActiveChat(chatItem)}
               type={chatListState}
             />

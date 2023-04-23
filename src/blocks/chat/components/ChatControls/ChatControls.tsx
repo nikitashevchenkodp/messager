@@ -16,7 +16,7 @@ import {
 } from 'store/selectors';
 
 const ChatControls = () => {
-  const { chatId, user } = useAppSelector(getActiveChat);
+  const { id: chatId } = useAppSelector(getActiveChat);
   const editableMessage = useAppSelector(getEditableMessage);
   const lastMessage = useAppSelector(getLastMessageFromActiveChat);
   const [val, setVal] = useState('');
@@ -41,7 +41,8 @@ const ChatControls = () => {
         type: 'editMessage',
         payload: {
           messageId: editableMessage._id,
-          text: val
+          text: val,
+          chatId: editableMessage.chatId
         }
       });
       dispatch(messagesActions.setEditableMessage({ chatId: chatId || '', messageId: '' }));
@@ -50,7 +51,7 @@ const ChatControls = () => {
         type: 'sendMessage',
         payload: {
           from: `${_id}`,
-          to: user?.id || '',
+          to: chatId || '',
           chatId: chatId || '',
           text: val
         }
@@ -66,7 +67,7 @@ const ChatControls = () => {
 
     typingRef.current = setTimeout(() => {
       dispatch({ type: 'typing', payload: { userId: _id, typing: false } });
-    }, 2000);
+    }, 1000);
 
     if (isTiping) return;
     dispatch({

@@ -14,7 +14,7 @@ const Chat = () => {
 
   return (
     <ChatStyled data-testid="chat" isChatOpen={isChatOpen}>
-      {activeChat.user ? (
+      {activeChat.id ? (
         <>
           {' '}
           <SelectedMessagesMenu />

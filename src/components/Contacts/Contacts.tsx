@@ -129,8 +129,9 @@ const Contacts: FC<IContactsProps> = ({ onClose }) => {
                 onClick={() => {
                   dispatch(
                     activeEntitiesActions.setActiveChat({
-                      chatId: item.chatId,
-                      user: { id: item.id, fullName: item.fullName, avatar: item.avatar }
+                      id: item.id,
+                      title: item.fullName,
+                      avatar: item.avatar
                     })
                   );
                   dispatch(uiSettingsActions.setChatState(true));
