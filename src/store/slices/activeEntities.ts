@@ -11,7 +11,7 @@ interface UIInitState {
     selectedMessagesIds: { [id: string]: string };
     activeMessage: IMessage | null;
     isOpenDeleteModal: boolean;
-  };
+  } & Partial<IChat>;
   activeFolder: string;
 }
 

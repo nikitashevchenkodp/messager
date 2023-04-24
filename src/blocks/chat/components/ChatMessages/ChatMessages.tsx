@@ -61,6 +61,8 @@ const ChatMessages: FC<IChatMessagesProps> = memo(({ openMessageMenu }) => {
   useEffect(() => {
     if (Number(scrolOffset) <= 1) {
       if (listRef?.current) {
+        console.log('scroll');
+
         listRef.current.scrollTo({
           top: listRef!.current!.scrollHeight!,
           behavior: 'smooth'

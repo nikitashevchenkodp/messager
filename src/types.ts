@@ -38,6 +38,8 @@ export interface IChat {
   id: string;
   avatar: string;
   title: string;
+  type?: 'privat' | 'group';
+  membersCount?: number;
 }
 
 export type TypingStatusObject = { userId: string; typing: boolean };
