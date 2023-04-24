@@ -22,7 +22,6 @@ export interface IMessage {
   from: string;
   _id: string;
   chatId: string;
-  to: string;
   updatedAt: string;
   // delivered: boolean;
   unreaded?: boolean;

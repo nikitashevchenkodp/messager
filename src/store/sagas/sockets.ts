@@ -80,6 +80,8 @@ function socketChanel(socket: Socket) {
     };
 
     const typing = ({ typing, userId }: TypingStatusObject) => {
+      console.log(typing, userId);
+
       emit(usersActions.setTypingStatus({ userId, typing }));
     };
     const messagesDeleted = ({ chatId, messagesIds }: any) => {

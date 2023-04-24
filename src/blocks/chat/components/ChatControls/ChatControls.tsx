@@ -51,7 +51,6 @@ const ChatControls = () => {
         type: 'sendMessage',
         payload: {
           from: `${_id}`,
-          to: chatId || '',
           chatId: chatId || '',
           text: val
         }
