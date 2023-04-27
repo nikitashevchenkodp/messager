@@ -5,12 +5,16 @@ type ModalWindowProps = {
   children?: React.ReactNode;
   active: boolean;
   onClose: () => void;
+  appearsFrom?: 'bottom' | 'right' | 'left' | 'top';
 };
 
-const Modal: FC<ModalWindowProps> = ({ children, active, onClose }) => {
+const Modal: FC<ModalWindowProps> = ({ children, active, onClose, appearsFrom }) => {
   return (
     <ModalWindow active={active} onClick={onClose}>
-      <ModalWindowContent active={active} onClick={(e) => e.stopPropagation()}>
+      <ModalWindowContent
+        appearsFrom={appearsFrom}
+        active={active}
+        onClick={(e) => e.stopPropagation()}>
         {active && children}
       </ModalWindowContent>
     </ModalWindow>

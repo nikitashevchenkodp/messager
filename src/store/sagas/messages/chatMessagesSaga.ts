@@ -20,6 +20,7 @@ export function* getMessagesSaga(chatId: string): any {
   try {
     const res = yield call(getChatMessages, chatId);
     yield put(messagesActions.setChat({ chatId, messages: res.data }));
+    console.log(res);
   } catch (error) {
     console.log(error);
   }
@@ -34,7 +35,7 @@ export function* loadMessagesSaga(
 > {
   try {
     for (let i = 0; i < chatList.length; i++) {
-      yield fork(getMessagesSaga, chatList[i].chatId);
+      yield fork(getMessagesSaga, chatList[i].id);
     }
   } catch (error) {
     console.log(error);

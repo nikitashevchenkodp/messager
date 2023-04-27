@@ -22,7 +22,6 @@ export interface IMessage {
   from: string;
   _id: string;
   chatId: string;
-  to: string;
   updatedAt: string;
   // delivered: boolean;
   unreaded?: boolean;
@@ -36,13 +35,11 @@ export interface IMessage {
 export type MessageShort = Pick<IMessage, 'text' | 'createdAt' | 'from' | '_id'>;
 
 export interface IChat {
-  chatId: string;
-  // lastMessage: MessageShort;
-  user: {
-    avatar: string;
-    fullName: string;
-    id: string;
-  };
+  id: string;
+  avatar: string;
+  title: string;
+  type?: 'privat' | 'group';
+  membersCount?: number;
 }
 
 export type TypingStatusObject = { userId: string; typing: boolean };

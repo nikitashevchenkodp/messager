@@ -11,15 +11,16 @@ import { getActiveChat, getChatIsOpen } from 'store/selectors';
 const Chat = () => {
   const activeChat = useAppSelector(getActiveChat);
   const isChatOpen = useAppSelector(getChatIsOpen);
+  const [files, setFiles] = useState<FileList | undefined>();
 
   return (
     <ChatStyled data-testid="chat" isChatOpen={isChatOpen}>
-      {activeChat.user ? (
+      {activeChat.id ? (
         <>
           {' '}
           <SelectedMessagesMenu />
           <ChatHeader />
-          <ChatArea />
+          <ChatArea files={files} setFiles={setFiles} />
           <ChatControls />
         </>
       ) : (

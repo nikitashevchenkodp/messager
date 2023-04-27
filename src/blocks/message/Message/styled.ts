@@ -4,6 +4,7 @@ export const MessageWrapper = styled.div<{
   type: 'sent' | 'recieved';
   isSelected: boolean;
   isSelectionMode: boolean;
+  lastInGroup: boolean;
 }>`
   display: flex;
   width: 100%;
@@ -24,9 +25,14 @@ export const MessageWrapper = styled.div<{
     background-color: rgba(0, 0, 0, 0.2);
     opacity: ${(props) => (props.isSelected ? '1' : '0')};
   }
+  margin-bottom: ${(props) => props.lastInGroup && '6px'};
 `;
 
-export const MessageContainer = styled.div<{ type: 'sent' | 'recieved'; hasTail: boolean }>`
+export const MessageContainer = styled.div<{
+  type: 'sent' | 'recieved';
+  hasTail: boolean;
+  chatType: 'privat' | 'group';
+}>`
   background-color: ${(props) => (props.type === 'sent' ? 'rgb(244, 251, 227)' : '#fff')};
   border-radius: ${(props) =>
     props.type === 'sent'
@@ -36,6 +42,7 @@ export const MessageContainer = styled.div<{ type: 'sent' | 'recieved'; hasTail:
   position: relative;
   max-width: 464px;
   transition: 0.3s;
+  margin-left: ${(props) => props.chatType === 'group' && '43px'};
 `;
 
 export const MessageBody = styled.div`
@@ -93,6 +100,6 @@ export const MessageMeta = styled.div`
 
 export const SelectedIconContainer = styled.div`
   position: absolute;
-  top: 20px;
+  bottom: 5px;
   left: 20px;
 `;

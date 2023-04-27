@@ -8,6 +8,10 @@ export function* editMessageSaga(socket: Socket): any {
     const { payload } = yield take('editMessage');
     console.log('edit message saga');
 
-    socket.emit(EDIT_MESSAGE, { messageId: payload.messageId, text: payload.text });
+    socket.emit(EDIT_MESSAGE, {
+      messageId: payload.messageId,
+      text: payload.text,
+      chatId: payload.chatId
+    });
   }
 }

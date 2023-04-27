@@ -1,7 +1,7 @@
 import { RootState } from 'store';
 
 export const getChatListState = (state: RootState) => state.ui.uiSettings.chatListState;
-export const getActiveChatId = (state: RootState) => state.entities.active.activeChat.chatId;
+export const getActiveChatId = (state: RootState) => state.entities.active.activeChat.id;
 
 export const getUserStatusById = (state: RootState, userId: string) =>
   state.users.statusesById[userId];
@@ -23,7 +23,7 @@ export const getEditableMessage = (state: RootState) => {
   return editableMessage;
 };
 
-export const getActiveChatUser = (state: RootState) => state.entities.active.activeChat?.user;
+// export const getActiveChatUser = (state: RootState) => state.entities.active.activeChat?.user;
 
 export const getActiveChat = (state: RootState) => state.entities.active.activeChat;
 export const getChatListLoading = (state: RootState) => state.entities.chats.isLoading;

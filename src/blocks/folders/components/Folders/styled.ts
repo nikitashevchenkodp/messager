@@ -5,5 +5,5 @@ export const FoldersContainer = styled.div`
   height: 100vh;
   min-width: 80px;
   max-width: 80px;
-  z-index: 130;
+  z-index: 10;
 `;

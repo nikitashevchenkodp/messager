@@ -13,13 +13,58 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { uiSettingsActions } from 'store/slices/UI';
 import TypingIndicator from 'components/TypingIndicator';
 import { fomatLastTimeOnline } from 'helpers/formatLastOnlineTime';
-import { getActiveChatUser, getUserStatusById } from 'store/selectors';
+import { getActiveChat, getUserStatusById } from 'store/selectors';
+import { Avatar } from 'components/shared/Avatar';
+import { isUserId } from 'helpers/isUserId';
 
 const ChatHeader = () => {
   const dispatch = useAppDispatch();
 
-  const userWithWhomChat = useAppSelector(getActiveChatUser);
-  const userStatus = useAppSelector((state) => getUserStatusById(state, userWithWhomChat!.id));
+  const activeChat = useAppSelector(getActiveChat);
+  const userStatus = useAppSelector((state) => getUserStatusById(state, activeChat.id));
+
+  const chatInfo = isUserId(activeChat.id) ? (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        height: '100%',
+        flexGrow: 1
+      }}>
+      <ChatTitle>{activeChat?.title}</ChatTitle>
+      <ChatExtraInfo>
+        {userStatus?.online ? (
+          userStatus?.typing ? (
+            <TypingIndicator />
+          ) : (
+            <p style={{ color: 'green' }}>online</p>
+          )
+        ) : (
+          <>{fomatLastTimeOnline(userStatus?.lastTimeOnline)}</>
+        )}
+      </ChatExtraInfo>
+    </div>
+  ) : (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+        height: '100%',
+        flexGrow: 1
+      }}>
+      <Avatar
+        src={activeChat.avatar}
+        fullName={activeChat.title}
+        styles={{ width: '40px', height: '40px', fontSize: '20px' }}
+      />
+      <div>
+        <ChatTitle>{activeChat?.title}</ChatTitle>
+        <ChatExtraInfo>{activeChat.membersCount} members</ChatExtraInfo>
+      </div>
+    </div>
+  );
 
   return (
     <ChatHeaderStyled data-testid="chat-header">
@@ -29,27 +74,7 @@ const ChatHeader = () => {
           onClick={() => dispatch(uiSettingsActions.setChatState(false))}>
           <ArrowBackIcon />
         </BackButton>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            height: '100%',
-            flexGrow: 1
-          }}>
-          <ChatTitle>{userWithWhomChat?.fullName}</ChatTitle>
-          <ChatExtraInfo>
-            {userStatus?.online ? (
-              userStatus?.typing ? (
-                <TypingIndicator />
-              ) : (
-                <p style={{ color: 'green' }}>online</p>
-              )
-            ) : (
-              <>{fomatLastTimeOnline(userStatus?.lastTimeOnline)}</>
-            )}
-          </ChatExtraInfo>
-        </div>
+        {chatInfo}
         <ChatActions>
           <SearchIcon width="24px" height="24px" cursor="pointer" />
           <SideBarIcon width="24px" height="24px" cursor="pointer" />

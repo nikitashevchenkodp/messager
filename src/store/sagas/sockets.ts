@@ -56,15 +56,18 @@ function* listenDisconnect() {
 function socketChanel(socket: Socket) {
   return eventChannel((emit) => {
     const resieveMessage = (message: IMessage) => {
+      console.log(message);
+
       emit({ type: 'newMessage', payload: message });
     };
 
-    const messageFromNewContact = (data: any) => {
-      emit({ type: 'MESSAGE_FROM_NEW_CONTACT', payload: data });
-    };
-    const newChatCreated = (chatId: string) => {
-      emit({ type: activeEntitiesActions.newChatCreated.type, payload: chatId });
-    };
+    // const messageFromNewContact = (data: any) => {
+    //   emit({ type: 'MESSAGE_FROM_NEW_CONTACT', payload: data });
+    // };
+    // const newChatCreated = (chatId: string) => {
+    //   console.log(chatId, 'new chat created');
+    //   emit({ type: activeEntitiesActions.newChatCreated.type, payload: chatId });
+    // };
 
     const online = (data: string[]) => {
       emit(usersActions.setOnlineList(data));
@@ -77,24 +80,30 @@ function socketChanel(socket: Socket) {
     };
 
     const typing = ({ typing, userId }: TypingStatusObject) => {
+      console.log(typing, userId);
+
       emit(usersActions.setTypingStatus({ userId, typing }));
     };
     const messagesDeleted = ({ chatId, messagesIds }: any) => {
       emit(messagesActions.deleteMessages({ chatId, messagesIds }));
     };
     const messageEdited = ({ message }: any) => {
+      console.log(message, 'edited');
+
       emit(messagesActions.editMessage(message));
     };
     const reactionAdded = ({ chatId, messageId, reactions }: any) => {
       emit(messagesActions.addReaction({ chatId, messageId, reactions }));
     };
     const reactionDeleted = ({ chatId, messageId, reactionId }: any) => {
+      console.log('reaction deleted', chatId, messageId, reactionId);
+
       emit(messagesActions.deleteReaction({ chatId, messageId, reactionId }));
     };
 
     socket.on(events.RESPONSE_MESSAGE, resieveMessage);
-    socket.on(events.MESSAGE_FROM_NEW_CONTACT, messageFromNewContact);
-    socket.on(events.NEW_CHAT_CREATED, newChatCreated);
+    // socket.on(events.MESSAGE_FROM_NEW_CONTACT, messageFromNewContact);
+    // socket.on(events.NEW_CHAT_CREATED, newChatCreated);
     socket.on(events.ONLINE_USERS, online);
     socket.on('USER_DISCONNECTED', disconnectUser);
     socket.on('NEW_USER_CONNECTED', newUserConnected);
@@ -108,8 +117,8 @@ function socketChanel(socket: Socket) {
       socket.off(events.RESPONSE_MESSAGE, resieveMessage);
       socket.off(events.MESSAGE_FROM_NEW_CONTACT, online);
       socket.off(events.TYPING_ON, typing);
-      socket.off(events.MESSAGE_FROM_NEW_CONTACT, messageFromNewContact);
-      socket.off(events.NEW_CHAT_CREATED, newChatCreated);
+      // socket.off(events.MESSAGE_FROM_NEW_CONTACT, messageFromNewContact);
+      // socket.off(events.NEW_CHAT_CREATED, newChatCreated);
       socket.off('messageDeleted', messagesDeleted);
       socket.off('messageEdited', messageEdited);
       socket.off('reactionAdded', reactionAdded);

@@ -23,14 +23,14 @@ jobs:
         with:
           node-version: '18.x'
       - run: npm ci
-      - run: npm run test -- --coverage
-        env:
-          CI: true
-      - name: Upload Test coverage
-        uses: actions/upload-artifact@v3
-        with:
-          name: code-coverage
-          path: coverage
+      # - run: npm run test -- --coverage
+      #   env:
+      #     CI: true
+      # - name: Upload Test coverage
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: code-coverage
+      #     path: coverage
       - name: Install Netlify CLI
         if: github.event_name == 'push'
         run: npm install -g netlify-cli

@@ -20,6 +20,7 @@ import {
   getActiveChatMessagesIds,
   getScrollOffsetByChatId
 } from 'store/selectors';
+import DragableZone from '../DragableZone/DragableZone';
 
 interface IChatMessagesProps {
   openMessageMenu: (e: React.MouseEvent, message: IMessage) => void;
@@ -27,10 +28,10 @@ interface IChatMessagesProps {
 
 const ChatMessages: FC<IChatMessagesProps> = memo(({ openMessageMenu }) => {
   const dispatch = useAppDispatch();
+
   const activeChatId = useAppSelector(getActiveChatId);
   const messagesIds = useAppSelector(getActiveChatMessagesIds);
   const messages = useAppSelector(getActiveChatMessages);
-
   const scrolOffset = useAppSelector(getScrollOffsetByChatId);
 
   const listRef = useRef<HTMLDivElement | null>(null);
@@ -61,6 +62,8 @@ const ChatMessages: FC<IChatMessagesProps> = memo(({ openMessageMenu }) => {
   useEffect(() => {
     if (Number(scrolOffset) <= 1) {
       if (listRef?.current) {
+        console.log('scroll');
+
         listRef.current.scrollTo({
           top: listRef!.current!.scrollHeight!,
           behavior: 'smooth'

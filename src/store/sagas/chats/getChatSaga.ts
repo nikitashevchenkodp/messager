@@ -18,6 +18,7 @@ export function* getChatSaga(
   try {
     const newChat = yield call(getChat, chatId);
     yield put(chatsActions.addChat(newChat.data));
+    console.log(newChat);
   } catch (error) {
     console.log(error);
   }

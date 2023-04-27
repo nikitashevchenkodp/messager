@@ -30,12 +30,9 @@ export const mockStore: Omit<RootState, '_persist'> = {
     active: {
       activeChat: {
         activeMessage: null,
-        chatId: '642683897571e92726bdbcd1',
-        user: {
-          fullName: 'Daria Shevchenko',
-          id: '63e7b7bfd2c2586ba49c4ba5',
-          avatar: 'https://picsum.photos/id/18/200/300'
-        },
+        id: '642683897571e92726bdbcd1',
+        title: 'Daria Shevchenko',
+        avatar: 'https://picsum.photos/id/18/200/300',
         selectedMessagesIds: {},
         isOpenDeleteModal: false
       },
@@ -44,28 +41,19 @@ export const mockStore: Omit<RootState, '_persist'> = {
     chats: {
       items: [
         {
-          chatId: '642683897571e92726bdbcd1',
-          user: {
-            fullName: 'Daria Shevchenko',
-            id: '63e7b7bfd2c2586ba49c4ba5',
-            avatar: 'https://picsum.photos/id/18/200/300'
-          }
+          id: '642683897571e92726bdbcd1',
+          title: 'Daria Shevchenko',
+          avatar: 'https://picsum.photos/id/18/200/300'
         },
         {
-          chatId: '641c76ee2d63029c0e92ae7f',
-          user: {
-            fullName: 'Dmitro Huk',
-            id: '63e7b7c4d2c2586ba49c4ba7',
-            avatar: 'https://picsum.photos/id/21/200/300'
-          }
+          id: '641c76ee2d63029c0e92ae7f',
+          title: 'Dmitro Huk',
+          avatar: 'https://picsum.photos/id/21/200/300'
         },
         {
-          chatId: '64214f93a6ad862f069d066f',
-          user: {
-            fullName: 'Irina Shevchenko',
-            id: '63e7b7c8d2c2586ba49c4ba9',
-            avatar: 'https://picsum.photos/id/23/200/300'
-          }
+          id: '64214f93a6ad862f069d066f',
+          title: 'Irina Shevchenko',
+          avatar: 'https://picsum.photos/id/23/200/300'
         }
       ],
       isLoading: false,
@@ -86,8 +74,7 @@ export const mockStore: Omit<RootState, '_persist'> = {
               text: 'asdsad',
               createdAt: '2023-03-23T15:11:15.019Z',
               from: '63e7b7b5d2c2586ba49c4ba3',
-              to: '63e7b7c4d2c2586ba49c4ba7',
-              chatId: '641c76ee2d63029c0e92ae7f',
+              chatId: '63e7b7c4d2c2586ba49c4ba7',
               edited: false,
               reactions: [],
               updatedAt: '2023-03-27T09:09:59.476Z'
@@ -97,15 +84,15 @@ export const mockStore: Omit<RootState, '_persist'> = {
               text: 'assad',
               createdAt: '2023-03-23T15:11:15.019Z',
               from: '63e7b7b5d2c2586ba49c4ba3',
-              to: '63e7b7c4d2c2586ba49c4ba7',
-              chatId: '641c76ee2d63029c0e92ae7f',
+              chatId: '63e7b7c4d2c2586ba49c4ba7',
               edited: false,
               reactions: [],
               updatedAt: '2023-03-23T15:11:15.019Z'
             }
           },
           messagesIds: ['641c76ee2d63029c0e92ae81', '641c76f02d63029c0e92ae86'],
-          editableMessage: null
+          editableMessage: null,
+          inputValue: ''
         },
         '642683897571e92726bdbcd1': {
           chatId: '642683897571e92726bdbcd1',
@@ -115,8 +102,7 @@ export const mockStore: Omit<RootState, '_persist'> = {
               text: 'Hi!',
               createdAt: '2023-03-31T06:26:02.851Z',
               from: '63e7b7b5d2c2586ba49c4ba3',
-              to: '63e7b7bfd2c2586ba49c4ba5',
-              chatId: '642683897571e92726bdbcd1',
+              chatId: '63e7b7bfd2c2586ba49c4ba5',
               edited: true,
               reactions: [],
               updatedAt: ''
@@ -125,8 +111,7 @@ export const mockStore: Omit<RootState, '_persist'> = {
               text: 'Hello',
               createdAt: '2023-03-31T06:26:02.851Z',
               from: '63e7b7bfd2c2586ba49c4ba5',
-              to: '63e7b7b5d2c2586ba49c4ba3',
-              chatId: '642683897571e92726bdbcd1',
+              chatId: '63e7b7b5d2c2586ba49c4ba3',
               edited: false,
               _id: '642683fe7571e92726bdbcf1',
               reactions: [],
@@ -136,8 +121,7 @@ export const mockStore: Omit<RootState, '_persist'> = {
               text: 'How are you doing?',
               createdAt: '2023-03-31T06:26:02.851Z',
               from: '63e7b7b5d2c2586ba49c4ba3',
-              to: '63e7b7bfd2c2586ba49c4ba5',
-              chatId: '642683897571e92726bdbcd1',
+              chatId: '63e7b7bfd2c2586ba49c4ba5',
               edited: false,
               _id: '642684127571e92726bdbcf4',
               reactions: [],
@@ -147,8 +131,7 @@ export const mockStore: Omit<RootState, '_persist'> = {
               text: 'I am fine, thanks. And you?😀',
               createdAt: '2023-03-31T06:26:02.851Z',
               from: '63e7b7bfd2c2586ba49c4ba5',
-              to: '63e7b7b5d2c2586ba49c4ba3',
-              chatId: '642683897571e92726bdbcd1',
+              chatId: '63e7b7b5d2c2586ba49c4ba3',
               edited: false,
               _id: '642684277571e92726bdbcf6',
               reactions: [],
@@ -161,7 +144,8 @@ export const mockStore: Omit<RootState, '_persist'> = {
             '642684127571e92726bdbcf4',
             '642684277571e92726bdbcf6'
           ],
-          editableMessage: null
+          editableMessage: null,
+          inputValue: ''
         }
       }
     }
