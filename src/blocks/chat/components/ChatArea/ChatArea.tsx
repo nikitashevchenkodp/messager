@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import Menu from 'components/shared/Menu';
 import Modal from 'components/shared/Modal';
@@ -11,13 +11,26 @@ import MenuOptions from 'blocks/message/MesageMenu';
 import { activeEntitiesActions } from 'store/slices/activeEntities';
 import { getActiveChatId, getActiveMessage, getCurrentUser, getIsModalOpen } from 'store/selectors';
 import { MessageMenuContainer } from './styled';
+import DragableZone from '../DragableZone/DragableZone';
+import styled from 'styled-components';
+import { CHAT_CONTROLS_HEIGHT, CHAT_HEADER_HEIGHT } from 'consts';
+import PreviewMedia from 'components/PreviewMedia';
 
-const ChatArea = () => {
+const ChatAreaStyled = styled.div`
+  height: calc(100% - ${CHAT_HEADER_HEIGHT}px - ${CHAT_CONTROLS_HEIGHT}px);
+`;
+
+interface IChatAreaProps {
+  files?: FileList;
+  setFiles: React.Dispatch<React.SetStateAction<FileList | undefined>>;
+}
+
+const ChatArea: FC<IChatAreaProps> = ({ files, setFiles }) => {
   const dispatch = useAppDispatch();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
-
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const activeChatId = useAppSelector(getActiveChatId);
   const { _id, avatar, fullName } = useAppSelector(getCurrentUser);
   const activeMessage = useAppSelector(getActiveMessage);
@@ -67,8 +80,14 @@ const ChatArea = () => {
     dispatch(activeEntitiesActions.addToSelectedMessagesIds());
   };
 
+  const showImages = () => {
+    return Array.from(files || []).map((file) => {
+      return <img key={file?.name} src={URL.createObjectURL(file)} width="300px" height="300px" />;
+    });
+  };
+
   return (
-    <>
+    <ChatAreaStyled>
       <Menu isOpen={isMenuOpen} coordinates={coordinates} onClose={() => setIsMenuOpen(false)}>
         <MessageMenuContainer data-testid="message-menu">
           <ReactionsMenu
@@ -78,11 +97,20 @@ const ChatArea = () => {
           <MenuOptions onEdit={editMessage} onDelete={openDeletionModal} onSelect={selectMessage} />
         </MessageMenuContainer>
       </Menu>
-      <ChatMessages openMessageMenu={openMessageMenu} />
+      <DragableZone
+        onDrop={(files) => {
+          setFiles(files);
+          setIsPreviewOpen(true);
+        }}>
+        <ChatMessages openMessageMenu={openMessageMenu} />
+      </DragableZone>
       <Modal active={isModalOpen} onClose={closeDeletionModal}>
         <DeletionConfirm cancel={closeDeletionModal} />
       </Modal>
-    </>
+      <Modal active={isPreviewOpen} onClose={() => setIsPreviewOpen(false)} appearsFrom="bottom">
+        <PreviewMedia files={files} onClose={() => setIsPreviewOpen(false)} />
+      </Modal>
+    </ChatAreaStyled>
   );
 };
 

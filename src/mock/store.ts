@@ -91,7 +91,8 @@ export const mockStore: Omit<RootState, '_persist'> = {
             }
           },
           messagesIds: ['641c76ee2d63029c0e92ae81', '641c76f02d63029c0e92ae86'],
-          editableMessage: null
+          editableMessage: null,
+          inputValue: ''
         },
         '642683897571e92726bdbcd1': {
           chatId: '642683897571e92726bdbcd1',
@@ -143,7 +144,8 @@ export const mockStore: Omit<RootState, '_persist'> = {
             '642684127571e92726bdbcf4',
             '642684277571e92726bdbcf6'
           ],
-          editableMessage: null
+          editableMessage: null,
+          inputValue: ''
         }
       }
     }

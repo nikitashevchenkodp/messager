@@ -106,7 +106,7 @@ const ChatControls = () => {
       <ChatControlsContainer data-testid="chat-controls">
         <Button>
           <PaperclipIcon width="24px" height="24px" />
-          <input type="file" hidden />
+          <input id="inputFile" type="file" hidden />
         </Button>
         <ChatInput
           data-testid="chat-controls-input"
