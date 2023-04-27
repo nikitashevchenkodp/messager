@@ -16,6 +16,7 @@ import { IMessage } from 'types';
 import notificationSound from 'assets/mixkit-correct-answer-tone-2870.wav';
 import { getChatSaga } from '../chats/getChatSaga';
 import { getMessagesSaga } from './chatMessagesSaga';
+import { getCurrentUserId } from 'store/selectors';
 
 // Generator<
 //   TakeEffect | SelectEffect | PutEffect,
@@ -23,27 +24,30 @@ import { getMessagesSaga } from './chatMessagesSaga';
 //   PayloadAction<IMessage> & string
 // >
 
-export function* newMessage(message: any): any {
+export function* newMessage(message: any, dummyMessageId?: string): any {
   console.log('inside new message saga');
-
+  const currentUserId = yield select(getCurrentUserId);
   const activeChatId = yield select((state: RootState) => state.entities.active.activeChat.id);
-  if (activeChatId !== message.payload.chatId) {
+  if (activeChatId !== message.chatId) {
     const audio = new Audio(notificationSound);
     // audio.play();
   }
-  const chat = yield select(
-    (state: RootState) => state.entities.messages.byChatId[message.payload.chatId]
-  );
+  const chat = yield select((state: RootState) => state.entities.messages.byChatId[message.chatId]);
   console.log(chat);
 
   if (!chat) {
     console.log('no chat');
 
-    yield call(getChatSaga, message.payload.chatId);
-    yield call(getMessagesSaga, message.payload.chatId);
+    yield call(getChatSaga, message.chatId);
+    yield call(getMessagesSaga, message.chatId);
     return;
   }
-  yield put(messagesActions.newMessage(message.payload));
+  if (currentUserId === message.from) {
+    yield put(
+      messagesActions.removeFromQueueById({ chatId: message.chatId, messageId: dummyMessageId })
+    );
+  }
+  yield put(messagesActions.newMessage(message));
   // yield put(
   //   snackbarActions.enqueueSnackbar({
   //     message: 'You recieved a new message',
@@ -56,6 +60,6 @@ export function* newMessage(message: any): any {
   // );
 }
 
-export function* newMessageWatcher() {
-  yield takeEvery('newMessage', newMessage);
-}
+// export function* newMessageWatcher() {
+//   yield takeEvery('newMessage', newMessage);
+// }

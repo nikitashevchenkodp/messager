@@ -15,6 +15,7 @@ import { chatsReducer } from 'blocks/center/chat-list';
 import { activeEntitiesReducer } from './slices/activeEntities';
 import { foldersReducer } from 'blocks/folders/redux/folders';
 import { sidebarReducer } from './slices/sidebar';
+import { sentMessagesQueueReducer } from './slices/sentMessagesQueue';
 
 const ui = combineReducers({
   uiSettings: uiSettingsReducer,

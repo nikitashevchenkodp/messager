@@ -21,7 +21,7 @@ import * as events from 'consts/events';
 import { deleteMessageSaga } from './messages/deleteMessage';
 import { messagesActions } from 'blocks/chat';
 import { connectToNewChat } from './chats/connectToNewChatSaga';
-import { sendMessage } from './messages/sendMessage';
+import { sendMessage, sendMessageFromQueue } from './messages/sendMessage';
 import { typingSaga } from './messages/typingSaga';
 import { editMessageSaga } from './messages/editMessageSaga';
 import { addReaction } from './messages/addReaction';
@@ -68,7 +68,9 @@ function socketChanel(socket: Socket) {
     //   console.log(chatId, 'new chat created');
     //   emit({ type: activeEntitiesActions.newChatCreated.type, payload: chatId });
     // };
-
+    const error = (error: Error) => {
+      console.log(error.message);
+    };
     const online = (data: string[]) => {
       emit(usersActions.setOnlineList(data));
     };
@@ -101,6 +103,15 @@ function socketChanel(socket: Socket) {
       emit(messagesActions.deleteReaction({ chatId, messageId, reactionId }));
     };
 
+    const disconnect = () => {
+      console.log('disconnect');
+    };
+    const reconnectFailed = (e: any) => {
+      console.log(e);
+
+      console.log('reconnect failed');
+    };
+
     socket.on(events.RESPONSE_MESSAGE, resieveMessage);
     // socket.on(events.MESSAGE_FROM_NEW_CONTACT, messageFromNewContact);
     // socket.on(events.NEW_CHAT_CREATED, newChatCreated);
@@ -112,6 +123,9 @@ function socketChanel(socket: Socket) {
     socket.on('messageEdited', messageEdited);
     socket.on('reactionAdded', reactionAdded);
     socket.on('reactionDeleted', reactionDeleted);
+    socket.on('error', error);
+    socket.on('disconnect', disconnect);
+    socket.on('reconnect_failed', reconnectFailed);
 
     return () => {
       socket.off(events.RESPONSE_MESSAGE, resieveMessage);
@@ -126,6 +140,9 @@ function socketChanel(socket: Socket) {
       socket.off(events.ONLINE_USERS, online);
       socket.off('USER_DISCONNECTED', disconnectUser);
       socket.off('NEW_USER_CONNECTED', newUserConnected);
+      socket.off('error', error);
+      socket.off('disconnect', disconnect);
+      socket.off('reconnect_failed', reconnectFailed);
     };
   });
 }

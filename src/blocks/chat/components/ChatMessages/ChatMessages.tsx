@@ -32,6 +32,12 @@ const ChatMessages: FC<IChatMessagesProps> = memo(({ openMessageMenu }) => {
   const activeChatId = useAppSelector(getActiveChatId);
   const messagesIds = useAppSelector(getActiveChatMessagesIds);
   const messages = useAppSelector(getActiveChatMessages);
+  const messagesIdsInQueue = useAppSelector(
+    (state) => state.entities.messages.byChatId[activeChatId].sentQueue.messagesIds
+  );
+  const messagesByIdInQueue = useAppSelector(
+    (state) => state.entities.messages.byChatId[activeChatId].sentQueue.messagesById
+  );
   const scrolOffset = useAppSelector(getScrollOffsetByChatId);
 
   const listRef = useRef<HTMLDivElement | null>(null);
@@ -74,8 +80,11 @@ const ChatMessages: FC<IChatMessagesProps> = memo(({ openMessageMenu }) => {
 
   const messagesGroups = useMemo<ReturnType<typeof groupMessages> | undefined>(() => {
     if (!messagesIds?.length) return;
-    return groupMessages(messages, messagesIds);
-  }, [messagesIds]);
+    return groupMessages({ ...messages, ...messagesByIdInQueue }, [
+      ...messagesIds,
+      ...messagesIdsInQueue
+    ]);
+  }, [messagesIds, messagesIdsInQueue]);
 
   const renderedMessages = useMemo(() => {
     if (!messagesGroups) return;
@@ -93,6 +102,7 @@ const ChatMessages: FC<IChatMessagesProps> = memo(({ openMessageMenu }) => {
                   const lastInGroup = i === arr.length - 1;
                   return (
                     <Message
+                      message={message}
                       messageId={message._id}
                       key={message._id}
                       openMessageMenu={openMessageMenu}

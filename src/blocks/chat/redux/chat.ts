@@ -15,6 +15,12 @@ interface UIInitState {
       editableMessage: IMessage | null;
       lastScrollOffset?: number;
       inputValue: string;
+      sentQueue: {
+        messagesIds: string[];
+        messagesById: {
+          [id: string]: IMessage;
+        };
+      };
     };
   };
 }
@@ -36,16 +42,20 @@ export const messages = createSlice({
         messages: messagesById,
         messagesIds,
         editableMessage: null,
-        inputValue: ''
+        inputValue: '',
+        sentQueue: {
+          messagesIds: [],
+          messagesById: {}
+        }
       };
     },
     newMessage: (state, action: PayloadAction<IMessage>) => {
-      const { chatId, _id } = action.payload;
       console.log(action.payload);
-
+      const { chatId, _id } = action.payload;
       state.byChatId[chatId].messages[_id] = action.payload;
       state.byChatId[chatId].messagesIds.push(_id);
     },
+
     startDeleteMessages: (
       state,
       action: PayloadAction<{ chatId: string; messagesIds: string[] }>
@@ -96,6 +106,23 @@ export const messages = createSlice({
     setChatInputValue: (state, action: PayloadAction<{ chatId: string; value: string }>) => {
       const { chatId, value } = action.payload;
       state.byChatId[chatId].inputValue = value;
+    },
+    addToQueue: (state, action: PayloadAction<IMessage>) => {
+      const { _id, chatId } = action.payload;
+      state.byChatId[chatId].sentQueue.messagesIds.push(_id);
+      state.byChatId[chatId].sentQueue.messagesById[_id] = { ...action.payload, fromQueue: true };
+    },
+    removeFromQueueById: (state, action: PayloadAction<{ chatId: string; messageId?: string }>) => {
+      if (!action.payload.messageId) return;
+      const { chatId, messageId } = action.payload;
+      state.byChatId[chatId].sentQueue.messagesIds = state.byChatId[
+        chatId
+      ].sentQueue.messagesIds.filter((id) => id !== messageId);
+      delete state.byChatId[chatId].sentQueue.messagesById[messageId];
+    },
+    clearQueue: (state, action: PayloadAction<string>) => {
+      state.byChatId[action.payload].sentQueue.messagesIds = [];
+      state.byChatId[action.payload].sentQueue.messagesById = {};
     }
   }
 });

@@ -21,6 +21,7 @@ interface IMessage {
   createdAt: string;
   edited: boolean;
   reactions?: IReaction[];
+  status?: 'sent' | 'delivered';
   attachment?: {
     media: IMediaItem[];
   };
