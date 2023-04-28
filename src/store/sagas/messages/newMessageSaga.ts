@@ -24,7 +24,9 @@ import { getCurrentUserId } from 'store/selectors';
 //   PayloadAction<IMessage> & string
 // >
 
-export function* newMessage(message: any, dummyMessageId?: string): any {
+export function* newMessageSaga(message: any, dummyMessageId?: string): any {
+  // const { payload: message } = yield take('newMessage');
+
   console.log('inside new message saga');
   const currentUserId = yield select(getCurrentUserId);
   const activeChatId = yield select((state: RootState) => state.entities.active.activeChat.id);

@@ -110,7 +110,7 @@ export const messages = createSlice({
     addToQueue: (state, action: PayloadAction<IMessage>) => {
       const { _id, chatId } = action.payload;
       state.byChatId[chatId].sentQueue.messagesIds.push(_id);
-      state.byChatId[chatId].sentQueue.messagesById[_id] = { ...action.payload, fromQueue: true };
+      state.byChatId[chatId].sentQueue.messagesById[_id] = { ...action.payload, status: 'sent' };
     },
     removeFromQueueById: (state, action: PayloadAction<{ chatId: string; messageId?: string }>) => {
       if (!action.payload.messageId) return;
@@ -123,6 +123,13 @@ export const messages = createSlice({
     clearQueue: (state, action: PayloadAction<string>) => {
       state.byChatId[action.payload].sentQueue.messagesIds = [];
       state.byChatId[action.payload].sentQueue.messagesById = {};
+    },
+    sendingErrorMessage: (state, action: PayloadAction<{ chatId: string; dummyId: string }>) => {
+      const { chatId, dummyId } = action.payload;
+      state.byChatId[chatId].sentQueue.messagesById[dummyId] = {
+        ...state.byChatId[chatId].sentQueue.messagesById[dummyId],
+        status: 'error'
+      };
     }
   }
 });

@@ -127,7 +127,7 @@ const Message = forwardRef<HTMLDivElement, IMessageProps>(
                   meta={{
                     edited: message.edited,
                     createdAt: message.createdAt,
-                    status: message.fromQueue ? 'sent' : 'delivered'
+                    mStatus: message.status && message.status
                   }}
                 />
               </MessageMainContent>

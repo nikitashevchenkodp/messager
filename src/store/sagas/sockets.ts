@@ -27,6 +27,7 @@ import { editMessageSaga } from './messages/editMessageSaga';
 import { addReaction } from './messages/addReaction';
 import { deleteReaction } from './messages/deleteReaction';
 import { id } from 'date-fns/locale';
+import { reconnectedSaga } from './reconnectedSaga';
 
 let socket: Socket | undefined;
 
@@ -34,8 +35,10 @@ function* connect(): Generator<SelectEffect, Socket, string> {
   const userId = yield select((state: RootState) => state.authentication.user?._id);
 
   socket = io(serverLink!, {
-    reconnectionAttempts: 5,
-    reconnectionDelay: 1000,
+    // reconnectionAttempts: 5,
+    ackTimeout: 10000,
+    reconnectionDelay: 500,
+    transports: ['websocket'],
     query: {
       id: userId
     }
@@ -104,12 +107,16 @@ function socketChanel(socket: Socket) {
     };
 
     const disconnect = () => {
-      console.log('disconnect');
+      emit({ type: 'sendingMessageError', payload: 'Error' });
     };
-    const reconnectFailed = (e: any) => {
-      console.log(e);
-
+    const reconnectFailed = () => {
       console.log('reconnect failed');
+    };
+    const reconnected = () => {
+      emit({ type: 'reconnected' });
+    };
+    const open = () => {
+      console.log('open socket');
     };
 
     socket.on(events.RESPONSE_MESSAGE, resieveMessage);
@@ -125,7 +132,9 @@ function socketChanel(socket: Socket) {
     socket.on('reactionDeleted', reactionDeleted);
     socket.on('error', error);
     socket.on('disconnect', disconnect);
-    socket.on('reconnect_failed', reconnectFailed);
+    socket.io.on('reconnect_failed', reconnectFailed);
+    socket.io.on('reconnect', reconnected);
+    // socket.io.on('open', open);
 
     return () => {
       socket.off(events.RESPONSE_MESSAGE, resieveMessage);
@@ -142,7 +151,8 @@ function socketChanel(socket: Socket) {
       socket.off('NEW_USER_CONNECTED', newUserConnected);
       socket.off('error', error);
       socket.off('disconnect', disconnect);
-      socket.off('reconnect_failed', reconnectFailed);
+      socket.io.on('reconnect_failed', reconnectFailed);
+      socket.io.on('reconnect', reconnected);
     };
   });
 }
@@ -176,16 +186,17 @@ function* runSocketEmmiters(socket: Socket) {
   yield fork(typingSaga, socket);
   yield fork(deleteMessageSaga, socket);
   yield fork(connectToNewChat, socket);
+  yield fork(reconnectedSaga, socket);
 }
 
 export function* socketSaga(): Generator<TakeEffect | CallEffect | ForkEffect, void, Socket> {
   while (true) {
     try {
       yield take('CHANEL_ON');
-      const socket = yield call(connect);
+      const socketIO = yield call(connect);
       yield fork(listenDisconnect);
-      yield fork(runChanel, socket);
-      yield fork(runSocketEmmiters, socket);
+      yield fork(runChanel, socketIO);
+      yield fork(runSocketEmmiters, socketIO);
     } catch (error) {
       console.log(error);
     }

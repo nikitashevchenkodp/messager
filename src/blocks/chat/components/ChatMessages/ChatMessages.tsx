@@ -33,10 +33,10 @@ const ChatMessages: FC<IChatMessagesProps> = memo(({ openMessageMenu }) => {
   const messagesIds = useAppSelector(getActiveChatMessagesIds);
   const messages = useAppSelector(getActiveChatMessages);
   const messagesIdsInQueue = useAppSelector(
-    (state) => state.entities.messages.byChatId[activeChatId].sentQueue.messagesIds
+    (state) => state.entities.messages.byChatId[activeChatId]?.sentQueue.messagesIds
   );
   const messagesByIdInQueue = useAppSelector(
-    (state) => state.entities.messages.byChatId[activeChatId].sentQueue.messagesById
+    (state) => state.entities.messages.byChatId[activeChatId]?.sentQueue.messagesById
   );
   const scrolOffset = useAppSelector(getScrollOffsetByChatId);
 
@@ -84,7 +84,7 @@ const ChatMessages: FC<IChatMessagesProps> = memo(({ openMessageMenu }) => {
       ...messagesIds,
       ...messagesIdsInQueue
     ]);
-  }, [messagesIds, messagesIdsInQueue]);
+  }, [messagesIds, messagesIdsInQueue, messages, messagesByIdInQueue]);
 
   const renderedMessages = useMemo(() => {
     if (!messagesGroups) return;
@@ -118,6 +118,7 @@ const ChatMessages: FC<IChatMessagesProps> = memo(({ openMessageMenu }) => {
       );
     });
   }, [messagesGroups]);
+  console.log('RE RENDER MESSAGES');
 
   return (
     <ChatMessagesStyled data-testid="chat-messages" ref={listRef}>

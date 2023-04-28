@@ -1,11 +1,11 @@
 /* eslint-disable prefer-const */
-import { fork, put, take } from 'redux-saga/effects';
+import { call, delay, fork, put, race, take } from 'redux-saga/effects';
 import { Socket } from 'socket.io-client';
 import { REQUEST_MESSAGE } from 'consts/events';
 import { messagesActions } from 'blocks/chat';
 import { sentMessagesQueueActions } from 'store/slices/sentMessagesQueue';
 import { IMessage } from 'types';
-import { newMessage } from './newMessageSaga';
+import { newMessageSaga } from './newMessageSaga';
 
 export function* sendMessage(socket: Socket) {
   while (true) {
@@ -29,9 +29,20 @@ export function* sendMessage(socket: Socket) {
   }
 }
 
-export function* sendMessageFromQueue(socket: Socket, message: any) {
+export function* sendMessageFromQueue(socket: Socket, message: any): any {
   socket.emit(REQUEST_MESSAGE, message);
+  console.log(message);
+
   const { _id } = message;
-  const { payload } = yield take('newMessage');
-  yield fork(newMessage, payload, _id);
+  const { newMessage, timeout } = yield race({
+    newMessage: take('newMessage'),
+    timeout: delay(10000)
+  });
+  console.log(newMessage);
+
+  if (timeout) {
+    yield put(messagesActions.sendingErrorMessage({ chatId: message.chatId, dummyId: _id }));
+  } else {
+    yield fork(newMessageSaga, newMessage.payload, _id);
+  }
 }

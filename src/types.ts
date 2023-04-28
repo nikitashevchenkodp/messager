@@ -24,6 +24,7 @@ export interface IMessage {
   chatId: string;
   updatedAt: string;
   fromQueue?: boolean;
+  status?: 'sent' | 'delivered' | 'error';
   // delivered: boolean;
   unreaded?: boolean;
   edited: boolean;
