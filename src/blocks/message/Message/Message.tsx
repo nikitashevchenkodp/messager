@@ -21,6 +21,7 @@ interface IMessageProps {
   openMessageMenu: (e: React.MouseEvent, message: IMessage) => void;
   firstInGroup: boolean;
   lastInGroup: boolean;
+  message: IMessage;
 }
 import FastReaction from '../FastReaction';
 import Reactions from '../Reactions';
@@ -43,7 +44,7 @@ import { Avatar } from 'components/shared/Avatar';
 const Text = styled.p``;
 
 const Message = forwardRef<HTMLDivElement, IMessageProps>(
-  ({ messageId, openMessageMenu, firstInGroup, lastInGroup }, ref) => {
+  ({ messageId, openMessageMenu, firstInGroup, lastInGroup, message }, ref) => {
     const dispatch = useAppDispatch();
 
     const currentUserId = useAppSelector(getCurrentUserId);
@@ -51,7 +52,7 @@ const Message = forwardRef<HTMLDivElement, IMessageProps>(
     const activechat = useAppSelector(getActiveChat);
     const isSelectiondModeOn = useAppSelector(isSelectionModeOn);
     const isSelected = useAppSelector((state) => isMessageSelected(state, messageId));
-    const message = useAppSelector((state) => getMessageById(state, activechatId, messageId));
+    // const message = useAppSelector((state) => getMessageById(state, activechatId, messageId));
     const users = useAppSelector(getUsersById);
 
     const type = message?.from === currentUserId ? 'sent' : 'recieved';
@@ -125,7 +126,8 @@ const Message = forwardRef<HTMLDivElement, IMessageProps>(
                 <MessageMeta
                   meta={{
                     edited: message.edited,
-                    createdAt: message.createdAt
+                    createdAt: message.createdAt,
+                    mStatus: message.status && message.status
                   }}
                 />
               </MessageMainContent>
