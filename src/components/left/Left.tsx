@@ -1,9 +1,11 @@
 import classNames from 'classnames';
 import useMediaQuery from 'hooks/useMediaQwery';
-import React from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { uiActions } from 'store/slices';
+import Chats from './Chats';
 import './Left.scss';
+import LeftHeader from './LeftHeader';
+
 const Left = () => {
   const isCenterOpen = useAppSelector((state) => state.ui.isCenterOpen);
   const dispatch = useAppDispatch();
@@ -20,15 +22,13 @@ const Left = () => {
       className={leftClasses}
       aria-expanded={isMd ? !isCenterOpen : undefined}
       data-testid="left">
-      <div className="left-header">Left Header</div>
+      <LeftHeader />
       <button className="opnCntrBnt" onClick={() => dispatch(uiActions.openCenter())}>
         open center
       </button>
 
       <div className="left-content">
-        <div className="chat-list">
-          <button className="opnSrchBnt">open search</button>
-        </div>
+        <Chats />
         <div className="search hide">
           <button className="closeSrchBnt">close search</button>
         </div>

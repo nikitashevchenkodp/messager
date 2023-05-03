@@ -1,0 +1,55 @@
+@mixin active-styles() {
+  &:not(.disabled):not(:disabled) {
+    &:active,
+    &.active,
+    &:focus {
+      @content;
+    }
+    @media (hover: hover) {
+      &:hover {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin no-ripple-styles() {
+  body.animation-level-0 & {
+    &:not(.disabled):not(:disabled) {
+      &:active {
+        @content;
+      }
+    }
+  }
+}
+
+.btn {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--br-default);
+  padding: 0.5rem;
+  transition: 0.1s;
+  // @include active-styles {
+  //   background: rgba(0, 0, 0, 0.2);
+  // }
+  --ripple-color: rgba(167, 14, 14, 0.5);
+  &--round {
+    border-radius: 50%;
+  }
+  &--primary {
+    background: var(--color-primary);
+    color: vat(--text-color-primary);
+    @include active-styles {
+      background-color: var(--color-primary-shade);
+    }
+  }
+}

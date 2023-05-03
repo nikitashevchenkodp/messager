@@ -3,6 +3,12 @@
   width: var(--left-width);
   display: flex;
   flex-direction: column;
+  &-header {
+    height: var(--header-height);
+    display: flex;
+    padding: 0.4rem 0.8rem;
+    align-items: center;
+  }
   @media (max-width: 900px) {
     position: absolute !important;
     top: 0;
