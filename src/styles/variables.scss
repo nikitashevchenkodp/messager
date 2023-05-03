@@ -1,14 +1,19 @@
+@use 'sass:color';
+
 :root {
   --html-font-size: 10px;
 
   //Colors
-
+  $color-primary: steelblue;
+  $color-black: black;
   --black: #000;
   --pink: pink;
   --purple: slateblue;
   --green: greenyellow;
   --white: #fff;
   --rgb-black: 0, 0, 0;
+
+  --color-primary-shade: #{color.mix($color-primary, $color-black, 92%)};
 
   //Break-points;
 
@@ -25,9 +30,13 @@
 
   // Elements sizes
   --left-width: 30rem;
+  --header-height: 4rem;
 
   //Transitions
   --layout-transition: 0.3s cubic-bezier(0.33, 1, 0.68, 1);
 
   //Z-indexes
+
+  //Border radiuses
+  --br-default: 0.8rem;
 }
