@@ -1,48 +1,31 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CHAT_LIST_MIN_WIDTH } from 'consts';
+import { createSlice } from '@reduxjs/toolkit';
 
-interface UIInitState {
-  windowWidth: number;
-  chatListState: 'expanded' | 'colapsed';
-  chatListWidth: number;
-  isChatOpen: boolean;
+interface IInitialState {
+  isCenterOpen: boolean;
+  isRightOpen: boolean;
 }
 
-const initialState: UIInitState = {
-  windowWidth: window.innerWidth,
-  chatListState: 'expanded',
-  chatListWidth: CHAT_LIST_MIN_WIDTH,
-  isChatOpen: true
-};
-
-export const uiSettings = createSlice({
-  name: 'UI',
-  initialState,
+const ui = createSlice({
+  name: 'ui',
+  initialState: {
+    isCenterOpen: false,
+    isRightOpen: false
+  } as IInitialState,
   reducers: {
-    setWindowWidth: (state, action: PayloadAction<number>) => {
-      state.windowWidth = action.payload;
+    openCenter: (state) => {
+      state.isCenterOpen = true;
     },
-    setChatState: (state, action: PayloadAction<boolean>) => {
-      state.isChatOpen = action.payload;
+    closeCenter: (state) => {
+      state.isCenterOpen = false;
     },
-    setChatListState: (state, action: PayloadAction<'expanded' | 'colapsed'>) => {
-      if (action.payload === 'colapsed') {
-        state.chatListWidth = 70;
-      } else {
-        state.chatListWidth = CHAT_LIST_MIN_WIDTH;
-      }
-      state.chatListState = action.payload;
+    openRight: (state) => {
+      state.isRightOpen = true;
     },
-    setChatListWidth: (state, action: PayloadAction<number>) => {
-      state.chatListWidth = action.payload;
-      if (action.payload === 70) {
-        state.chatListState = 'colapsed';
-      } else {
-        state.chatListState = 'expanded';
-      }
+    closeRight: (state) => {
+      state.isRightOpen = false;
     }
   }
 });
 
-export const uiSettingsReducer = uiSettings.reducer;
-export const uiSettingsActions = uiSettings.actions;
+export const uiActions = ui.actions;
+export const uiReducer = ui.reducer;

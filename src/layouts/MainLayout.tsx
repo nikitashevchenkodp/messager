@@ -1,23 +1,13 @@
-import { Chat } from 'blocks/chat';
-import { Folders } from 'blocks/folders';
-import { Sidebar } from 'blocks/sidebar';
-
-import React from 'react';
-import { MainContainer, MainLayoutStyled } from './styled';
-import CenterColumn from 'blocks/center/CenterColumn';
-
+import { Center, Left } from 'components';
+import Right from 'components/right';
+import './MainLayout.scss';
 const MainLayout = () => {
   return (
-    <>
-      <MainLayoutStyled data-testid="main-layout">
-        <Folders />
-        <MainContainer>
-          <CenterColumn />
-          <Chat />
-        </MainContainer>
-      </MainLayoutStyled>
-      <Sidebar />
-    </>
+    <div className="mainlayout" data-testid="mainlayout">
+      <Left />
+      <Center />
+      <Right />
+    </div>
   );
 };
 

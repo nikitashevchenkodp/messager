@@ -1,0 +1,33 @@
+:root {
+  --html-font-size: 10px;
+
+  //Colors
+
+  --black: #000;
+  --pink: pink;
+  --purple: slateblue;
+  --green: greenyellow;
+  --white: #fff;
+  --rgb-black: 0, 0, 0;
+
+  //Break-points;
+
+  --sx: 38rem;
+  --sm: 54rem;
+  --md: 90rem;
+  --lg: 110rem;
+
+  // Elements colors
+  --left-color: var(--pink);
+  --center-color: var(--purple);
+  --right-color: var(--green);
+  --bgc-theme: var(--white);
+
+  // Elements sizes
+  --left-width: 30rem;
+
+  //Transitions
+  --layout-transition: 0.3s cubic-bezier(0.33, 1, 0.68, 1);
+
+  //Z-indexes
+}

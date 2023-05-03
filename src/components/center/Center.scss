@@ -1,0 +1,14 @@
+.center {
+  background-color: var(--center-color);
+  flex-grow: 1;
+  @media (max-width: 900px) {
+    position: absolute !important;
+    left: 0;
+    top: 0;
+    width: 100%;
+    transition: var(--layout-transition);
+  }
+  @media (max-width: 540px) {
+    width: 100%;
+  }
+}

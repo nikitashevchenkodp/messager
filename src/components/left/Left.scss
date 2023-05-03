@@ -1,0 +1,26 @@
+.left {
+  background-color: var(--left-color);
+  width: var(--left-width);
+  display: flex;
+  flex-direction: column;
+  @media (max-width: 900px) {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    transition: var(--layout-transition);
+    &[aria-expanded='false'] {
+      visibility: hidden;
+    }
+  }
+  @media (max-width: 540px) {
+  }
+}
+
+.left-content {
+  position: relative;
+  flex-grow: 1;
+  //   background-color: var(--bgc-theme);
+  overflow: hidden;
+}

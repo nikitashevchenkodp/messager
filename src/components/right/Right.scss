@@ -1,0 +1,13 @@
+.right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 400px;
+  max-width: 100%;
+  background-color: var(--right-color);
+  transition: 0.2s cubic-bezier(0.33, 1, 0.68, 1);
+  @media (max-width: 540px) {
+    width: 100%;
+  }
+}

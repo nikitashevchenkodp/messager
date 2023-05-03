@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500;700;900&display=swap');
+@import './styles/variables.scss';
 
 body {
   margin: 0;
@@ -14,49 +15,11 @@ body {
   padding: 0;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}
-
 img {
   max-width: 100%;
   width: 100%;
 }
 
-.fade-out {
-  transform: translateX(-100%);
-  opacity: 0.6;
-  z-index: -1;
-  max-width: 0;
-  transition: all 0.3s;
-  transition-property: transform max-width;
-  transition-duration: 0.2s 0.5s;
-}
-
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-@keyframes rotateReverse {
-  0% {
-    transform: rotate(360deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
-}
-
-@keyframes zoom {
-  0% {
-    transform: scale(0.5);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+html {
+  font-size: var(--html-font-size);
 }
