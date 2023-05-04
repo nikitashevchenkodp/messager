@@ -22,9 +22,9 @@
     &:hover {
       background-color: rgba(0, 0, 0, 0.05);
     }
-    --ripple-color: blue;
+    --ripple-color: rgba(255, 255, 255, 0.3);
     &.active {
-      background-color: blue;
+      background-color: rgb(51, 144, 236);
       & > * {
         color: white !important;
       }
@@ -131,4 +131,9 @@
   border: 2px solid var(--white);
   background-color: green;
   border-radius: 50%;
+  transform: scale(0);
+  transition: 0.4s cubic-bezier(0.76, 0.34, 0.33, 1.5);
+  &.active {
+    transform: scale(1);
+  }
 }

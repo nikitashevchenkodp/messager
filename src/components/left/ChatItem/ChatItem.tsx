@@ -1,8 +1,12 @@
 import Avatar from 'components/Avatar';
 import Ripple from 'components/ui/Ripple';
-import React, { FC, useMemo } from 'react';
+import useMediaQuery from 'hooks/useMediaQwery';
+import { FC, useMemo } from 'react';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { uiActions } from 'store/slices';
 import './ChatItem.scss';
 
+//mock data
 const lastMessage = {
   status: 'read',
   createdAt: '15:08',
@@ -10,18 +14,29 @@ const lastMessage = {
    `
 };
 
-const isOnline = true;
-const isMuted = false;
+const isOnline = false;
 const unreadCount = 2;
-const isPinned = true;
 const isUser = true;
+/////////////////////////////
 
 type MessageStatus = 'delivered' | 'pending' | 'read' | 'fail';
 interface IChatItemProps {
-  onClick: () => void;
+  chatId: string;
 }
 
-const ChatItem: FC<IChatItemProps> = ({ onClick }) => {
+const ChatItem: FC<IChatItemProps> = ({ chatId }) => {
+  const dispatch = useAppDispatch();
+  const isMdScreen = useMediaQuery('(max-width: 900px)');
+  const { avatar, id, title, isMuted, isPinned } = useAppSelector(
+    (state) => state.entities.chats.byId[chatId]
+  );
+  const isActiveChat = useAppSelector((state) => state.ui?.activeChat?.id === chatId);
+
+  const handleChatClick = () => {
+    dispatch(uiActions.setActiveChat({ avatar, id, title, isMuted, isPinned }));
+    isMdScreen && dispatch(uiActions.openCenter());
+  };
+
   const foundMsgStatus = (status: MessageStatus) => {
     switch (status) {
       case 'delivered':
@@ -50,14 +65,14 @@ const ChatItem: FC<IChatItemProps> = ({ onClick }) => {
   }, []);
 
   return (
-    <div className="chat-list-item" onClick={onClick}>
+    <div className={`chat-list-item ${isActiveChat ? 'active' : ''}`} onClick={handleChatClick}>
       <div className="avatar-container">
-        <Avatar title="Huk Dmitiy" style={{ height: '50px', width: '50px' }} />
-        <div className={`online-status ${isOnline ? '' : 'hide'}`}></div>
+        <Avatar title={title} style={{ height: '50px', width: '50px' }} />
+        <div className={`online-status ${isOnline ? 'active' : ''}`}></div>
       </div>
       <div className="info">
         <div className="d-flex space-between">
-          <div className="title">Dmytro Huk</div>
+          <div className="title">{title}</div>
           <div className="last-message-info">
             <div className="last-message-status">{messageStatus}</div>
             <span className="last-message-time">{lastMessage.createdAt}</span>

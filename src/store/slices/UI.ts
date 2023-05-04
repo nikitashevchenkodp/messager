@@ -1,8 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IChat } from 'store/interfaces';
 
 interface IInitialState {
   isCenterOpen: boolean;
   isRightOpen: boolean;
+  activeChat: IChat;
 }
 
 const ui = createSlice({
@@ -23,6 +25,9 @@ const ui = createSlice({
     },
     closeRight: (state) => {
       state.isRightOpen = false;
+    },
+    setActiveChat: (state, action: PayloadAction<IChat>) => {
+      state.activeChat = action.payload;
     }
   }
 });

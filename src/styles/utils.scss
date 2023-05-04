@@ -1,7 +1,7 @@
 .d-flex {
   display: flex;
 }
-.fd-column {
+.direction-column {
   flex-direction: column;
 }
 .jc-center {
@@ -9,6 +9,10 @@
 }
 .ai-center {
   align-items: center;
+}
+
+.space-around {
+  justify-content: space-around;
 }
 
 .space-between {
