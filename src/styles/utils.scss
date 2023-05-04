@@ -1,0 +1,23 @@
+.d-flex {
+  display: flex;
+}
+.fd-column {
+  flex-direction: column;
+}
+.jc-center {
+  justify-content: center;
+}
+.ai-center {
+  align-items: center;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.p-relative {
+  position: relative;
+}
+.p-absolute {
+  position: absolute;
+}

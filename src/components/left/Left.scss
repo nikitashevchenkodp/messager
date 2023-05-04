@@ -3,10 +3,11 @@
   width: var(--left-width);
   display: flex;
   flex-direction: column;
+  min-width: 24rem;
   &-header {
     height: var(--header-height);
     display: flex;
-    padding: 0.4rem 0.8rem;
+    padding: 0.6rem 1rem;
     align-items: center;
   }
   @media (max-width: 900px) {
@@ -27,6 +28,5 @@
 .left-content {
   position: relative;
   flex-grow: 1;
-  //   background-color: var(--bgc-theme);
-  overflow: hidden;
+  overflow-y: scroll;
 }
