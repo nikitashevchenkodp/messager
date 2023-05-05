@@ -23,6 +23,10 @@
       background-color: rgba(0, 0, 0, 0.05);
     }
     --ripple-color: rgba(255, 255, 255, 0.3);
+    .message-author {
+      color: grey;
+      font-weight: 500;
+    }
     &.active {
       background-color: rgb(51, 144, 236);
       & > * {
@@ -38,6 +42,10 @@
 
       .notification-count {
         background-color: rgba(255, 255, 255, 0.4);
+      }
+
+      .message-author {
+        color: white !important;
       }
     }
     .info {

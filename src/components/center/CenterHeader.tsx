@@ -1,12 +1,20 @@
-import Avatar from 'components/Avatar';
+import Avatar from 'components/ui/Avatar';
 import Button from 'components/ui/Button';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { uiActions } from 'store/slices';
 
 const CenterHeader = () => {
   const activeChat = useAppSelector((state) => state.ui.activeChat);
+  const isUserChat = activeChat?.type === 'privat';
   const dispatch = useAppDispatch();
+
+  const status = useMemo(() => {
+    if (isUserChat) {
+      return <div className="activechat-status">last seen 2 hours ago</div>;
+    }
+    return <div className="activechat-status">{activeChat?.membersCount} members</div>;
+  }, [activeChat]);
 
   return (
     <div className="center-header">
@@ -21,7 +29,7 @@ const CenterHeader = () => {
         />
         <div className="d-flex direction-column space-around">
           <div className="activechat-title">{activeChat?.title}</div>
-          <div className="activechat-status">last seen 2 hours ago</div>
+          {status}
         </div>
       </div>
       <div className="activechat-tools">

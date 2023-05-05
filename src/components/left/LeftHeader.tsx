@@ -1,13 +1,9 @@
 import Burger from 'components/ui/Burger';
 import Button from 'components/ui/Button';
 import SearchInput from 'components/ui/SearchInput';
-import { log } from 'console';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 const LeftHeader = () => {
-  const ref = useRef();
-  console.log(ref);
-
   const [val, setVal] = useState('');
 
   return (

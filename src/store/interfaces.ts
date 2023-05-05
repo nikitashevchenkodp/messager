@@ -4,4 +4,6 @@ export interface IChat {
   avatar: string;
   isPinned?: boolean;
   isMuted?: boolean;
+  membersCount?: number;
+  type: 'privat' | 'group' | 'channel';
 }
