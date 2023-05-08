@@ -1,19 +1,24 @@
 @use 'sass:color';
 
+$color-primary: rgb(51, 144, 236);
+$black: black;
+$light-green: #99ba92;
+$gray: rgb(153, 153, 153);
+$light-gray: rgb(244, 244, 245);
+$white: #fff;
+
 :root {
   --html-font-size: 10px;
 
   //Colors
-  $color-primary: steelblue;
-  $color-black: black;
-  --black: #000;
-  --pink: pink;
-  --purple: slateblue;
-  --green: greenyellow;
-  --white: #fff;
+
+  --black: #{$black};
+  --white: #{$white};
+  --gray: #{$gray};
+  --color-primary: #{$color-primary};
   --rgb-black: 0, 0, 0;
 
-  --color-primary-shade: #{color.mix($color-primary, $color-black, 92%)};
+  --color-primary-shade: #{color.mix($color-primary, black, 92%)};
 
   //Break-points;
 
@@ -23,16 +28,19 @@
   --lg: 110rem;
 
   // Elements colors
-  --left-color: var(--white);
-  --center-color: var(--purple);
-  --right-color: var(--green);
-  --bgc-theme: var(--white);
+  --left-color: #{$white};
+  --center-bgc-light: #{$light-green};
+  --right-color: #{$light-green};
+  --bgc-theme: #{$white};
   --search-input-border-color: transparent;
   --search-input-border-color-focused: $color-primary;
-  --serach-input-color: rgb(153, 153, 153);
-  --search-input-bgc: rgb(244, 244, 245);
-
+  --serach-input-color: #{$gray};
+  --search-input-bgc: #{$light-gray};
   --bg-color-light: var(--white);
+  --not-selected-chat-bg: rgba(255, 255, 255, 0.1);
+  --layout-border-color: rgba(154, 154, 154, 0.7);
+
+  --chat-bg-pattern: url('../assets/chat-bg-pattern-light.png');
 
   // Elements sizes
   --left-width: 40rem;
@@ -46,4 +54,8 @@
   //Border radiuses
   --br-default: 0.8rem;
   --search-input-border-radius: 1.5rem;
+
+  //Shadows
+
+  --center-header-shadow: 0 0.4rem 0.4rem -0.2rem rgba(0, 0, 0, 0.5);
 }

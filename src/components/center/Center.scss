@@ -2,10 +2,10 @@
   background-color: var(--center-color);
   flex-grow: 1;
   position: relative;
-  background: url('../../assets/chat-bg-pattern-light.png');
+  background: var(--chat-bg-pattern);
   background-size: 500px;
   background-repeat: repeat;
-  background-color: #99ba92;
+  background-color: var(--center-bgc-light);
   position: relative;
 
   &-header {
@@ -14,7 +14,7 @@
     background-color: var(--bg-color-light);
     padding: 0.9rem 1.3rem;
     padding-left: 0.6rem;
-    box-shadow: 0 0 3rem rgba(0, 0, 0, 0.5);
+    box-shadow: var(--center-header-shadow);
   }
 
   &-footer {
@@ -98,8 +98,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: var(--not-selected-chat-bg);
     font-size: 1.6rem;
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(3px);
+    box-shadow: 0.2rem 0.4rem 0.6rem rgba(0, 0, 0, 0.3);
   }
 }

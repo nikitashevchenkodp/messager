@@ -28,16 +28,16 @@
       font-weight: 500;
     }
     &.active {
-      background-color: rgb(51, 144, 236);
+      background-color: var(--color-primary);
       & > * {
-        color: white !important;
+        color: var(--white) !important;
       }
       .last-msg-text {
-        color: white !important;
+        color: var(--white) !important;
       }
 
       .material-symbols-outlined {
-        color: white !important;
+        color: var(--white) !important;
       }
 
       .notification-count {
@@ -45,7 +45,7 @@
       }
 
       .message-author {
-        color: white !important;
+        color: var(--white) !important;
       }
     }
     .info {
