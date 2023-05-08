@@ -17,6 +17,7 @@ $white: #fff;
   --gray: #{$gray};
   --color-primary: #{$color-primary};
   --rgb-black: 0, 0, 0;
+  --green: green;
 
   --color-primary-shade: #{color.mix($color-primary, black, 92%)};
 

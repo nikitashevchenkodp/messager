@@ -26,6 +26,7 @@
     background-color: var(--bg-color-light);
     padding: 0.9rem 1.3rem;
     padding-left: 0.6rem;
+    border-top: 1px solid var(--layout-border-color);
     width: 100%;
     & > *:not(.message-input) {
       align-self: flex-end;

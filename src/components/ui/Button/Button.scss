@@ -38,6 +38,8 @@
   border-radius: var(--br-default);
   padding: 0.5rem;
   transition: 0.1s;
+  width: 4rem;
+  height: 100%;
   @include active-styles {
     background: rgba(0, 0, 0, 0.05);
   }

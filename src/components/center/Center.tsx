@@ -4,6 +4,7 @@ import { useAppSelector } from 'store/hooks';
 import './Center.scss';
 import CenterFooter from './CenterFooter';
 import CenterHeader from './CenterHeader';
+import MessagesList from './MessagesList';
 
 const Center = () => {
   const { isCenterOpen, isRightOpen } = useAppSelector((state) => state.ui);
@@ -24,6 +25,7 @@ const Center = () => {
       {activeChat ? (
         <>
           <CenterHeader />
+          <MessagesList />
           {isNotChannel && <CenterFooter />}
         </>
       ) : (
