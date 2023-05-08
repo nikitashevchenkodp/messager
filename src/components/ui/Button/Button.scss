@@ -38,10 +38,10 @@
   border-radius: var(--br-default);
   padding: 0.5rem;
   transition: 0.1s;
-  // @include active-styles {
-  //   background: rgba(0, 0, 0, 0.2);
-  // }
-  --ripple-color: rgba(167, 14, 14, 0.5);
+  @include active-styles {
+    background: rgba(0, 0, 0, 0.05);
+  }
+  --ripple-color: rgba(0, 0, 0, 0.15);
   &--round {
     border-radius: 50%;
   }

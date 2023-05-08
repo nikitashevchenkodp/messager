@@ -1,6 +1,54 @@
 .center {
   background-color: var(--center-color);
   flex-grow: 1;
+  position: relative;
+  background: url('../../assets/chat-bg-pattern-light.png');
+  background-size: 500px;
+  background-repeat: repeat;
+  background-color: #99ba92;
+  position: relative;
+
+  &-header {
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-color-light);
+    padding: 0.9rem 1.3rem;
+    padding-left: 0.6rem;
+    box-shadow: 0 0 3rem rgba(0, 0, 0, 0.5);
+  }
+
+  &-footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-color-light);
+    padding: 0.9rem 1.3rem;
+    padding-left: 0.6rem;
+    width: 100%;
+    & > *:not(.message-input) {
+      align-self: flex-end;
+    }
+    .material-symbols-outlined {
+      font-size: 3rem;
+      transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.5);
+      &.changable {
+        display: block;
+        position: absolute;
+        top: 0.4rem;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+      &.hide {
+        overflow: hidden;
+        transform: scale(0);
+        opacity: 0;
+      }
+    }
+  }
+
   @media (max-width: 900px) {
     position: absolute !important;
     left: 0;
@@ -10,5 +58,48 @@
   }
   @media (max-width: 540px) {
     width: 100%;
+  }
+}
+
+.activechat {
+  &-info {
+    display: flex;
+    max-height: 100%;
+    gap: 0.6rem;
+    flex-grow: 1;
+    cursor: pointer;
+    margin-left: 0.8rem;
+  }
+  &-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+  &-status {
+    font-size: 1.3rem;
+    color: rgb(154, 154, 154);
+  }
+  &-tools {
+    display: flex;
+    gap: 0.5rem;
+  }
+}
+
+.not-selected-chat {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .content {
+    width: 15rem;
+    height: 15rem;
+    border-radius: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.2);
+    font-size: 1.6rem;
+    backdrop-filter: blur(5px);
   }
 }

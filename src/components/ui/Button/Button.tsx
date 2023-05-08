@@ -45,8 +45,8 @@ const Button = forwardRef(
       <Component
         ref={ref}
         className={btnClasses}
-        {...rest}
-        style={{ width: width, height: height }}>
+        style={{ width: width, height: height }}
+        {...rest}>
         {children}
         {hasRipple ? <Ripple /> : null}
       </Component>

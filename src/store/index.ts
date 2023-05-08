@@ -1,8 +1,13 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { uiReducer } from './slices';
+import { chatsReducer, uiReducer } from './slices';
+
+const entitiesReducer = combineReducers({
+  chats: chatsReducer
+});
 
 const rootReducer = combineReducers({
-  ui: uiReducer
+  ui: uiReducer,
+  entities: entitiesReducer
 });
 
 export const createStore = (init?: Record<string, unknown>) => {

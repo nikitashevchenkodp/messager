@@ -1,0 +1,43 @@
+.d-flex {
+  display: flex;
+}
+.direction-column {
+  flex-direction: column;
+}
+.jc-center {
+  justify-content: center;
+}
+.ai-center {
+  align-items: center;
+}
+
+.grow-1 {
+  flex-grow: 1;
+}
+
+.space-around {
+  justify-content: space-around;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.p-relative {
+  position: relative;
+}
+.p-absolute {
+  position: absolute;
+}
+
+.rotate-45 {
+  transform: rotate(45deg);
+}
+
+.fw-500 {
+  font-weight: 500;
+}
+
+.color-gray {
+  color: rgba(0, 0, 0, 0.8);
+}

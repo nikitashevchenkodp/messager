@@ -23,14 +23,20 @@
   --lg: 110rem;
 
   // Elements colors
-  --left-color: var(--pink);
+  --left-color: var(--white);
   --center-color: var(--purple);
   --right-color: var(--green);
   --bgc-theme: var(--white);
+  --search-input-border-color: transparent;
+  --search-input-border-color-focused: $color-primary;
+  --serach-input-color: rgb(153, 153, 153);
+  --search-input-bgc: rgb(244, 244, 245);
+
+  --bg-color-light: var(--white);
 
   // Elements sizes
-  --left-width: 30rem;
-  --header-height: 4rem;
+  --left-width: 40rem;
+  --header-height: 5rem;
 
   //Transitions
   --layout-transition: 0.3s cubic-bezier(0.33, 1, 0.68, 1);
@@ -39,4 +45,5 @@
 
   //Border radiuses
   --br-default: 0.8rem;
+  --search-input-border-radius: 1.5rem;
 }

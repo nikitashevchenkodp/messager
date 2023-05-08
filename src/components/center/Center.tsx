@@ -1,13 +1,13 @@
 import classNames from 'classnames';
 import useMediaQuery from 'hooks/useMediaQwery';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { uiActions } from 'store/slices';
+import { useAppSelector } from 'store/hooks';
 import './Center.scss';
+import CenterFooter from './CenterFooter';
+import CenterHeader from './CenterHeader';
 
 const Center = () => {
   const { isCenterOpen, isRightOpen } = useAppSelector((state) => state.ui);
-  const dispatch = useAppDispatch();
-
+  const activeChat = useAppSelector((state) => state.ui.activeChat);
   const centerClasses = classNames({
     'section center': true,
     'section-hide-right-md': !isCenterOpen,
@@ -15,18 +15,22 @@ const Center = () => {
   });
 
   const isMd = useMediaQuery('(max-width: 900px)');
-
+  const isNotChannel = activeChat?.type !== 'channel';
   return (
     <div
       className={centerClasses}
       aria-expanded={isMd ? isCenterOpen : undefined}
       data-testid="center">
-      <button className="clsCntrBnt" onClick={() => dispatch(uiActions.closeCenter())}>
-        close center
-      </button>
-      <button className="opnRightBnt" onClick={() => dispatch(uiActions.openRight())}>
-        open right
-      </button>
+      {activeChat ? (
+        <>
+          <CenterHeader />
+          {isNotChannel && <CenterFooter />}
+        </>
+      ) : (
+        <div className="not-selected-chat">
+          <div className="content">Select a chat</div>
+        </div>
+      )}
     </div>
   );
 };

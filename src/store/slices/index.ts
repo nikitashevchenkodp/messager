@@ -1,3 +1,4 @@
-import { uiActions, uiReducer } from './ui';
+import { uiActions, uiReducer } from './UI';
+import { chatsActions, chatsReducer } from './chats';
 
-export { uiActions, uiReducer };
+export { uiActions, uiReducer, chatsActions, chatsReducer };

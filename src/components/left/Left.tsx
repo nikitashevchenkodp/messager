@@ -8,8 +8,6 @@ import LeftHeader from './LeftHeader';
 
 const Left = () => {
   const isCenterOpen = useAppSelector((state) => state.ui.isCenterOpen);
-  const dispatch = useAppDispatch();
-
   const leftClasses = classNames({
     'section left': true,
     'section-moved-left-10rem': isCenterOpen
@@ -23,15 +21,11 @@ const Left = () => {
       aria-expanded={isMd ? !isCenterOpen : undefined}
       data-testid="left">
       <LeftHeader />
-      <button className="opnCntrBnt" onClick={() => dispatch(uiActions.openCenter())}>
-        open center
-      </button>
-
       <div className="left-content">
         <Chats />
-        <div className="search hide">
+        {/* <div className="search hide">
           <button className="closeSrchBnt">close search</button>
-        </div>
+        </div> */}
       </div>
     </div>
   );
