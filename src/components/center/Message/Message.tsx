@@ -1,11 +1,15 @@
 import classNames from 'classnames';
-import React, { FC } from 'react';
+import React, { FC, forwardRef, useRef } from 'react';
 import './Message.scss';
 import { ReactComponent as OwnTail } from '../../../assets/message/ownTail.svg';
 import { ReactComponent as SentTail } from '../../../assets/message/sentTail.svg';
 import Avatar from 'components/ui/Avatar';
-
+import { IMessage } from 'store/interfaces';
+import { useAppDispatch } from 'store/hooks';
+import { messagesActions } from 'store/slices';
+import { CSSTransition } from 'react-transition-group';
 interface IMessageProps {
+  message: IMessage;
   isSelectionModeOn: boolean;
   isSelected?: boolean;
   isOwn: boolean;
@@ -16,8 +20,10 @@ interface IMessageProps {
   setSelected: any;
   setIsSelected: any;
 }
-const Message: FC<IMessageProps> = (props) => {
+const Message = forwardRef<any, IMessageProps>((props, ref) => {
+  const dispatch = useAppDispatch();
   const {
+    message,
     isOwn,
     isSelected,
     isFirstInGroup,
@@ -29,7 +35,6 @@ const Message: FC<IMessageProps> = (props) => {
   } = props;
 
   const hasTail = isLastInGroup || (isFirstInGroup && isLastInGroup);
-
   const msgClasses = classNames({
     msg: true,
     'msg-selected': isSelected,
@@ -43,8 +48,13 @@ const Message: FC<IMessageProps> = (props) => {
   const withAvatar =
     !isOwn && chatType === 'group' && (isLastInGroup || (isFirstInGroup && isLastInGroup));
 
+  const deleteMessage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    dispatch(messagesActions.deleteMessage({ chatId: message.chatId, msgId: message.id }));
+  };
+
   return (
-    <div className={msgClasses} onClick={setIsSelected}>
+    <div className={msgClasses} onClick={deleteMessage} ref={ref}>
       {isSelectionModeOn && (
         <div className={`msg-selection`}>
           <span className={`material-icons ${isSelected ? 'show' : ''}`}>check_circle</span>
@@ -77,6 +87,8 @@ const Message: FC<IMessageProps> = (props) => {
       </div>
     </div>
   );
-};
+});
+
+Message.displayName = 'Message';
 
 export default Message;

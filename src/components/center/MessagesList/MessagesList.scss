@@ -7,3 +7,46 @@
   max-width: 70rem;
   margin: 0 auto;
 }
+
+.date-group {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.date-label-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 10px;
+  margin-bottom: 10px;
+}
+
+.date-label {
+  padding: 4px 8px;
+  background: #4a8e3a8c;
+  border-radius: 12px;
+  text-align: center;
+  color: white;
+  font-size: 14px;
+}
+
+.item-enter {
+  opacity: 0;
+  transform: scale(0.3);
+}
+.item-enter-active {
+  opacity: 1;
+  transform: scale(0.3);
+  transition: 200ms;
+}
+.item-exit {
+  opacity: 1;
+  transform: none;
+}
+.item-exit-active {
+  opacity: 0;
+  transform: translateX(100%);
+
+  transition: 200ms;
+}

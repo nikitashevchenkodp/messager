@@ -1,8 +1,9 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { chatsReducer, uiReducer } from './slices';
+import { chatsReducer, messagesReducer, uiReducer } from './slices';
 
 const entitiesReducer = combineReducers({
-  chats: chatsReducer
+  chats: chatsReducer,
+  messages: messagesReducer
 });
 
 const rootReducer = combineReducers({

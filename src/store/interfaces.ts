@@ -7,3 +7,19 @@ export interface IChat {
   membersCount?: number;
   type: 'privat' | 'group' | 'channel';
 }
+
+export interface IMessage {
+  id: string;
+  from: {
+    id: string;
+    fullName: string;
+    avatar: string;
+  };
+  chatId: string;
+  content: {
+    text: string;
+  };
+  edited: boolean;
+  createdAt: string;
+  reactions?: [];
+}
