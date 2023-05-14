@@ -1,7 +1,8 @@
 import Avatar from 'components/ui/Avatar';
+import Menu from 'components/ui/Menu';
 import Ripple from 'components/ui/Ripple';
 import useMediaQuery from 'hooks/useMediaQwery';
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { uiActions } from 'store/slices';
 import './ChatItem.scss';
@@ -30,6 +31,15 @@ interface IChatItemProps {
 
 const ChatItem: FC<IChatItemProps> = ({ chatId }) => {
   const dispatch = useAppDispatch();
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
+
+  const onContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setCoordinates({ x: e.clientX, y: e.clientY });
+    setIsOpen(true);
+  };
 
   const isMdScreen = useMediaQuery('(max-width: 900px)');
   const chat = useAppSelector((state) => state.entities.chats.byId[chatId]);
@@ -82,27 +92,48 @@ const ChatItem: FC<IChatItemProps> = ({ chatId }) => {
   }, []);
 
   return (
-    <div className={`chat-list-item ${isActiveChat ? 'active' : ''}`} onClick={handleChatClick}>
-      <div className="avatar-container">
-        <Avatar title={chat.title} style={{ height: '50px', width: '50px' }} />
-        <div className={`online-status ${isOnline ? 'active' : ''}`}></div>
-      </div>
-      <div className="info">
-        <div className="d-flex">
-          {isChannel && <span className="material-symbols-outlined">campaign</span>}
-          <div className="title grow-1">{chat.title}</div>
-          <div className="last-message-info">
-            <div className="last-message-status">{messageStatus}</div>
-            <span className="last-message-time">{lastMessage.createdAt}</span>
+    <>
+      <div
+        className={`chat-list-item ${isActiveChat ? 'active' : ''}`}
+        onClick={handleChatClick}
+        onContextMenu={onContextMenu}>
+        <div className="avatar-container">
+          <Avatar title={chat.title} style={{ height: '50px', width: '50px' }} />
+          <div className={`online-status ${isOnline ? 'active' : ''}`}></div>
+        </div>
+        <div className="info">
+          <div className="d-flex">
+            {isChannel && <span className="material-symbols-outlined">campaign</span>}
+            <div className="title grow-1">{chat.title}</div>
+            <div className="last-message-info">
+              <div className="last-message-status">{messageStatus}</div>
+              <span className="last-message-time">{lastMessage.createdAt}</span>
+            </div>
+          </div>
+          <div className="last-message-row">
+            <div className="last-msg-text">{lastMessageText}</div>
+            {badge}
           </div>
         </div>
-        <div className="last-message-row">
-          <div className="last-msg-text">{lastMessageText}</div>
-          {badge}
-        </div>
+        <Ripple />
       </div>
-      <Ripple />
-    </div>
+      <Menu
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        cordX={coordinates.x}
+        cordY={coordinates.y}>
+        <div
+          style={{
+            padding: '2rem',
+            maxWidth: '200px',
+            backgroundColor: 'yellowgreen'
+          }}>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit neque doloribus
+          doloremque, error non est et minus sed deleniti ipsam natus repudiandae obcaecati aliquam
+          iusto. Itaque delectus eius aspernatur explicabo!
+        </div>
+      </Menu>
+    </>
   );
 };
 
