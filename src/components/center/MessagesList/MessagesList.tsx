@@ -53,10 +53,10 @@ const MessagesList = () => {
                         isFirstInGroup={firstInGroup}
                         isLastInGroup={lastInGroup}
                         chatType={'group'}
-                        setSelected={() => setSelectionMode(!selectionMode)}
+                        // setSelected={() => setSelectionMode(!selectionMode)}
                         isSelectionModeOn={selectionMode}
-                        isSelected={isSelected}
-                        setIsSelected={() => setIsSelected(!isSelected)}
+                        // isSelected={isSelected}
+                        // setIsSelected={() => setIsSelected(!isSelected)}
                       />
                     </CSSTransition>
                   );

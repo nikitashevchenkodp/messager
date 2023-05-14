@@ -1,13 +1,13 @@
 import classNames from 'classnames';
-import React, { FC, forwardRef, ReactText, useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 import './Message.scss';
 import { ReactComponent as OwnTail } from '../../../assets/message/ownTail.svg';
 import { ReactComponent as SentTail } from '../../../assets/message/sentTail.svg';
 import Avatar from 'components/ui/Avatar';
 import { IMessage } from 'store/interfaces';
-import { useAppDispatch } from 'store/hooks';
 import Menu from 'components/ui/Menu';
 
+//TODO: Reactions, edited, msgStatus.
 interface IMessageProps {
   message: IMessage;
   isSelectionModeOn: boolean;
@@ -17,8 +17,8 @@ interface IMessageProps {
   isLastInGroup?: boolean;
   hasAvatar?: boolean;
   chatType?: 'privat' | 'group' | 'channel';
-  setSelected: any;
-  setIsSelected: any;
+  // setSelected: any;
+  // setIsSelected: any;
 }
 const Message = forwardRef<any, IMessageProps>((props, ref) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,16 +30,16 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
     isFirstInGroup,
     isLastInGroup,
     chatType,
-    setSelected,
-    isSelectionModeOn,
-    setIsSelected
+    // setSelected,
+    isSelectionModeOn
+    // setIsSelected
   } = props;
 
   const hasTail = isLastInGroup || (isFirstInGroup && isLastInGroup);
   const msgClasses = classNames({
     msg: true,
     'msg-selected': isSelected || isOpen,
-    'msg-selectionmode-on': isSelectionModeOn,
+    // 'msg-selectionmode-on': isSelectionModeOn,
     hastail: hasTail,
     'msg-own': isOwn,
     'msg-recieved': !isOwn,
@@ -68,7 +68,7 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
           </div>
         )}
         {withAvatar && (
-          <div>
+          <div data-testid="msg-avatar">
             <Avatar
               src=""
               title="Dmitiy Huk"
@@ -88,9 +88,15 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
               </span>
             </div>
           </div>
-          <div className={`msg-tail ${hasTail ? '' : 'hide'}`}>
-            {isOwn ? <OwnTail /> : <SentTail />}
-          </div>
+          {hasTail && (
+            <div className={`msg-tail`} data-testid="msg-tail">
+              {isOwn ? (
+                <OwnTail data-testid="msg-tail-own" />
+              ) : (
+                <SentTail data-testid="msg-tail-sent" />
+              )}
+            </div>
+          )}
         </div>
       </div>
 
