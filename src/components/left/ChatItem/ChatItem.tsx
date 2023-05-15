@@ -5,6 +5,7 @@ import useMediaQuery from 'hooks/useMediaQwery';
 import { FC, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { uiActions } from 'store/slices';
+import ChatMenu from '../ChatMenu/MessageMenu';
 import './ChatItem.scss';
 
 //mock data
@@ -122,16 +123,7 @@ const ChatItem: FC<IChatItemProps> = ({ chatId }) => {
         onClose={() => setIsOpen(false)}
         cordX={coordinates.x}
         cordY={coordinates.y}>
-        <div
-          style={{
-            padding: '2rem',
-            maxWidth: '200px',
-            backgroundColor: 'yellowgreen'
-          }}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit neque doloribus
-          doloremque, error non est et minus sed deleniti ipsam natus repudiandae obcaecati aliquam
-          iusto. Itaque delectus eius aspernatur explicabo!
-        </div>
+        <ChatMenu />
       </Menu>
     </>
   );

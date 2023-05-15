@@ -21,7 +21,7 @@
   }
   &-content {
     border-radius: 20px;
-    background-color: #fff;
+    background-color: rgb(220, 248, 197);
     overflow: hidden;
     border-radius: 10px 10px 0 0;
   }
@@ -71,6 +71,7 @@
     margin-right: -0.5rem;
     padding: 0.3rem;
     font-size: 1.3rem;
+    color: rgb(79, 174, 78);
     .material-symbols-outlined {
       font-size: 1.9rem;
     }
@@ -93,6 +94,7 @@
     }
     .msg-content {
       border-radius: 10px 10px 10px 10px;
+      background-color: #fff;
     }
     .msg-tail {
       position: absolute;
@@ -111,6 +113,7 @@
 
     .msg-content {
       border-radius: 10px 10px 10px 10px;
+      background-color: rgb(220, 248, 197);
     }
 
     .msg-tail {

@@ -6,6 +6,7 @@ import { ReactComponent as SentTail } from '../../../assets/message/sentTail.svg
 import Avatar from 'components/ui/Avatar';
 import { IMessage } from 'store/interfaces';
 import Menu from 'components/ui/Menu';
+import MessageMenu from '../MessageMenu/MessageMenu';
 
 //TODO: Reactions, edited, msgStatus.
 interface IMessageProps {
@@ -83,6 +84,7 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
               asdfasdfasdfa adsfasdfasdfsd sasdasd asdasdasdasdas asdasdasasd asdadasd asda asd
               adsfasdfasdfsdasd adfasdf sadfasdfasfasdf asdfasdasdf
               <span className="msg-meta">
+                {message.edited && <span style={{ marginRight: '3px' }}>edited</span>}
                 <span>12:13</span>
                 <span className="material-symbols-outlined done_all color-green">done_all</span>
               </span>
@@ -105,16 +107,7 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
         onClose={() => setIsOpen(false)}
         cordX={coordinates.x}
         cordY={coordinates.y}>
-        <div
-          style={{
-            padding: '2rem',
-            width: '300px',
-            backgroundColor: 'yellowgreen'
-          }}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit neque doloribus
-          doloremque, error non est et minus sed deleniti ipsam natus repudiandae obcaecati aliquam
-          iusto. Itaque delectus eius aspernatur explicabo!
-        </div>
+        <MessageMenu />
       </Menu>
     </>
   );

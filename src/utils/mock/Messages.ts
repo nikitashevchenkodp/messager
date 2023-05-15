@@ -10,7 +10,7 @@ export const messages = [
     content: {
       text: 'Message 1'
     },
-    edited: false,
+    edited: true,
     createdAt: new Date().toISOString()
     // reactions: []
   },
