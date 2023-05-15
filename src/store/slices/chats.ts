@@ -21,6 +21,21 @@ const chats = createSlice({
     setChats: (state, action: PayloadAction<IChat[]>) => {
       state.byId = arrayToObject(action.payload, 'id');
       state.chatIds = arrayOfIds(action.payload, 'id');
+    },
+    addChat: (state, action: PayloadAction<any>) => {
+      console.log('new chat added');
+    },
+    togglePinChat: (state, action: PayloadAction<string>) => {
+      console.log('toggle pin chat');
+    },
+    toggleMuteChat: (state, action: PayloadAction<string>) => {
+      console.log('toggle mute chat');
+    },
+    deleteChat: (state, action: PayloadAction<string>) => {
+      console.log('chat deleted');
+    },
+    changeOrderChat: (state, action: PayloadAction<number>) => {
+      console.log('chat reordered');
     }
   }
 });
