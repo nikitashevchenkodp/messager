@@ -4,7 +4,9 @@ export const chats = [
     title: 'Dmytro Huk',
     avatar: '',
     type: 'privat',
-    lastMessage: {}
+    lastMessage: {},
+    isPinned: false,
+    unreadCount: 0
   },
   {
     id: '222',
@@ -12,11 +14,36 @@ export const chats = [
     avatar: '',
     type: 'privat',
     lastMessage: {},
-    isPinned: true
+    isPinned: true,
+    unreadCount: 0
   },
-  { id: '333', title: 'Irina Shevchenko', avatar: '', type: 'privat', lastMessage: {} },
-  { id: '444', title: 'Pavlo Yefimov', avatar: '', type: 'privat', lastMessage: {} },
-  { id: '555', title: 'Petrov pavlo', avatar: '', type: 'privat', lastMessage: {} },
+  {
+    id: '333',
+    title: 'Irina Shevchenko',
+    avatar: '',
+    type: 'privat',
+    lastMessage: {},
+    isPinned: false,
+    unreadCount: 0
+  },
+  {
+    id: '444',
+    title: 'Pavlo Yefimov',
+    avatar: '',
+    type: 'privat',
+    lastMessage: {},
+    isPinned: false,
+    unreadCount: 0
+  },
+  {
+    id: '555',
+    title: 'Petrov pavlo',
+    avatar: '',
+    type: 'privat',
+    lastMessage: {},
+    isPinned: false,
+    unreadCount: 0
+  },
   {
     id: '-666',
     title: 'Family chat',
@@ -29,7 +56,9 @@ export const chats = [
       text: 'Hello, how are you doing?',
       cretedAt: '15:08',
       chatId: '-6'
-    }
+    },
+    isPinned: false,
+    unreadCount: 0
   },
   {
     id: '-777',
@@ -43,6 +72,8 @@ export const chats = [
       text: 'Last message in this channel',
       cretedAt: '15:08',
       chatId: '-6'
-    }
+    },
+    isPinned: false,
+    unreadCount: 0
   }
 ];

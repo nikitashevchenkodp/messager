@@ -69,16 +69,26 @@ const ChatItem: FC<IChatItemProps> = ({ chatId }) => {
   const messageStatus = useMemo(() => {
     if (isUser) return foundMsgStatus(lastMessage.status as MessageStatus);
     return null;
-  }, []);
+  }, [chat]);
 
   const badge = useMemo(() => {
-    if (unreadCount > 0) {
-      return <div className={`notification-count ${chat.isMuted ? 'muted' : ''}`}>2</div>;
+    if (chat?.unreadCount && chat?.unreadCount > 0) {
+      return (
+        <div
+          data-testid="notification-badge"
+          className={`notification-count ${chat.isMuted ? 'muted' : ''}`}>
+          2
+        </div>
+      );
     }
     if (chat.isPinned) {
-      return <span className="material-symbols-outlined pinned">push_pin</span>;
+      return (
+        <span data-testid="isPinned-icon" className="material-symbols-outlined pinned">
+          push_pin
+        </span>
+      );
     }
-  }, []);
+  }, [chat]);
 
   const lastMessageText = useMemo<string | JSX.Element>(() => {
     if (!isGroup) {
@@ -90,11 +100,12 @@ const ChatItem: FC<IChatItemProps> = ({ chatId }) => {
         {lastMessage.text}
       </>
     );
-  }, []);
+  }, [chat]);
 
   return (
     <>
       <div
+        data-testid={`chat-${chatId}`}
         className={`chat-list-item ${isActiveChat ? 'active' : ''}`}
         onClick={handleChatClick}
         onContextMenu={onContextMenu}>
@@ -104,8 +115,19 @@ const ChatItem: FC<IChatItemProps> = ({ chatId }) => {
         </div>
         <div className="info">
           <div className="d-flex">
-            {isChannel && <span className="material-symbols-outlined">campaign</span>}
-            <div className="title grow-1">{chat.title}</div>
+            {isChannel && (
+              <span data-testid="isChanel-icon" className="material-symbols-outlined">
+                campaign
+              </span>
+            )}
+            <div className="d-flex title grow-1 items-center">
+              {chat.title}
+              {chat.isMuted && (
+                <span data-testid="isMuted-icon" className="material-symbols-outlined color-gray">
+                  volume_off
+                </span>
+              )}
+            </div>
             <div className="last-message-info">
               <div className="last-message-status">{messageStatus}</div>
               <span className="last-message-time">{lastMessage.createdAt}</span>
@@ -123,7 +145,7 @@ const ChatItem: FC<IChatItemProps> = ({ chatId }) => {
         onClose={() => setIsOpen(false)}
         cordX={coordinates.x}
         cordY={coordinates.y}>
-        <ChatMenu />
+        <ChatMenu chat={chat} />
       </Menu>
     </>
   );

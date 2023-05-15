@@ -6,6 +6,7 @@ export interface IChat {
   isMuted?: boolean;
   membersCount?: number;
   type: 'privat' | 'group' | 'channel';
+  unreadCount?: number;
 }
 
 export interface IMessage {

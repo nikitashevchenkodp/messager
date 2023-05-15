@@ -44,6 +44,9 @@ const messages = createSlice({
       state.byChatId[chatId].messagesIds = state.byChatId[chatId].messagesIds.filter(
         (id) => id !== msgId
       );
+    },
+    editMessage: (state, action: PayloadAction<IMessage>) => {
+      console.log('message edited');
     }
   }
 });
