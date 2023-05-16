@@ -1,4 +1,3 @@
-import { NumericDictionaryIterator } from 'lodash';
 import React, { useCallback, useState } from 'react';
 import './Ripple.scss';
 import debounce from 'lodash.debounce';
@@ -33,12 +32,13 @@ const Ripple = () => {
   };
 
   return (
-    <div className="ripple-container" onClick={handleClick}>
+    <div className="ripple-container" onClick={handleClick} data-testid="ripple-container">
       {ripples.map(({ x, y, size }, i) => {
         return (
           <span
             key={i}
             className="ripple-item"
+            data-testid="ripple-item"
             style={{
               top: `${y}px`,
               left: `${x}px`,
