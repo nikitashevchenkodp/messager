@@ -1,14 +1,17 @@
 import Button from 'components/ui/Button';
 import MessageInput from 'components/ui/MessageInput';
-import React, { useRef, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
-import { IMessage } from 'store/interfaces';
+import { IChat, IMessage } from 'store/interfaces';
 import { messagesActions } from 'store/slices';
 
-const CenterFooter = () => {
+interface ICenterFooterProps {
+  activeChat: IChat;
+}
+
+const CenterFooter: FC<ICenterFooterProps> = ({ activeChat }) => {
   const [val, setVal] = useState('');
   const dispatch = useAppDispatch();
-  const activeChatId = useAppSelector((state) => state.ui.activeChat.id);
   const onChange = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     setVal((e.target as HTMLDivElement).innerText);
@@ -17,8 +20,8 @@ const CenterFooter = () => {
   const submit = () => {
     if (!val.length) return;
     const newMessage: IMessage = {
-      id: '351',
-      chatId: activeChatId,
+      id: `${Math.random() * 10000}`,
+      chatId: activeChat.id,
       content: {
         text: val
       },

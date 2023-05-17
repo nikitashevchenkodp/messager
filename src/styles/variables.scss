@@ -1,6 +1,7 @@
 @use 'sass:color';
 
 $color-primary: rgb(51, 144, 236);
+$color-error: red;
 $black: black;
 $light-green: #99ba92;
 $gray: rgb(153, 153, 153);
@@ -16,10 +17,12 @@ $white: #fff;
   --white: #{$white};
   --gray: #{$gray};
   --color-primary: #{$color-primary};
+  --color-error: #{$color-error};
   --rgb-black: 0, 0, 0;
   --green: green;
 
   --color-primary-shade: #{color.mix($color-primary, black, 92%)};
+  --color-error-shade: #{color.mix($color-error, black, 92%)};
 
   //Break-points;
 
@@ -40,6 +43,7 @@ $white: #fff;
   --bg-color-light: var(--white);
   --not-selected-chat-bg: rgba(255, 255, 255, 0.1);
   --layout-border-color: rgba(154, 154, 154, 0.7);
+  --text-color-primary: #fff;
 
   --chat-bg-pattern: url('../assets/chat-bg-pattern-light.png');
 

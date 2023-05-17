@@ -9,6 +9,8 @@ interface IInitialState {
         [id: string]: IMessage;
       };
       messagesIds: string[];
+      scrollOffset: number;
+      selectedMessages: Record<string, string>;
     };
   };
 }
@@ -17,7 +19,9 @@ const initialState = {
   byChatId: {
     '111': {
       byId: arrayToObject(mockMessage, 'id'),
-      messagesIds: arrayOfIds(mockMessage, 'id')
+      messagesIds: arrayOfIds(mockMessage, 'id'),
+      scrollOffset: 0,
+      selectedMessages: {}
     }
   }
 } as IInitialState;
@@ -47,6 +51,21 @@ const messages = createSlice({
     },
     editMessage: (state, action: PayloadAction<IMessage>) => {
       console.log('message edited');
+    },
+    setScrollOffset: (state, action: PayloadAction<{ chatId: string; offset: number }>) => {
+      const { chatId, offset } = action.payload;
+      state.byChatId[chatId].scrollOffset = offset;
+    },
+    toggleSelectMessage: (state, action: PayloadAction<{ chatId: string; msgId: string }>) => {
+      const { chatId, msgId } = action.payload;
+      if (state.byChatId[chatId].selectedMessages[msgId]) {
+        delete state.byChatId[chatId].selectedMessages[msgId];
+      } else {
+        state.byChatId[chatId].selectedMessages[msgId] = msgId;
+      }
+    },
+    clearAllSelectedMessages: (state, action: PayloadAction<string>) => {
+      state.byChatId[action.payload].selectedMessages = {};
     }
   }
 });

@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { FC } from 'react';
 
-const MessageMenu = () => {
+interface IMessageMenuProps {
+  selectMessage: () => void;
+}
+
+const MessageMenu: FC<IMessageMenuProps> = ({ selectMessage }) => {
   return (
     <div className="menu">
       <div className="menu-item">
         <span className="material-symbols-outlined">edit</span>
         Edit
       </div>
-      <div className="menu-item">
+      <div className="menu-item" onClick={selectMessage}>
         <span className="material-symbols-outlined">check_circle</span>
         Select
       </div>

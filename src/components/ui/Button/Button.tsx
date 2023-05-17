@@ -38,7 +38,8 @@ const Button = forwardRef(
     const btnClasses = classNames({
       btn: true,
       'btn--round': round,
-      'btn--primary': color === 'primary'
+      'btn--primary': color === 'primary',
+      'btn--error': color === 'error'
     });
 
     return (

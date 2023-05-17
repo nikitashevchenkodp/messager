@@ -24,9 +24,9 @@ const Center = () => {
       data-testid="center">
       {activeChat ? (
         <>
-          <CenterHeader />
-          <MessagesList />
-          {isNotChannel && <CenterFooter />}
+          <CenterHeader activeChat={activeChat} />
+          <MessagesList activeChatId={activeChat.id} />
+          {isNotChannel && <CenterFooter activeChat={activeChat} />}
         </>
       ) : (
         <div className="not-selected-chat">

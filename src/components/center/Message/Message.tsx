@@ -7,6 +7,8 @@ import Avatar from 'components/ui/Avatar';
 import { IMessage } from 'store/interfaces';
 import Menu from 'components/ui/Menu';
 import MessageMenu from '../MessageMenu/MessageMenu';
+import { useAppDispatch } from 'store/hooks';
+import { messagesActions } from 'store/slices';
 
 //TODO: Reactions, edited, msgStatus.
 interface IMessageProps {
@@ -18,10 +20,10 @@ interface IMessageProps {
   isLastInGroup?: boolean;
   hasAvatar?: boolean;
   chatType?: 'privat' | 'group' | 'channel';
-  // setSelected: any;
-  // setIsSelected: any;
+  selectMessage: () => void;
 }
 const Message = forwardRef<any, IMessageProps>((props, ref) => {
+  const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
   const {
@@ -31,16 +33,15 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
     isFirstInGroup,
     isLastInGroup,
     chatType,
-    // setSelected,
-    isSelectionModeOn
-    // setIsSelected
+    isSelectionModeOn,
+    selectMessage
   } = props;
 
   const hasTail = isLastInGroup || (isFirstInGroup && isLastInGroup);
   const msgClasses = classNames({
     msg: true,
     'msg-selected': isSelected || isOpen,
-    // 'msg-selectionmode-on': isSelectionModeOn,
+    'msg-selectionmode-on': isSelectionModeOn,
     hastail: hasTail,
     'msg-own': isOwn,
     'msg-recieved': !isOwn,
@@ -62,7 +63,8 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
         className={msgClasses}
         onContextMenu={onContextMenu}
         ref={ref}
-        data-testid={`msg-${message.id}`}>
+        data-testid={`msg-${message.id}`}
+        onClick={() => isSelectionModeOn && selectMessage()}>
         {isSelectionModeOn && (
           <div className={`msg-selection`}>
             <span className={`material-icons ${isSelected ? 'show' : ''}`}>check_circle</span>
@@ -107,7 +109,7 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
         onClose={() => setIsOpen(false)}
         cordX={coordinates.x}
         cordY={coordinates.y}>
-        <MessageMenu />
+        <MessageMenu selectMessage={selectMessage} />
       </Menu>
     </>
   );

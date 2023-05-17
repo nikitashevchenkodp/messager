@@ -1,12 +1,16 @@
 import Avatar from 'components/ui/Avatar';
 import Button from 'components/ui/Button';
 import useMediaQuery from 'hooks/useMediaQwery';
-import React, { useMemo } from 'react';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
+import React, { FC, memo, useMemo } from 'react';
+import { useAppDispatch } from 'store/hooks';
+import { IChat } from 'store/interfaces';
 import { uiActions } from 'store/slices';
 
-const CenterHeader = () => {
-  const activeChat = useAppSelector((state) => state.ui.activeChat);
+interface ICenterHeaderProps {
+  activeChat: IChat;
+}
+
+const CenterHeader: FC<ICenterHeaderProps> = ({ activeChat }) => {
   const isUserChat = activeChat?.type === 'privat';
   const dispatch = useAppDispatch();
   const isMd = useMediaQuery('(max-width: 900px)');
@@ -51,4 +55,4 @@ const CenterHeader = () => {
   );
 };
 
-export default CenterHeader;
+export default memo(CenterHeader);
