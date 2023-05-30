@@ -1,13 +1,19 @@
 import Avatar from 'components/ui/Avatar';
 import Button from 'components/ui/Button';
-import React, { useMemo } from 'react';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
+import useMediaQuery from 'hooks/useMediaQwery';
+import React, { FC, memo, useMemo } from 'react';
+import { useAppDispatch } from 'store/hooks';
+import { IChat } from 'store/interfaces';
 import { uiActions } from 'store/slices';
 
-const CenterHeader = () => {
-  const activeChat = useAppSelector((state) => state.ui.activeChat);
+interface ICenterHeaderProps {
+  activeChat: IChat;
+}
+
+const CenterHeader: FC<ICenterHeaderProps> = ({ activeChat }) => {
   const isUserChat = activeChat?.type === 'privat';
   const dispatch = useAppDispatch();
+  const isMd = useMediaQuery('(max-width: 900px)');
 
   const status = useMemo(() => {
     if (isUserChat) {
@@ -18,9 +24,11 @@ const CenterHeader = () => {
 
   return (
     <div className="center-header">
-      <Button round onClick={() => dispatch(uiActions.closeCenter())}>
-        <span className="material-symbols-outlined">arrow_back</span>
-      </Button>
+      {isMd && (
+        <Button round onClick={() => dispatch(uiActions.closeCenter())}>
+          <span className="material-symbols-outlined">arrow_back</span>
+        </Button>
+      )}
       <div className="activechat-info" onClick={() => dispatch(uiActions.openRight())}>
         <Avatar
           title={activeChat?.title}
@@ -47,4 +55,4 @@ const CenterHeader = () => {
   );
 };
 
-export default CenterHeader;
+export default memo(CenterHeader);

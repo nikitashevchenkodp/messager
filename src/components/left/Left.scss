@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   min-width: 24rem;
-  border-right: 1px solid rgba(154, 154, 154, 0.7);
+  border-right: 1px solid var(--layout-border-color);
   &-header {
     height: var(--header-height);
     display: flex;

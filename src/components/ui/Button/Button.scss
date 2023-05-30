@@ -38,6 +38,9 @@
   border-radius: var(--br-default);
   padding: 0.5rem;
   transition: 0.1s;
+  width: 4rem;
+  height: 100%;
+  font-weight: 500;
   @include active-styles {
     background: rgba(0, 0, 0, 0.05);
   }
@@ -47,9 +50,16 @@
   }
   &--primary {
     background: var(--color-primary);
-    color: vat(--text-color-primary);
+    color: var(--text-color-primary);
     @include active-styles {
       background-color: var(--color-primary-shade);
+    }
+  }
+  &--error {
+    background: var(--color-error);
+    color: var(--text-color-primary);
+    @include active-styles {
+      background-color: var(--color-error-shade);
     }
   }
 }

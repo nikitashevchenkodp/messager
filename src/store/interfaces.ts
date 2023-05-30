@@ -6,4 +6,22 @@ export interface IChat {
   isMuted?: boolean;
   membersCount?: number;
   type: 'privat' | 'group' | 'channel';
+  unreadCount?: number;
+}
+
+export interface IMessage {
+  id: string;
+  from: {
+    id: string;
+    fullName: string;
+    avatar: string;
+  };
+  chatId: string;
+  content: {
+    text: string;
+  };
+  edited: boolean;
+  createdAt: string;
+  reactions?: [];
+  readed?: boolean;
 }

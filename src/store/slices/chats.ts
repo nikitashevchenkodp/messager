@@ -21,6 +21,26 @@ const chats = createSlice({
     setChats: (state, action: PayloadAction<IChat[]>) => {
       state.byId = arrayToObject(action.payload, 'id');
       state.chatIds = arrayOfIds(action.payload, 'id');
+    },
+    addChat: (state, action: PayloadAction<any>) => {
+      console.log('new chat added');
+    },
+    togglePinChat: (state, action: PayloadAction<string>) => {
+      const id = action.payload;
+      state.byId[id].isPinned = !state.byId[id].isPinned;
+    },
+    toggleMuteChat: (state, action: PayloadAction<string>) => {
+      const id = action.payload;
+      state.byId[id].isMuted = !state.byId[id].isMuted;
+    },
+    deleteChat: (state, action: PayloadAction<string>) => {
+      const id = action.payload;
+
+      delete state.byId[id];
+      state.chatIds = state.chatIds.filter((chatId) => chatId !== id);
+    },
+    changeOrderChat: (state, action: PayloadAction<number>) => {
+      console.log('chat reordered');
     }
   }
 });

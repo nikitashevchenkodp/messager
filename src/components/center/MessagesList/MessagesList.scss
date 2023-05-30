@@ -1,0 +1,75 @@
+.msg-list {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0;
+  height: calc(100% - 6.8rem - 5.2rem);
+  overflow-y: auto;
+  max-width: 70rem;
+  margin: 0 auto;
+  transition: 0.3s;
+}
+
+.date-group {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.date-label-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 10px;
+  // margin-bottom: 10px;
+}
+
+.date-label {
+  padding: 4px 8px;
+  background: #4a8e3a8c;
+  border-radius: 12px;
+  text-align: center;
+  color: white;
+  font-size: 14px;
+}
+
+.item-enter {
+  opacity: 0;
+  transform: scale(0.3);
+}
+.item-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition: 500ms cubic-bezier(0.175, 0.885, 0.32, 1.5);
+}
+.item-exit {
+  opacity: 1;
+  transform: none;
+}
+.item-exit-active {
+  opacity: 0;
+  transform: translateX(100%);
+
+  transition: 200ms;
+}
+
+.selected-menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 0 2rem;
+  transform: translateY(-100%);
+  transition: var(--layout-transition);
+  height: var(--header-height);
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  & > * {
+    width: 100px;
+    height: 80%;
+  }
+  &.show {
+    transform: none;
+  }
+}
