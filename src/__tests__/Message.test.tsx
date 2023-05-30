@@ -1,10 +1,11 @@
 import Message from 'components/center/Message';
 import { render } from '@testing-library/react';
 import { messages } from 'utils/mock/Messages';
+import { renderWithRedux } from 'utils/tests/wrapper';
 
 describe('Message', () => {
   it('renders', () => {
-    const container = render(
+    const { container } = renderWithRedux(
       <Message
         message={messages[1]}
         isOwn={true}
@@ -13,6 +14,8 @@ describe('Message', () => {
         chatType={'group'}
         isSelectionModeOn={false}
         isSelected={false}
+        selectMessage={jest.fn()}
+        onDelete={jest.fn()}
       />
     );
     const message = container.getByTestId(`msg-${messages[1].id}`);
@@ -20,7 +23,7 @@ describe('Message', () => {
   });
 
   it('message tail', () => {
-    const container = render(
+    const { container } = renderWithRedux(
       <Message
         message={messages[1]}
         isOwn={true}
@@ -29,6 +32,8 @@ describe('Message', () => {
         chatType={'group'}
         isSelectionModeOn={false}
         isSelected={false}
+        selectMessage={jest.fn()}
+        onDelete={jest.fn()}
       />
     );
 
@@ -41,7 +46,7 @@ describe('Message', () => {
     expect(msgTailOwn).toBeInTheDocument();
   });
   it('message avatar', () => {
-    const container = render(
+    const { container } = renderWithRedux(
       <Message
         message={messages[0]} //here
         isOwn={false}
@@ -50,6 +55,8 @@ describe('Message', () => {
         chatType={'group'}
         isSelectionModeOn={false}
         isSelected={false}
+        selectMessage={jest.fn()}
+        onDelete={jest.fn()}
       />
     );
 

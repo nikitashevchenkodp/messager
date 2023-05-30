@@ -6,6 +6,7 @@ import React, {
   memo,
   SetStateAction,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState
@@ -24,14 +25,18 @@ interface IMessageListProps {
   activeChatId: string;
 }
 
+export function compact<T>(array: T[]) {
+  return array.filter(Boolean);
+}
+
 const myId = '000';
 
 const MessagesList: FC<IMessageListProps> = ({ activeChatId }) => {
   const listRef = useRef<HTMLDivElement | null>(null);
+  const endOfUnreadedMessages = useRef<HTMLDivElement | null>(null);
 
   const dispatch = useAppDispatch();
-
-  const { messagesById, messagesIds, scrollOffset, selectedMessages } = useAppSelector((state) => {
+  const { scrollOffset, selectedMessages, messagesById, messagesIds } = useAppSelector((state) => {
     return {
       messagesById: state.entities.messages.byChatId[activeChatId]?.byId || {},
       messagesIds: state.entities.messages.byChatId[activeChatId]?.messagesIds || [],
@@ -39,6 +44,7 @@ const MessagesList: FC<IMessageListProps> = ({ activeChatId }) => {
       selectedMessages: state.entities.messages.byChatId[activeChatId]?.selectedMessages || {}
     };
   });
+
   const selectedMessageCount = Object.keys(selectedMessages).length;
 
   useEffect(() => {
@@ -56,6 +62,17 @@ const MessagesList: FC<IMessageListProps> = ({ activeChatId }) => {
         (e.target as HTMLDivElement).scrollTop -
         (e.target as HTMLDivElement).offsetHeight;
       dispatch(messagesActions.setScrollOffset({ chatId: activeChatId, offset: offsetBottom }));
+
+      if (endOfUnreadedMessages.current && listRef.current) {
+        const scrollHeight = listRef?.current?.scrollHeight;
+        const scrolled = listRef?.current?.scrollTop + listRef?.current?.clientHeight;
+        console.log(scrollHeight);
+        console.log(scrolled);
+
+        if (scrollHeight - scrolled <= 10) {
+          dispatch(messagesActions.readMessages({ chatId: activeChatId }));
+        }
+      }
     }, 100);
 
     listRef?.current?.addEventListener('scroll', handleScroll);
@@ -75,67 +92,102 @@ const MessagesList: FC<IMessageListProps> = ({ activeChatId }) => {
         });
       }
     }
-  }, [messagesIds]);
+  }, [messagesIds, messagesById]);
+
+  useLayoutEffect(() => {
+    if (endOfUnreadedMessages.current && listRef.current) {
+      const scrollHeight = listRef?.current?.scrollHeight;
+      const scrolled = listRef?.current?.scrollTop + listRef?.current?.clientHeight;
+      console.log(scrollHeight);
+      console.log(scrolled);
+
+      if (scrollHeight - scrolled <= 10) {
+        dispatch(messagesActions.readMessages({ chatId: activeChatId }));
+      }
+    }
+  }, [messagesIds, messagesById]);
 
   const renderedMessages = useMemo(() => {
     if (!messagesIds?.length) return;
-    const messagesGroups = groupMessages(messagesById, messagesIds);
-
-    return Object.keys(messagesGroups).map((date, i) => {
+    const { groupedByDateAndSender: messagesGroups } = groupMessages(messagesById, messagesIds);
+    return Object.keys(messagesGroups).map((date, msgGroupsIdx, msgGroupsArr) => {
       return (
-        <div className="date-group" key={date + i}>
+        <div className="date-group" key={date + msgGroupsIdx}>
           <div className="date-label-container" key={date}>
             <div className="date-label">{formatToHumanDate(date)}</div>
           </div>
-          <TransitionGroup key={i} component={null}>
+          <TransitionGroup key={msgGroupsIdx} component={null}>
             {messagesGroups[date]
-              .map((senderGroup, i) => {
-                return senderGroup.map((message, i, arr) => {
-                  const firstInGroup = i === 0;
-                  const lastInGroup = i === arr.length - 1;
-                  // @ts-ignore
-                  const ref = createRef<null | HTMLElement>(null);
-                  return (
-                    <CSSTransition
-                      key={message.id}
-                      timeout={500}
-                      classNames="item"
-                      // @ts-ignore
-                      nodeRef={ref}>
-                      <Message
-                        ref={ref}
+              .map((senderGroup, senderIdx, senderArr) => {
+                return senderGroup
+                  .map((message, msgIdx, msgArr) => {
+                    const firstInGroup = msgIdx === 0;
+                    const lastInGroup = msgIdx === msgArr.length - 1;
+                    // @ts-ignore
+                    const ref = createRef<null | HTMLElement>(null);
+
+                    return (
+                      <CSSTransition
                         key={message.id}
-                        message={message}
-                        isOwn={message.from.id == myId}
-                        isFirstInGroup={firstInGroup}
-                        isLastInGroup={lastInGroup}
-                        chatType={'group'}
-                        isSelectionModeOn={!!selectedMessageCount}
-                        isSelected={!!selectedMessages[message.id]}
-                        selectMessage={() =>
-                          dispatch(
-                            messagesActions.toggleSelectMessage({
-                              chatId: activeChatId,
-                              msgId: message.id
-                            })
-                          )
-                        }
-                      />
-                    </CSSTransition>
-                  );
-                });
+                        timeout={500}
+                        classNames="item"
+                        // @ts-ignore
+                        nodeRef={ref}>
+                        <Message
+                          ref={ref}
+                          key={message.id}
+                          message={message}
+                          isOwn={message.from.id == myId}
+                          isFirstInGroup={firstInGroup}
+                          isLastInGroup={lastInGroup}
+                          chatType={'group'}
+                          isSelectionModeOn={!!selectedMessageCount}
+                          isSelected={!!selectedMessages[message.id]}
+                          selectMessage={() =>
+                            dispatch(
+                              messagesActions.toggleSelectMessage({
+                                chatId: activeChatId,
+                                msgId: message.id
+                              })
+                            )
+                          }
+                          onDelete={() => {
+                            dispatch(
+                              messagesActions.deleteMessages({
+                                chatId: activeChatId,
+                                messagesIds: [message.id]
+                              })
+                            );
+                          }}
+                        />
+                      </CSSTransition>
+                    );
+                  })
+                  .flat();
               })
-              .flat(Infinity)}
+              .flat()}
           </TransitionGroup>
         </div>
       );
     });
-  }, [messagesIds, selectedMessages]);
+  }, [messagesById, messagesIds, selectedMessages]);
 
   return (
     <>
       <div className={`selected-menu ${selectedMessageCount ? 'show' : ''}`}>
-        <Button color="error">Delete {selectedMessageCount}</Button>
+        <Button
+          color="error"
+          onClick={() => {
+            dispatch(
+              messagesActions.deleteMessages({
+                chatId: activeChatId,
+                messagesIds: Object.keys(selectedMessages)
+              })
+            );
+            dispatch(messagesActions.clearAllSelectedMessages(activeChatId));
+          }}>
+          Delete {selectedMessageCount}
+        </Button>
         <Button color="secondary">
           <span className="material-symbols-outlined">arrow_top_right</span>
           Forward

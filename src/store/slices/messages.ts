@@ -66,6 +66,23 @@ const messages = createSlice({
     },
     clearAllSelectedMessages: (state, action: PayloadAction<string>) => {
       state.byChatId[action.payload].selectedMessages = {};
+    },
+    deleteMessages: (state, action: PayloadAction<{ chatId: string; messagesIds: string[] }>) => {
+      const { messagesIds, chatId } = action.payload;
+      console.log(messagesIds);
+
+      messagesIds.forEach((msgId) => {
+        delete state.byChatId[chatId].byId[msgId];
+        state.byChatId[chatId].messagesIds = state.byChatId[chatId].messagesIds.filter(
+          (id) => id !== msgId
+        );
+      });
+    },
+    readMessages: (state, action: PayloadAction<{ chatId: string }>) => {
+      const { chatId } = action.payload;
+      state.byChatId[chatId].messagesIds.forEach((msgId) => {
+        state.byChatId[chatId].byId[msgId].readed = true;
+      });
     }
   }
 });

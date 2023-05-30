@@ -1,3 +1,4 @@
+import { log } from 'console';
 import { IMessage } from 'store/interfaces';
 
 type GroupedMessages = {
@@ -21,15 +22,23 @@ export const groupMessages = (messages: { [id: string]: IMessage }, messagesIds:
     }
   }
   const groupedByDateAndSender = {} as GroupedMessages;
+  let firstUnreadId = '';
+
   for (const date in messagesByDateGroup) {
     const current = messagesByDateGroup[date];
     const groupedBySenderGroups = [] as IMessage[][];
     for (let i = 0; i < current.length; i++) {
+      if (current[i].readed === false && !firstUnreadId) {
+        firstUnreadId = String(current[i].id);
+      }
       const group = [current[i]] as IMessage[];
       while (
         current[i + 1] &&
         (current[i] as IMessage).from.id === (current[i + 1] as IMessage).from.id
       ) {
+        if (current[i].readed === false && !firstUnreadId) {
+          firstUnreadId = String(current[i].id);
+        }
         group.push(current[i + 1] as IMessage);
         i++;
       }
@@ -38,5 +47,6 @@ export const groupMessages = (messages: { [id: string]: IMessage }, messagesIds:
     }
     groupedByDateAndSender[date] = groupedBySenderGroups;
   }
-  return groupedByDateAndSender;
+
+  return { firstUnreadId, groupedByDateAndSender };
 };

@@ -2,9 +2,10 @@ import React, { FC } from 'react';
 
 interface IMessageMenuProps {
   selectMessage: () => void;
+  onDelete: () => void;
 }
 
-const MessageMenu: FC<IMessageMenuProps> = ({ selectMessage }) => {
+const MessageMenu: FC<IMessageMenuProps> = ({ selectMessage, onDelete }) => {
   return (
     <div className="menu">
       <div className="menu-item">
@@ -27,7 +28,7 @@ const MessageMenu: FC<IMessageMenuProps> = ({ selectMessage }) => {
         <span className="material-symbols-outlined">arrow_top_right</span>
         Forward
       </div>
-      <div className="menu-item color-error">
+      <div className="menu-item color-error" onClick={onDelete}>
         <span className="material-symbols-outlined">delete</span>
         Delete
       </div>

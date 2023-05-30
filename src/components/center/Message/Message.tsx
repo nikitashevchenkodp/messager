@@ -21,6 +21,7 @@ interface IMessageProps {
   hasAvatar?: boolean;
   chatType?: 'privat' | 'group' | 'channel';
   selectMessage: () => void;
+  onDelete: () => void;
 }
 const Message = forwardRef<any, IMessageProps>((props, ref) => {
   const dispatch = useAppDispatch();
@@ -34,7 +35,8 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
     isLastInGroup,
     chatType,
     isSelectionModeOn,
-    selectMessage
+    selectMessage,
+    onDelete
   } = props;
 
   const hasTail = isLastInGroup || (isFirstInGroup && isLastInGroup);
@@ -82,13 +84,13 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
         <div className="msg-container">
           <div className="msg-content">
             <div className="msg-text">
-              .asdfas as dfasd fasd fa asdfasdfasdfasdfa asdfasdf asdf asdfas dfasdfasdfasdf
-              asdfasdfasdfa adsfasdfasdfsd sasdasd asdasdasdasdas asdasdasasd asdadasd asda asd
-              adsfasdfasdfsdasd adfasdf sadfasdfasfasdf asdfasdasdf
+              {message.content.text}
               <span className="msg-meta">
                 {message.edited && <span style={{ marginRight: '3px' }}>edited</span>}
                 <span>12:13</span>
-                <span className="material-symbols-outlined done_all color-green">done_all</span>
+                {isOwn && (
+                  <span className="material-symbols-outlined done_all color-green">done_all</span>
+                )}
               </span>
             </div>
           </div>
@@ -109,7 +111,7 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
         onClose={() => setIsOpen(false)}
         cordX={coordinates.x}
         cordY={coordinates.y}>
-        <MessageMenu selectMessage={selectMessage} />
+        <MessageMenu selectMessage={selectMessage} onDelete={onDelete} />
       </Menu>
     </>
   );

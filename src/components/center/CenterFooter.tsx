@@ -4,6 +4,7 @@ import React, { FC, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { IChat, IMessage } from 'store/interfaces';
 import { messagesActions } from 'store/slices';
+let id = 0;
 
 interface ICenterFooterProps {
   activeChat: IChat;
@@ -19,8 +20,9 @@ const CenterFooter: FC<ICenterFooterProps> = ({ activeChat }) => {
 
   const submit = () => {
     if (!val.length) return;
+
     const newMessage: IMessage = {
-      id: `${Math.random() * 10000}`,
+      id: `${id++}`,
       chatId: activeChat.id,
       content: {
         text: val
@@ -31,7 +33,8 @@ const CenterFooter: FC<ICenterFooterProps> = ({ activeChat }) => {
         id: '000',
         fullName: 'Nikita Shevchenko',
         avatar: ''
-      }
+      },
+      readed: false
     };
     dispatch(messagesActions.addNewMessage(newMessage));
   };
