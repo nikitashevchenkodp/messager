@@ -110,7 +110,7 @@ const ChatItem: FC<IChatItemProps> = ({ chatId }) => {
         onClick={handleChatClick}
         onContextMenu={onContextMenu}>
         <div className="avatar-container">
-          <Avatar title={chat.title} style={{ height: '50px', width: '50px' }} />
+          <Avatar title={chat.title} style={{ height: '50px', width: '50px' }} src={chat.avatar} />
           <div className={`online-status ${isOnline ? 'active' : ''}`}></div>
         </div>
         <div className="info">

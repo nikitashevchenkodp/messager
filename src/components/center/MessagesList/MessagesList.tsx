@@ -29,21 +29,22 @@ export function compact<T>(array: T[]) {
   return array.filter(Boolean);
 }
 
-const myId = '000';
-
 const MessagesList: FC<IMessageListProps> = ({ activeChatId }) => {
   const listRef = useRef<HTMLDivElement | null>(null);
   const endOfUnreadedMessages = useRef<HTMLDivElement | null>(null);
 
   const dispatch = useAppDispatch();
-  const { scrollOffset, selectedMessages, messagesById, messagesIds } = useAppSelector((state) => {
-    return {
-      messagesById: state.entities.messages.byChatId[activeChatId]?.byId || {},
-      messagesIds: state.entities.messages.byChatId[activeChatId]?.messagesIds || [],
-      scrollOffset: state.entities.messages.byChatId[activeChatId]?.scrollOffset || 0,
-      selectedMessages: state.entities.messages.byChatId[activeChatId]?.selectedMessages || {}
-    };
-  });
+  const { scrollOffset, selectedMessages, messagesById, messagesIds, myId, activeChat } =
+    useAppSelector((state) => {
+      return {
+        messagesById: state.entities.messages.byChatId[activeChatId]?.byId || {},
+        messagesIds: state.entities.messages.byChatId[activeChatId]?.messagesIds || [],
+        scrollOffset: state.entities.messages.byChatId[activeChatId]?.scrollOffset || 0,
+        selectedMessages: state.entities.messages.byChatId[activeChatId]?.selectedMessages || {},
+        myId: state.user.user._id || {},
+        activeChat: state.ui.activeChat
+      };
+    });
 
   const selectedMessageCount = Object.keys(selectedMessages).length;
 
@@ -137,10 +138,10 @@ const MessagesList: FC<IMessageListProps> = ({ activeChatId }) => {
                           ref={ref}
                           key={message.id}
                           message={message}
-                          isOwn={message.from.id == myId}
+                          isOwn={message.from.id === myId}
                           isFirstInGroup={firstInGroup}
                           isLastInGroup={lastInGroup}
-                          chatType={'group'}
+                          chatType={activeChat.type}
                           isSelectionModeOn={!!selectedMessageCount}
                           isSelected={!!selectedMessages[message.id]}
                           selectMessage={() =>

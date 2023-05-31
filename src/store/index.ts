@@ -1,5 +1,16 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { chatsReducer, messagesReducer, uiReducer } from './slices';
+import { chatsReducer, messagesReducer, uiReducer, userReducer } from './slices';
+import storage from 'redux-persist/lib/storage';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER
+} from 'redux-persist';
 
 const entitiesReducer = combineReducers({
   chats: chatsReducer,
@@ -7,17 +18,33 @@ const entitiesReducer = combineReducers({
 });
 
 const rootReducer = combineReducers({
-  ui: uiReducer,
-  entities: entitiesReducer
+  entities: entitiesReducer,
+  user: userReducer,
+  ui: uiReducer
 });
+
+const persistConfig = {
+  key: 'root',
+  storage
+  // blacklist: ['authentication.isAuth', 'entities', 'online', 'ui']
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const createStore = (init?: Record<string, unknown>) => {
   return configureStore({
-    reducer: rootReducer
+    reducer: persistedReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+        }
+      })
   });
 };
 
 export const store = createStore();
+export const persistor = persistStore(store);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

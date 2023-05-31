@@ -11,7 +11,7 @@ interface ICenterHeaderProps {
 }
 
 const CenterHeader: FC<ICenterHeaderProps> = ({ activeChat }) => {
-  const isUserChat = activeChat?.type === 'privat';
+  const isUserChat = activeChat?.type === 'privat' || !activeChat.id.startsWith('-');
   const dispatch = useAppDispatch();
   const isMd = useMediaQuery('(max-width: 900px)');
 

@@ -38,6 +38,7 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
     selectMessage,
     onDelete
   } = props;
+  console.log(message);
 
   const hasTail = isLastInGroup || (isFirstInGroup && isLastInGroup);
   const msgClasses = classNames({
@@ -65,7 +66,7 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
         className={msgClasses}
         onContextMenu={onContextMenu}
         ref={ref}
-        data-testid={`msg-${message.id}`}
+        data-testid={`msg-${message?.id}`}
         onClick={() => isSelectionModeOn && selectMessage()}>
         {isSelectionModeOn && (
           <div className={`msg-selection`}>
@@ -84,9 +85,9 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
         <div className="msg-container">
           <div className="msg-content">
             <div className="msg-text">
-              {message.content.text}
+              {message?.content?.text}
               <span className="msg-meta">
-                {message.edited && <span style={{ marginRight: '3px' }}>edited</span>}
+                {message?.edited && <span style={{ marginRight: '3px' }}>edited</span>}
                 <span>12:13</span>
                 {isOwn && (
                   <span className="material-symbols-outlined done_all color-green">done_all</span>

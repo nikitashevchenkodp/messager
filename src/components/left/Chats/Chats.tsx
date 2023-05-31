@@ -4,6 +4,7 @@ import './Chats.scss';
 
 const Chats = () => {
   const chatsIds = useAppSelector((state) => state.entities.chats.chatIds);
+
   return (
     <>
       <div className="chat-list">

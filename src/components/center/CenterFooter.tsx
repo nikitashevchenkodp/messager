@@ -13,6 +13,7 @@ interface ICenterFooterProps {
 const CenterFooter: FC<ICenterFooterProps> = ({ activeChat }) => {
   const [val, setVal] = useState('');
   const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user.user);
   const onChange = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     setVal((e.target as HTMLDivElement).innerText);
@@ -30,9 +31,9 @@ const CenterFooter: FC<ICenterFooterProps> = ({ activeChat }) => {
       createdAt: new Date().toISOString(),
       edited: false,
       from: {
-        id: '000',
-        fullName: 'Nikita Shevchenko',
-        avatar: ''
+        id: user._id,
+        fullName: user.fullName,
+        avatar: user.avatar
       },
       readed: false
     };

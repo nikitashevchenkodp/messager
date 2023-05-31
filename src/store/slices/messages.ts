@@ -32,8 +32,13 @@ const messages = createSlice({
   reducers: {
     setMessages: (state, action: PayloadAction<{ chatId: string; messages: IMessage[] }>) => {
       const { chatId, messages } = action.payload;
-      state.byChatId[chatId].byId = arrayToObject(messages, 'id');
-      state.byChatId[chatId].messagesIds = arrayOfIds(messages, 'id');
+      console.log(action.payload);
+      state.byChatId[chatId] = {
+        byId: arrayToObject(messages, 'id'),
+        messagesIds: arrayOfIds(messages, 'id'),
+        scrollOffset: 0,
+        selectedMessages: {}
+      };
     },
     addNewMessage: (state, action: PayloadAction<IMessage>) => {
       const { chatId, id } = action.payload;

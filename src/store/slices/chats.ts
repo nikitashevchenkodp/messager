@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { getChats } from 'services/chats';
 import { IChat } from 'store/interfaces';
 import { arrayOfIds, arrayToObject } from 'utils/arrToObj';
 import { chats as mockChats } from 'utils/mock/Chats';
