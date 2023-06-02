@@ -34,3 +34,9 @@ export interface IUser {
   chatId: string;
   lastTimeOnline?: number;
 }
+
+export enum LeftContent {
+  ChatList = 'chat-list',
+  UsersList = 'users-list',
+  Search = 'search'
+}
