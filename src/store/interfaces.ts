@@ -5,7 +5,7 @@ export interface IChat {
   isPinned?: boolean;
   isMuted?: boolean;
   membersCount?: number;
-  type: 'privat' | 'group' | 'channel';
+  type?: 'privat' | 'group' | 'channel';
   unreadCount?: number;
 }
 

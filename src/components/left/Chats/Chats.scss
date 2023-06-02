@@ -5,9 +5,7 @@
   padding: 0.8rem;
   overflow-y: scroll;
   gap: 0.3rem;
-}
 
-.chat-list {
   &-item {
     max-width: 100%;
     display: flex;
@@ -23,6 +21,11 @@
       background-color: rgba(0, 0, 0, 0.05);
     }
     --ripple-color: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.chat-list {
+  &-item {
     .message-author {
       color: grey;
       font-weight: 500;

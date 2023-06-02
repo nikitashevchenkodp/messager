@@ -106,7 +106,7 @@ const ChatItem: FC<IChatItemProps> = ({ chatId }) => {
     <>
       <div
         data-testid={`chat-${chatId}`}
-        className={`chat-list-item ${isActiveChat ? 'active' : ''}`}
+        className={`list-item chat-list-item ${isActiveChat ? 'active' : ''}`}
         onClick={handleChatClick}
         onContextMenu={onContextMenu}>
         <div className="avatar-container">

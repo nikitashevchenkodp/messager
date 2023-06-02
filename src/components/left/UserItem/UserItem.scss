@@ -1,0 +1,25 @@
+.user-item {
+  align-items: center;
+  &__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex: 1;
+    overflow: hidden;
+    width: 100%;
+    gap: 0.5rem;
+  }
+  &__title {
+    font-size: 1.6rem;
+    font-weight: 500;
+  }
+  &__online {
+    font-size: 1.4rem;
+    color: rgb(154, 154, 154);
+    padding-right: 2rem;
+    font-weight: 400;
+    overflow: hidden;
+    flex-grow: 1;
+    max-width: 100%;
+  }
+}
