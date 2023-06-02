@@ -2,9 +2,10 @@ import Avatar from 'components/ui/Avatar';
 import Button from 'components/ui/Button';
 import useMediaQuery from 'hooks/useMediaQwery';
 import React, { FC, memo, useMemo } from 'react';
-import { useAppDispatch } from 'store/hooks';
+import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { IChat } from 'store/interfaces';
 import { uiActions } from 'store/slices';
+import { fomatLastTimeOnline } from 'utils/formatLastOnlineTime';
 
 interface ICenterHeaderProps {
   activeChat: IChat;
@@ -12,12 +13,19 @@ interface ICenterHeaderProps {
 
 const CenterHeader: FC<ICenterHeaderProps> = ({ activeChat }) => {
   const isUserChat = activeChat?.type === 'privat' || !activeChat.id.startsWith('-');
+  const userStatusesById = useAppSelector((state) => state.entities.users.statusesById);
   const dispatch = useAppDispatch();
   const isMd = useMediaQuery('(max-width: 900px)');
 
   const status = useMemo(() => {
     if (isUserChat) {
-      return <div className="activechat-status">last seen 2 hours ago</div>;
+      const userStatus = userStatusesById[activeChat.id];
+      return (
+        <div className="activechat-status">
+          {' '}
+          {userStatus.online ? 'online' : fomatLastTimeOnline(userStatus.lastTimeOnline)}
+        </div>
+      );
     }
     return <div className="activechat-status">{activeChat?.membersCount} members</div>;
   }, [activeChat]);

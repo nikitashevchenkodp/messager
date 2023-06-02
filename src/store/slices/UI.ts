@@ -12,7 +12,8 @@ const ui = createSlice({
   name: 'ui',
   initialState: {
     isCenterOpen: false,
-    isRightOpen: false
+    isRightOpen: false,
+    leftContent: LeftContent.ChatList
   } as IInitialState,
   reducers: {
     openCenter: (state) => {

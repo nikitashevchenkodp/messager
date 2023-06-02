@@ -9,7 +9,18 @@ interface ContextDataType {
 
 const SocketContext = createContext<ContextDataType | null>(null);
 
-enum SocketEvents {}
+enum SocketEvents {
+  SendMessage = 'new-message',
+  Typing = 'typing',
+  Disconnect = 'disconnect',
+  DeleteMessage = 'deleteMessage',
+  EditMessage = 'editMessage',
+  AddReation = 'addReaction',
+  DeleteReaction = 'deleteReaction',
+  ConnectToNewChat = 'connectToNewChat',
+  Reconnect = 'reconnect',
+  ReconnectFailed = 'reconnect_failed'
+}
 
 export const SocketProvider: FC<PropsWithChildren> = (props) => {
   const userId = useAppSelector((state) => state.user.user._id);
