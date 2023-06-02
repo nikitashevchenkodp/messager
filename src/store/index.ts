@@ -1,5 +1,5 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { chatsReducer, messagesReducer, uiReducer, userReducer } from './slices';
+import { chatsReducer, messagesReducer, uiReducer, userReducer, usersReducer } from './slices';
 import storage from 'redux-persist/lib/storage';
 import {
   persistStore,
@@ -14,7 +14,8 @@ import {
 
 const entitiesReducer = combineReducers({
   chats: chatsReducer,
-  messages: messagesReducer
+  messages: messagesReducer,
+  users: usersReducer
 });
 
 const rootReducer = combineReducers({

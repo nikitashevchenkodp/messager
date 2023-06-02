@@ -7,7 +7,7 @@ interface IInitialState {
 }
 
 const user = createSlice({
-  name: 'ui',
+  name: 'user',
   initialState: {
     user: {},
     isAuth: false,

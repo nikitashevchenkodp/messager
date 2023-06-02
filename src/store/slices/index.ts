@@ -1,6 +1,7 @@
 import { userActions, userReducer } from './user';
 import { chatsActions, chatsReducer } from './chats';
 import { messagesActions, messagesReducer } from './messages';
+import { usersActions, usersReducer } from './users';
 import { uiActions, uiReducer } from './UI';
 
 export {
@@ -11,5 +12,7 @@ export {
   messagesActions,
   messagesReducer,
   userActions,
-  userReducer
+  userReducer,
+  usersActions,
+  usersReducer
 };

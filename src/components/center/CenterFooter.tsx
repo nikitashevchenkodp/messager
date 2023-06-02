@@ -1,6 +1,6 @@
 import Button from 'components/ui/Button';
 import MessageInput from 'components/ui/MessageInput';
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { IChat, IMessage } from 'store/interfaces';
 import { messagesActions } from 'store/slices';

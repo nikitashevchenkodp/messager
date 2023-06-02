@@ -25,3 +25,12 @@ export interface IMessage {
   reactions?: [];
   readed?: boolean;
 }
+
+export interface IUser {
+  id: string;
+  fullName: string;
+  avatar: string;
+  email: string;
+  chatId: string;
+  lastTimeOnline?: number;
+}
