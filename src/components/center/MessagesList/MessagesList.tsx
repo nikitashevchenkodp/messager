@@ -130,7 +130,7 @@ const MessagesList: FC<IMessageListProps> = ({ activeChatId }) => {
                     return (
                       <CSSTransition
                         key={message.id}
-                        timeout={500}
+                        timeout={300}
                         classNames="item"
                         // @ts-ignore
                         nodeRef={ref}>

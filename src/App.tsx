@@ -12,9 +12,7 @@ function App() {
           path="/"
           element={
             <Protected>
-              <SocketProvider>
-                <MainLayout />
-              </SocketProvider>
+              <MainLayout />
             </Protected>
           }
         />

@@ -11,7 +11,6 @@ export const arrayToObject = <T extends Record<string, any>, K extends keyof T>(
 
 export const arrayOfIds = (arr: any[], key: string) => {
   return arr.reduce((acc, item) => {
-    console.log(item[key]);
     acc.push(item[key]);
     return acc;
   }, []);

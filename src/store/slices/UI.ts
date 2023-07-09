@@ -6,6 +6,7 @@ interface IInitialState {
   isRightOpen: boolean;
   activeChat: IChat;
   leftContent: LeftContent;
+  isGlobalLoading: boolean;
 }
 
 const ui = createSlice({
@@ -13,6 +14,7 @@ const ui = createSlice({
   initialState: {
     isCenterOpen: false,
     isRightOpen: false,
+    isGlobalLoading: true,
     leftContent: LeftContent.ChatList
   } as IInitialState,
   reducers: {
@@ -33,6 +35,9 @@ const ui = createSlice({
     },
     setLeftContent: (state, action: PayloadAction<LeftContent>) => {
       state.leftContent = action.payload;
+    },
+    setIsGlobalLoading: (state, action: PayloadAction<boolean>) => {
+      state.isGlobalLoading = action.payload;
     }
   }
 });

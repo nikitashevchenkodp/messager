@@ -8,7 +8,6 @@ import { IMessage } from 'store/interfaces';
 import Menu from 'components/ui/Menu';
 import MessageMenu from '../MessageMenu/MessageMenu';
 import { useAppDispatch } from 'store/hooks';
-import { messagesActions } from 'store/slices';
 
 //TODO: Reactions, edited, msgStatus.
 interface IMessageProps {
@@ -38,7 +37,6 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
     selectMessage,
     onDelete
   } = props;
-  console.log(message);
 
   const hasTail = isLastInGroup || (isFirstInGroup && isLastInGroup);
   const msgClasses = classNames({

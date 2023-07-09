@@ -9,13 +9,13 @@ export const groupMessages = (messages: { [id: string]: IMessage }, messagesIds:
   const messagesByDateGroup = {} as { [date: string]: IMessage[] };
   for (let i = 0; i < messagesIds.length; i++) {
     const currentMessage = messages[messagesIds[i]];
-    const currentMessageDate = new Date(currentMessage.createdAt).toLocaleDateString();
+    const currentMessageDate = new Date(currentMessage?.createdAt).toLocaleDateString();
     messagesByDateGroup[new Date(currentMessage.createdAt).toISOString()] = [currentMessage];
     while (
       messagesIds[i + 1] &&
       currentMessageDate === new Date(messages[messagesIds[i + 1]].createdAt).toLocaleDateString()
     ) {
-      messagesByDateGroup[new Date(currentMessage.createdAt).toISOString()].push(
+      messagesByDateGroup[new Date(currentMessage?.createdAt).toISOString()].push(
         messages[messagesIds[i + 1]]
       );
       i++;

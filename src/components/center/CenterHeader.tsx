@@ -1,7 +1,7 @@
 import Avatar from 'components/ui/Avatar';
 import Button from 'components/ui/Button';
 import useMediaQuery from 'hooks/useMediaQwery';
-import React, { FC, memo, useMemo } from 'react';
+import { FC, memo } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { IChat } from 'store/interfaces';
 import { uiActions } from 'store/slices';
@@ -13,22 +13,21 @@ interface ICenterHeaderProps {
 
 const CenterHeader: FC<ICenterHeaderProps> = ({ activeChat }) => {
   const isUserChat = activeChat?.type === 'privat' || !activeChat.id.startsWith('-');
-  const userStatusesById = useAppSelector((state) => state.entities.users.statusesById);
+  const userStatus = useAppSelector((state) => state.entities.users.statusesById[activeChat.id]);
   const dispatch = useAppDispatch();
-  const isMd = useMediaQuery('(max-width: 900px)');
+  const isMd = useMediaQuery('(max-width: 700px)');
 
-  const status = useMemo(() => {
+  const status = () => {
     if (isUserChat) {
-      const userStatus = userStatusesById[activeChat.id];
+      if (userStatus.typing) return <div className="activechat-status">typing...</div>;
       return (
         <div className="activechat-status">
-          {' '}
           {userStatus.online ? 'online' : fomatLastTimeOnline(userStatus.lastTimeOnline)}
         </div>
       );
     }
     return <div className="activechat-status">{activeChat?.membersCount} members</div>;
-  }, [activeChat]);
+  };
 
   return (
     <div className="center-header">
@@ -45,7 +44,7 @@ const CenterHeader: FC<ICenterHeaderProps> = ({ activeChat }) => {
         />
         <div className="d-flex direction-column space-around">
           <div className="activechat-title">{activeChat?.title}</div>
-          {status}
+          {status()}
         </div>
       </div>
       <div className="activechat-tools">

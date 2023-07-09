@@ -48,12 +48,14 @@ const users = createSlice({
       const { userId, typing } = action.payload;
       state.statusesById[userId] = { ...state.statusesById[userId], typing };
     },
-    addOnlineUser: (state, action: PayloadAction<string>) => {
-      const userId = action.payload;
+    addOnlineUser: (state, action: PayloadAction<{ userId: string }>) => {
+      const { userId } = action.payload;
       state.statusesById[userId] = { ...state.statusesById[userId], online: true };
     },
     delOnlineUser: (state, action: PayloadAction<{ userId: string; lastTimeOnline: number }>) => {
       const { userId, lastTimeOnline } = action.payload;
+      console.log(userId, lastTimeOnline);
+
       state.statusesById[userId] = {
         ...state.statusesById[userId],
         online: false,

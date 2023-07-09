@@ -2,40 +2,38 @@ import Avatar from 'components/ui/Avatar';
 import Menu from 'components/ui/Menu';
 import Ripple from 'components/ui/Ripple';
 import useMediaQuery from 'hooks/useMediaQwery';
-import { FC, useMemo, useState } from 'react';
+import { FC, forwardRef, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { IChat } from 'store/interfaces';
 import { uiActions } from 'store/slices';
 import ChatMenu from '../ChatMenu/MessageMenu';
 import './ChatItem.scss';
 
 //mock data
-const lastMessage = {
-  from: {
-    id: '222',
-    fullName: 'Daria Shevchenko'
-  },
-  status: 'read',
-  createdAt: '15:08',
-  text: `My name is Nikita. blaasasdasdasdas   asdasdasd a asd asdasdas  das la
-   `
-};
+// const lastMessage = {
+//   from: {
+//     id: '222',
+//     fullName: 'Daria Shevchenko'
+//   },
+//   status: 'read',
+//   createdAt: '15:08',
+//   text: `My name is Nikita. blaasasdasdasdas   asdasdasd a asd asdasdas  das la
+//    `
+// };
 
-const isOnline = false;
 const unreadCount = 0;
 const isUser = true;
 /////////////////////////////
 
 type MessageStatus = 'delivered' | 'pending' | 'read' | 'fail';
 interface IChatItemProps {
-  chatId: string;
+  chat: IChat;
 }
 
-const ChatItem: FC<IChatItemProps> = ({ chatId }) => {
+const ChatItem = forwardRef<any, IChatItemProps>(({ chat }, ref) => {
   const dispatch = useAppDispatch();
-
   const [isOpen, setIsOpen] = useState(false);
   const [coordinates, setCoordinates] = useState({ x: 0, y: 0 });
-
   const onContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
     setCoordinates({ x: e.clientX, y: e.clientY });
@@ -43,10 +41,18 @@ const ChatItem: FC<IChatItemProps> = ({ chatId }) => {
   };
 
   const isMdScreen = useMediaQuery('(max-width: 900px)');
-  const chat = useAppSelector((state) => state.entities.chats.byId[chatId]);
-  const isActiveChat = useAppSelector((state) => state.ui?.activeChat?.id === chatId);
-  const isChannel = chat.type === 'channel';
-  const isGroup = chat.type === 'group';
+  console.log(chat);
+
+  const isActiveChat = useAppSelector((state) => state.ui?.activeChat?.id === chat.id);
+  const userStatus = useAppSelector((state) => state.entities.users.statusesById[chat.id]);
+  const isChannel = chat?.type === 'channel';
+  const isGroup = chat?.type === 'group';
+  const lastMessage = useAppSelector((state) => {
+    const l = state.entities.messages.byChatId[chat.id]?.messagesIds.length;
+    const lastMessageId = state.entities.messages.byChatId[chat.id]?.messagesIds[l - 1];
+    const lastMessage = state.entities.messages.byChatId[chat.id]?.byId[lastMessageId];
+    return lastMessage;
+  });
 
   const handleChatClick = () => {
     dispatch(uiActions.setActiveChat(chat));
@@ -67,7 +73,7 @@ const ChatItem: FC<IChatItemProps> = ({ chatId }) => {
   };
 
   const messageStatus = useMemo(() => {
-    if (isUser) return foundMsgStatus(lastMessage.status as MessageStatus);
+    if (isUser) return foundMsgStatus('delivered');
     return null;
   }, [chat]);
 
@@ -92,26 +98,28 @@ const ChatItem: FC<IChatItemProps> = ({ chatId }) => {
 
   const lastMessageText = useMemo<string | JSX.Element>(() => {
     if (!isGroup) {
-      return lastMessage.text;
+      if (userStatus.typing) return 'typing...';
+      return lastMessage.content.text;
     }
     return (
       <>
         <span className="message-author">{lastMessage.from.fullName}: </span>
-        {lastMessage.text}
+        {lastMessage.content.text}
       </>
     );
-  }, [chat]);
+  }, [chat, userStatus, lastMessage]);
 
   return (
     <>
       <div
-        data-testid={`chat-${chatId}`}
+        ref={ref}
+        data-testid={`chat-${chat.id}`}
         className={`list-item chat-list-item ${isActiveChat ? 'active' : ''}`}
         onClick={handleChatClick}
         onContextMenu={onContextMenu}>
         <div className="avatar-container">
           <Avatar title={chat.title} style={{ height: '50px', width: '50px' }} src={chat.avatar} />
-          <div className={`online-status ${isOnline ? 'active' : ''}`}></div>
+          <div className={`online-status ${userStatus?.online ? 'active' : ''}`}></div>
         </div>
         <div className="info">
           <div className="d-flex">
@@ -130,7 +138,9 @@ const ChatItem: FC<IChatItemProps> = ({ chatId }) => {
             </div>
             <div className="last-message-info">
               <div className="last-message-status">{messageStatus}</div>
-              <span className="last-message-time">{lastMessage.createdAt}</span>
+              <span className="last-message-time">
+                {new Date(lastMessage.createdAt).toLocaleTimeString()}
+              </span>
             </div>
           </div>
           <div className="last-message-row">
@@ -149,6 +159,8 @@ const ChatItem: FC<IChatItemProps> = ({ chatId }) => {
       </Menu>
     </>
   );
-};
+});
+
+ChatItem.displayName = 'ChatItem';
 
 export default ChatItem;

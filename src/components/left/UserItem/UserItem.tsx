@@ -28,6 +28,7 @@ const UserItem: FC<IUserItemProps> = (props) => {
     <div className="list-item user-item" onClick={handleClick}>
       <div className="avatar-container">
         <Avatar title={user.fullName} style={{ height: '50px', width: '50px' }} src={user.avatar} />
+        <div className={`online-status ${userStatus?.online ? 'active' : ''}`}></div>
       </div>
       <div className="user-item__info">
         <p className="user-item__title">{user.fullName}</p>

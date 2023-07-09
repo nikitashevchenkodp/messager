@@ -1,9 +1,9 @@
 import Button from 'components/ui/Button';
 import MessageInput from 'components/ui/MessageInput';
-import React, { FC, useState } from 'react';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { useSocketContext } from 'contexts/SocketContexts';
+import React, { FC, useRef, useState } from 'react';
+import { useAppSelector } from 'store/hooks';
 import { IChat, IMessage } from 'store/interfaces';
-import { messagesActions } from 'store/slices';
 let id = 0;
 
 interface ICenterFooterProps {
@@ -12,21 +12,29 @@ interface ICenterFooterProps {
 
 const CenterFooter: FC<ICenterFooterProps> = ({ activeChat }) => {
   const [val, setVal] = useState('');
-  const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user.user);
+  const chatId = useAppSelector((state) => state.ui.activeChat.id);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { sendMessage, typing } = useSocketContext();
+
   const onChange = (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
+    if (timerRef.current) clearTimeout(timerRef.current);
     setVal((e.target as HTMLDivElement).innerText);
+    typing(chatId, true);
+    timerRef.current = setTimeout(() => {
+      typing(chatId, false);
+    }, 2000);
   };
 
   const submit = () => {
-    if (!val.length) return;
-
+    const msgText = val.trim();
+    if (!msgText.length) return;
     const newMessage: IMessage = {
       id: `${id++}`,
       chatId: activeChat.id,
       content: {
-        text: val
+        text: msgText
       },
       createdAt: new Date().toISOString(),
       edited: false,
@@ -35,9 +43,10 @@ const CenterFooter: FC<ICenterFooterProps> = ({ activeChat }) => {
         fullName: user.fullName,
         avatar: user.avatar
       },
-      readed: false
+      readed: false,
+      status: 'pending'
     };
-    dispatch(messagesActions.addNewMessage(newMessage));
+    sendMessage(newMessage);
   };
 
   return (

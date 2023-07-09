@@ -9,7 +9,7 @@ interface IChatMenuProps {
 
 const ChatMenu: FC<IChatMenuProps> = ({ chat }) => {
   const dispatch = useAppDispatch();
-  const { isMuted, isPinned } = useAppSelector((state) => state.entities.chats.byId[chat.id]);
+  const { isMuted, isPinned } = chat;
   const toogleMute = () => dispatch(chatsActions.toggleMuteChat(chat.id));
   const deleteChat = () => dispatch(chatsActions.deleteChat(chat.id));
   const togglePin = () => dispatch(chatsActions.togglePinChat(chat.id));

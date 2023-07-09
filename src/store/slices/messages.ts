@@ -16,14 +16,7 @@ interface IInitialState {
 }
 
 const initialState = {
-  byChatId: {
-    '111': {
-      byId: arrayToObject(mockMessage, 'id'),
-      messagesIds: arrayOfIds(mockMessage, 'id'),
-      scrollOffset: 0,
-      selectedMessages: {}
-    }
-  }
+  byChatId: {}
 } as IInitialState;
 
 const messages = createSlice({
@@ -32,7 +25,7 @@ const messages = createSlice({
   reducers: {
     setMessages: (state, action: PayloadAction<{ chatId: string; messages: IMessage[] }>) => {
       const { chatId, messages } = action.payload;
-      console.log(action.payload);
+
       state.byChatId[chatId] = {
         byId: arrayToObject(messages, 'id'),
         messagesIds: arrayOfIds(messages, 'id'),
@@ -42,13 +35,22 @@ const messages = createSlice({
     },
     addNewMessage: (state, action: PayloadAction<IMessage>) => {
       const { chatId, id } = action.payload;
+      if (!state.byChatId[chatId]) {
+        state.byChatId[chatId] = {
+          byId: {
+            [id]: action.payload
+          },
+          messagesIds: [id],
+          scrollOffset: 0,
+          selectedMessages: {}
+        };
+        return;
+      }
       state.byChatId[chatId].byId[id] = action.payload;
       state.byChatId[chatId].messagesIds.push(id);
     },
     deleteMessage: (state, action: PayloadAction<{ chatId: string; msgId: string }>) => {
       const { chatId, msgId } = action.payload;
-      console.log(chatId, msgId);
-
       delete state.byChatId[chatId].byId[msgId];
       state.byChatId[chatId].messagesIds = state.byChatId[chatId].messagesIds.filter(
         (id) => id !== msgId
@@ -88,6 +90,17 @@ const messages = createSlice({
       state.byChatId[chatId].messagesIds.forEach((msgId) => {
         state.byChatId[chatId].byId[msgId].readed = true;
       });
+    },
+    updateMessageStatus: (
+      state,
+      action: PayloadAction<{
+        chatId: string;
+        msgId: string;
+        status: 'pending' | 'delivered' | 'hasRead' | 'error';
+      }>
+    ) => {
+      const { chatId, msgId, status } = action.payload;
+      state.byChatId[chatId].byId[msgId].status = status;
     }
   }
 });

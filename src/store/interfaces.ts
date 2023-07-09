@@ -24,6 +24,7 @@ export interface IMessage {
   createdAt: string;
   reactions?: [];
   readed?: boolean;
+  status?: 'pending' | 'delivered' | 'hasRead' | 'error';
 }
 
 export interface IUser {
