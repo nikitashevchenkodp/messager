@@ -57,7 +57,6 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
     setCoordinates({ x: e.clientX, y: e.clientY });
     setIsOpen(true);
   };
-  console.log(message);
 
   return (
     <>
@@ -94,7 +93,7 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
               {message?.content?.text}
               <span className="msg-meta">
                 {message?.edited && <span style={{ marginRight: '3px' }}>edited</span>}
-                <span>12:13</span>
+                <span>{new Date(message.createdAt).toLocaleTimeString().slice(0, 5)}</span>
                 {isOwn && (
                   <span className="material-symbols-outlined done_all color-green">done_all</span>
                 )}

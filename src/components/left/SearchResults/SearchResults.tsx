@@ -13,7 +13,7 @@ const SearchResults = ({ isActive }: { isActive: boolean }) => {
       mountOnEnter
       timeout={300}>
       <div className="section-scaled search-results" ref={nodeRef}>
-        SearchResults
+        <h3 className="left-content-title">Search Results</h3>
       </div>
     </CSSTransition>
   );

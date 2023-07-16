@@ -54,9 +54,10 @@ const CenterFooter: FC<ICenterFooterProps> = ({ activeChat, isDropZoneActive, on
   };
 
   const submit = async () => {
-    const res = await uploadAttachments(file);
-    console.log(res);
-
+    let res;
+    if (file) {
+      res = await uploadAttachments(file);
+    }
     const msgText = val.trim();
     if (!msgText.length) return;
     const newMessage: IMessage = {

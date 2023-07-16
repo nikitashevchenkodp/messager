@@ -139,7 +139,7 @@ const ChatItem = forwardRef<any, IChatItemProps>(({ chat }, ref) => {
             <div className="last-message-info">
               <div className="last-message-status">{messageStatus}</div>
               <span className="last-message-time">
-                {new Date(lastMessage.createdAt).toLocaleTimeString()}
+                {new Date(lastMessage.createdAt).toLocaleTimeString().slice(0, 5)}
               </span>
             </div>
           </div>

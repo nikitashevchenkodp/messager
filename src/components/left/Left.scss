@@ -31,7 +31,10 @@
   flex-grow: 1;
   overflow-y: scroll;
 }
-
+.left-content-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
 .section-scaled {
   position: absolute;
   left: 0;

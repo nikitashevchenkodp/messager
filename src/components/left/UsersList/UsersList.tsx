@@ -16,6 +16,8 @@ const UsersList = ({ isActive }: { isActive: boolean }) => {
       mountOnEnter
       timeout={300}>
       <div className="section-scaled users-list list" ref={nodeRef}>
+        <h3 className="left-content-title">Users</h3>
+
         {usersIds.map((userId) => {
           return <UserItem key={userId} userId={userId} />;
         })}

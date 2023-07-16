@@ -21,6 +21,7 @@ const Chats = ({ isActive }: { isActive: boolean }) => {
       timeout={300}>
       <div className="chat-list" ref={nodeRef}>
         <div className="list">
+          <h3 className="left-content-title">Chats</h3>
           <TransitionGroup component={null}>
             {chatsIds?.map((chatId, i) => {
               // @ts-ignore
