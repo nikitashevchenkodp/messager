@@ -16,7 +16,6 @@ const CenterHeader: FC<ICenterHeaderProps> = ({ activeChat }) => {
   const userStatus = useAppSelector((state) => state.entities.users.statusesById[activeChat.id]);
   const dispatch = useAppDispatch();
   const isMd = useMediaQuery('(max-width: 700px)');
-
   const status = () => {
     if (isUserChat) {
       if (userStatus.typing) return <div className="activechat-status">typing...</div>;

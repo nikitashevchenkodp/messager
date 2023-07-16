@@ -19,6 +19,7 @@ export interface IMessage {
   chatId: string;
   content: {
     text: string;
+    attachments?: string[];
   };
   edited: boolean;
   createdAt: string;

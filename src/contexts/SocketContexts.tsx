@@ -8,6 +8,8 @@ import { AppDispatch, RootState } from 'store';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { IMessage } from 'store/interfaces';
 import { chatsActions, messagesActions, usersActions } from 'store/slices';
+import audio from 'assets/iPhone - Message Notification.mp3';
+import { audioService } from 'services/audioServise';
 interface ContextDataType {
   socket: Socket;
   sendMessage: (msg: IMessage) => void;
@@ -78,6 +80,7 @@ export const SocketProvider: FC<PropsWithChildren> = (props) => {
     socket.on(SocketEvents.RecieveMessage, (message: IMessage) => {
       dispatch(newMessageThunk(message));
       if (message.from.id === userId) return;
+      audioService.newMessage();
     });
     socket.on(SocketEvents.OnlineList, (data: any) => {
       dispatch(usersActions.setOnlineList(data));

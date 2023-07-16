@@ -57,6 +57,7 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
     setCoordinates({ x: e.clientX, y: e.clientY });
     setIsOpen(true);
   };
+  console.log(message);
 
   return (
     <>
@@ -82,6 +83,13 @@ const Message = forwardRef<any, IMessageProps>((props, ref) => {
         )}
         <div className="msg-container">
           <div className="msg-content">
+            <div className="msg-media">
+              {message.content.attachments?.map((item) => (
+                <div key={item} className="msg-media-item">
+                  <img src={item} />
+                </div>
+              ))}
+            </div>
             <div className="msg-text">
               {message?.content?.text}
               <span className="msg-meta">

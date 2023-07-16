@@ -1,0 +1,39 @@
+.Preview-media {
+  max-width: 450px;
+  border-radius: 30px;
+  &-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+  }
+  &-body {
+    padding: 0 10px;
+  }
+  &-footer {
+  }
+}
+
+.image-list {
+  display: flex;
+  flex-wrap: wrap;
+  overflow: auto;
+  flex-shrink: 1;
+  gap: 0.5rem;
+  margin: 10px;
+  max-height: 26rem;
+  &-item {
+    flex: 1 calc(50% - 0.5rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    overflow: hidden;
+
+    img {
+      object-fit: cover;
+      height: auto;
+      max-height: 20rem;
+    }
+  }
+}
