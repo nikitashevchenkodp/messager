@@ -77,7 +77,6 @@ const MessagesList: FC<IMessageListProps> = ({ activeChatId }) => {
     }, 100);
 
     listRef?.current?.addEventListener('scroll', handleScroll);
-    // dispatch(messagesActions.clearAllSelectedMessages(activeChatId));
     return () => {
       listRef?.current?.removeEventListener('scroll', handleScroll);
     };

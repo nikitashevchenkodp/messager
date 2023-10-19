@@ -53,6 +53,8 @@ const newMessageThunk =
       const chat = getState().entities.chats.byId[message.chatId];
       if (chat) {
         dispatch(messagesActions.addNewMessage(message));
+        dispatch(chatsActions.changeOrderChat(message.chatId));
+
         return;
       }
       const newChat = await getChatById(message.chatId);

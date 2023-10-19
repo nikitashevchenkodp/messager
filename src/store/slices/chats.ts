@@ -41,8 +41,9 @@ const chats = createSlice({
       delete state.byId[id];
       state.chatIds = state.chatIds.filter((chatId) => chatId !== id);
     },
-    changeOrderChat: (state, action: PayloadAction<number>) => {
-      console.log('chat reordered');
+    changeOrderChat: (state, action: PayloadAction<string>) => {
+      const chatId = action.payload;
+      state.chatIds = [chatId, ...state.chatIds.filter((id) => id !== chatId)];
     }
   }
 });

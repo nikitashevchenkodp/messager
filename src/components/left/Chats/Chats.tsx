@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { createRef, useRef } from 'react';
+import { Tab } from 'components/ui/Tab';
+import { TabList } from 'components/ui/TabList';
+import { createRef, useMemo, useRef, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { useAppSelector } from 'store/hooks';
 import ChatItem from '../ChatItem';
@@ -9,6 +11,8 @@ const Chats = ({ isActive }: { isActive: boolean }) => {
   const chatsIds = useAppSelector((state) => state.entities.chats.chatIds);
   const chatsById = useAppSelector((state) => state.entities.chats.byId);
   const nodeRef = useRef<HTMLDivElement | null>(null);
+
+  const [activeTab, setActiveTab] = useState(1);
   console.log(chatsIds);
 
   return (
@@ -21,7 +25,11 @@ const Chats = ({ isActive }: { isActive: boolean }) => {
       timeout={300}>
       <div className="chat-list" ref={nodeRef}>
         <div className="list">
-          <h3 className="left-content-title">Chats</h3>
+          <TabList value={activeTab} onChange={(val: number) => setActiveTab(val)}>
+            <Tab value={0} title="All" />
+            <Tab value={1} title="News" />
+            <Tab value={2} title="Work" />
+          </TabList>
           <TransitionGroup component={null}>
             {chatsIds?.map((chatId, i) => {
               // @ts-ignore
@@ -29,7 +37,7 @@ const Chats = ({ isActive }: { isActive: boolean }) => {
               return (
                 <CSSTransition
                   key={chatId}
-                  timeout={150 * (i + 1)}
+                  timeout={150}
                   classNames="chatItem"
                   // @ts-ignore
                   nodeRef={ref}>
