@@ -1,10 +1,16 @@
+@use 'src/styles/mixins' as mixins;
+
 .list {
   display: flex;
-  flex-direction: column;
   position: relative;
   padding: 0.8rem;
-  overflow-y: scroll;
-  gap: 0.3rem;
+  overflow-y: auto;
+  gap: 0.8rem;
+  flex-grow: 1;
+  height: 100%;
+  &:not(:hover) {
+    @include mixins.hide-scroll-bar;
+  }
 
   &-item {
     max-width: 100%;
@@ -25,7 +31,10 @@
 }
 
 .chat-list {
+  overflow: hidden;
+  height: 100%;
   &-item {
+    flex-shrink: 0;
     .message-author {
       color: grey;
       font-weight: 500;
@@ -170,4 +179,34 @@
   opacity: 0;
   transform: translateX(30px);
   transition: 400ms;
+}
+
+.slide-enter {
+  transform: translate3d(-100%, 0, 0);
+}
+.slide-enter-active {
+  transform: translate3d(0, 0, 0);
+  transition: 2s;
+}
+.slide-exit {
+  transform: translate3d(0, 0, 0);
+}
+.slide-exit-active {
+  transform: translate3d(-100%, 0, 0);
+  transition: 2s;
+}
+
+.slide-backwards-enter {
+  transform: translate3d(100%, 0, 0);
+}
+.slide-backwards-enter-active {
+  transform: translate3d(0, 0, 0);
+  transition: 2s;
+}
+.slide-backwards-exit {
+  transform: translate3d(0, 0, 0);
+}
+.slide-backwards-exit-active {
+  transform: translate3d(100%, 0, 0);
+  transition: 2s;
 }

@@ -1,15 +1,15 @@
 import { useSocket } from 'hooks/useSocket';
 import throttle from 'lodash.throttle';
-import React, { createContext, FC, PropsWithChildren, useContext, useEffect, useRef } from 'react';
+import React, { createContext, FC, PropsWithChildren, useContext, useEffect } from 'react';
 import { getChatById } from 'services/chats';
-import { serverLink } from 'services/config';
+import { serverIp } from 'services/config';
 import { Socket } from 'socket.io-client';
 import { AppDispatch, RootState } from 'store';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { IMessage } from 'store/interfaces';
 import { chatsActions, messagesActions, usersActions } from 'store/slices';
-import audio from 'assets/iPhone - Message Notification.mp3';
 import { audioService } from 'services/audioServise';
+
 interface ContextDataType {
   socket: Socket;
   sendMessage: (msg: IMessage) => void;
@@ -69,7 +69,7 @@ export const SocketProvider: FC<PropsWithChildren> = (props) => {
   const userId = useAppSelector((state) => state.user.user._id);
   const dispatch = useAppDispatch();
 
-  const socket = useSocket(serverLink!, {
+  const socket = useSocket(serverIp!, {
     ackTimeout: 10000,
     reconnectionDelay: 500,
     autoConnect: false,
@@ -103,17 +103,6 @@ export const SocketProvider: FC<PropsWithChildren> = (props) => {
 
   const sendMessage = (newMessage: IMessage) => {
     const { chatId, id: dummyMsgId } = newMessage;
-    // dispatch(messagesActions.addNewMessage(newMessage));
-
-    // const cancelMessageTimeoutId = setTimeout(() => {
-    //   dispatch(messagesActions.updateMessageStatus({ chatId, msgId: dummyMsgId, status: 'error' }));
-    // }, 5000);
-
-    // const cb = () => {
-    //   console.log('cb');
-    //   clearTimeout(cancelMessageTimeoutId);
-    // };
-
     socket.emit(SocketEvents.SendMessage, newMessage);
   };
 

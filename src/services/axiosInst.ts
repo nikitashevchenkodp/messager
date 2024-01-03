@@ -2,10 +2,10 @@ import axios, { AxiosRequestConfig, GenericAbortSignal, InternalAxiosRequestConf
 import { store } from 'store';
 import { userActions } from 'store/slices';
 import { authService } from './authService';
-import { serverLink } from './config';
+import { serverIp } from './config';
 
 export const axiosInstance = axios.create({
-  baseURL: serverLink,
+  baseURL: serverIp,
   withCredentials: true
 });
 
@@ -21,17 +21,18 @@ axiosInstance.interceptors.response.use(
   (config) => config,
   async (err) => {
     const originalRequest = err.config;
+    console.log('interceptor');
+
     if (err?.response?.status == 401 && originalRequest && !originalRequest._isRetry) {
+      console.log('in condition');
+
       originalRequest._isRetry = true;
-      console.log('here only once');
       try {
         const res = await authService.refreshAccessToken();
-        console.log(res);
         store.dispatch(userActions.setAccessToken(res.data.accessToken));
         store.dispatch(userActions.setUser(res.data.user));
         return axiosInstance.request(originalRequest);
       } catch (error) {
-        console.log(error);
         store.dispatch(userActions.setIsAuth(false));
         window.location.reload();
       }

@@ -1,27 +1,4 @@
-@mixin active-styles() {
-  &:not(.disabled):not(:disabled) {
-    &:active,
-    &.active,
-    &:focus {
-      @content;
-    }
-    @media (hover: hover) {
-      &:hover {
-        @content;
-      }
-    }
-  }
-}
-
-@mixin no-ripple-styles() {
-  body.animation-level-0 & {
-    &:not(.disabled):not(:disabled) {
-      &:active {
-        @content;
-      }
-    }
-  }
-}
+@use 'src/styles/mixins' as mixins;
 
 .btn {
   background-color: transparent;
@@ -41,7 +18,7 @@
   width: 4rem;
   height: 100%;
   font-weight: 500;
-  @include active-styles {
+  @include mixins.active-styles {
     background: rgba(0, 0, 0, 0.05);
   }
   --ripple-color: rgba(0, 0, 0, 0.15);
@@ -51,14 +28,14 @@
   &--primary {
     background: var(--color-primary);
     color: var(--text-color-primary);
-    @include active-styles {
+    @include mixins.active-styles {
       background-color: var(--color-primary-shade);
     }
   }
   &--error {
     background: var(--color-error);
     color: var(--text-color-primary);
-    @include active-styles {
+    @include mixins.active-styles {
       background-color: var(--color-error-shade);
     }
   }

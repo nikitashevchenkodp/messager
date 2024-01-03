@@ -1,3 +1,5 @@
+@use 'src/styles/mixins.scss' as mixins;
+
 .msg-list {
   display: flex;
   flex-direction: column;
@@ -7,6 +9,7 @@
   max-width: 70rem;
   margin: 0 auto;
   transition: 0.3s;
+  @include mixins.hide-scroll-bar;
 }
 
 .date-group {

@@ -1,19 +1,24 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Tab } from 'components/ui/Tab';
 import { TabList } from 'components/ui/TabList';
+import { usePrevious } from 'hooks/usePrevious';
+import { r } from 'msw/lib/glossary-de6278a9';
 import { createRef, useMemo, useRef, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-import { useAppSelector } from 'store/hooks';
-import ChatItem from '../ChatItem';
+import { ChatList } from '../ChatList';
 import './Chats.scss';
 
+const folders = [
+  { title: 'All', id: 0 },
+  { title: 'Work', id: 1 },
+  { title: 'Study', id: 2 }
+];
+
 const Chats = ({ isActive }: { isActive: boolean }) => {
-  const chatsIds = useAppSelector((state) => state.entities.chats.chatIds);
-  const chatsById = useAppSelector((state) => state.entities.chats.byId);
   const nodeRef = useRef<HTMLDivElement | null>(null);
 
-  const [activeTab, setActiveTab] = useState(1);
-  console.log(chatsIds);
+  const [activeTab, setActiveTab] = useState(folders[0].id);
+  const prevActiveTab = usePrevious(activeTab);
 
   return (
     <CSSTransition
@@ -24,28 +29,23 @@ const Chats = ({ isActive }: { isActive: boolean }) => {
       mountOnEnter
       timeout={300}>
       <div className="chat-list" ref={nodeRef}>
+        <TabList value={activeTab} onChange={(val: number) => setActiveTab(val)}>
+          {Object.values(folders).map((folder) => (
+            <Tab key={folder.id} value={folder.id} title={folder.title} />
+          ))}
+        </TabList>
         <div className="list">
-          <TabList value={activeTab} onChange={(val: number) => setActiveTab(val)}>
-            <Tab value={0} title="All" />
-            <Tab value={1} title="News" />
-            <Tab value={2} title="Work" />
-          </TabList>
-          <TransitionGroup component={null}>
-            {chatsIds?.map((chatId, i) => {
-              // @ts-ignore
-              const ref = createRef<null | HTMLElement>(null);
-              return (
-                <CSSTransition
-                  key={chatId}
-                  timeout={150}
-                  classNames="chatItem"
-                  // @ts-ignore
-                  nodeRef={ref}>
-                  <ChatItem chat={chatsById[chatId]} ref={ref} />
-                </CSSTransition>
-              );
+          <div
+            style={{
+              transform: `translateX(calc(${-activeTab} * calc(100% + 0.8rem)))`,
+              width: '100%',
+              display: 'flex',
+              gap: '0.8rem'
+            }}>
+            {Object.values(folders).map((folder, idx) => {
+              return <ChatList folderId={folder.id} key={folder.id} ref={nodeRef} />;
             })}
-          </TransitionGroup>
+          </div>
         </div>
       </div>
     </CSSTransition>

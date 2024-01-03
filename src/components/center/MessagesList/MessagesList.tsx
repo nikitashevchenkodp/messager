@@ -98,8 +98,6 @@ const MessagesList: FC<IMessageListProps> = ({ activeChatId }) => {
     if (endOfUnreadedMessages.current && listRef.current) {
       const scrollHeight = listRef?.current?.scrollHeight;
       const scrolled = listRef?.current?.scrollTop + listRef?.current?.clientHeight;
-      console.log(scrollHeight);
-      console.log(scrolled);
 
       if (scrollHeight - scrolled <= 10) {
         dispatch(messagesActions.readMessages({ chatId: activeChatId }));
@@ -110,7 +108,7 @@ const MessagesList: FC<IMessageListProps> = ({ activeChatId }) => {
   const renderedMessages = useMemo(() => {
     if (!messagesIds?.length) return;
     const { groupedByDateAndSender: messagesGroups } = groupMessages(messagesById, messagesIds);
-    return Object.keys(messagesGroups).map((date, msgGroupsIdx, msgGroupsArr) => {
+    return Object.keys(messagesGroups).map((date, msgGroupsIdx) => {
       return (
         <div className="date-group" key={date + msgGroupsIdx}>
           <div className="date-label-container" key={date}>
@@ -118,7 +116,7 @@ const MessagesList: FC<IMessageListProps> = ({ activeChatId }) => {
           </div>
           <TransitionGroup key={msgGroupsIdx} component={null}>
             {messagesGroups[date]
-              .map((senderGroup, senderIdx, senderArr) => {
+              .map((senderGroup) => {
                 return senderGroup
                   .map((message, msgIdx, msgArr) => {
                     const firstInGroup = msgIdx === 0;

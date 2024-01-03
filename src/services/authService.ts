@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { axiosInstance } from './axiosInst';
-import { serverLink } from './config';
 
 interface LoginBody {
   email: string;
@@ -16,14 +15,14 @@ export interface ISignup {
 
 class AuthService {
   login = async (body: LoginBody) => {
-    return axios.post(`${serverLink}/api/users/login`, body, { withCredentials: true });
+    return axiosInstance.post(`/api/users/login`, body, { withCredentials: true });
   };
   createUser = async (body: ISignup) => {
-    return axios.post(`${serverLink}/api/users/create`, body, { withCredentials: true });
+    return axiosInstance.post(`/api/users/create`, body, { withCredentials: true });
   };
 
   refreshAccessToken = () => {
-    return axios.get(`${serverLink}/api/users/refresh`, { withCredentials: true });
+    return axios.get(`/api/users/refresh`, { withCredentials: true });
   };
 }
 

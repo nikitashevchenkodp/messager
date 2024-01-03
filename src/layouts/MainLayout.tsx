@@ -18,7 +18,7 @@ const MainLayout = () => {
         <h1>Loading...</h1>
       ) : (
         <SocketProvider>
-          <div className="mainlayout" data-testid="mainlayout">
+          <div className="mainlayout custom-scrollbar" data-testid="mainlayout">
             <Left />
             <Center />
             <Right />

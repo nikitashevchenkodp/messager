@@ -1,4 +1,3 @@
-import { SocketProvider } from 'contexts/SocketContexts';
 import { AuthLayout, MainLayout } from 'layouts';
 import { Route, Routes } from 'react-router-dom';
 import Protected from 'router/Protected';
