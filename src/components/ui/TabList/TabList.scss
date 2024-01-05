@@ -1,4 +1,6 @@
 .TabList {
   display: flex;
   align-items: center;
+  box-shadow: 0 2px 2px var(--shadow-color);
+  padding: 0 0.5rem;
 }

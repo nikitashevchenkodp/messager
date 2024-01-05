@@ -15,12 +15,13 @@ const UsersList = ({ isActive }: { isActive: boolean }) => {
       unmountOnExit
       mountOnEnter
       timeout={300}>
-      <div className="section-scaled users-list list" ref={nodeRef}>
+      <div className="section-scaled users-list" ref={nodeRef}>
         <h3 className="left-content-title">Users</h3>
-
-        {usersIds.map((userId) => {
-          return <UserItem key={userId} userId={userId} />;
-        })}
+        <div className="list">
+          {usersIds.map((userId) => {
+            return <UserItem key={userId} userId={userId} />;
+          })}
+        </div>
       </div>
     </CSSTransition>
   );

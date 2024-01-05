@@ -3,6 +3,7 @@ import { chatsActions, chatsReducer } from './chats';
 import { messagesActions, messagesReducer } from './messages';
 import { usersActions, usersReducer } from './users';
 import { uiActions, uiReducer } from './UI';
+import { foldersActions, foldersReducer } from './folders';
 
 export {
   chatsActions,
@@ -14,5 +15,7 @@ export {
   userActions,
   userReducer,
   usersActions,
-  usersReducer
+  usersReducer,
+  foldersActions,
+  foldersReducer
 };

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { useAppDispatch, useAppSelector } from 'store/hooks';
+import { useAppDispatch } from 'store/hooks';
 import { IChat } from 'store/interfaces';
 import { chatsActions } from 'store/slices';
 
@@ -9,7 +9,9 @@ interface IChatMenuProps {
 
 const ChatMenu: FC<IChatMenuProps> = ({ chat }) => {
   const dispatch = useAppDispatch();
+
   const { isMuted, isPinned } = chat;
+
   const toogleMute = () => dispatch(chatsActions.toggleMuteChat(chat.id));
   const deleteChat = () => dispatch(chatsActions.deleteChat(chat.id));
   const togglePin = () => dispatch(chatsActions.togglePinChat(chat.id));
@@ -44,6 +46,10 @@ const ChatMenu: FC<IChatMenuProps> = ({ chat }) => {
       </div>
       <div className="menu-item" onClick={togglePin}>
         {pinInner}
+      </div>
+      <div className="menu-item" onClick={togglePin}>
+        <span className="material-symbols-outlined">add</span>
+        Add to folder...
       </div>
       <div className="menu-item color-error" onClick={deleteChat}>
         <span className="material-symbols-outlined">delete</span>

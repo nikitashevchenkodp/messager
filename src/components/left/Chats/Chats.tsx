@@ -2,9 +2,8 @@
 import { Tab } from 'components/ui/Tab';
 import { TabList } from 'components/ui/TabList';
 import { usePrevious } from 'hooks/usePrevious';
-import { r } from 'msw/lib/glossary-de6278a9';
-import { createRef, useMemo, useRef, useState } from 'react';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import { useRef, useState } from 'react';
+import { CSSTransition } from 'react-transition-group';
 import { ChatList } from '../ChatList';
 import './Chats.scss';
 
@@ -18,7 +17,6 @@ const Chats = ({ isActive }: { isActive: boolean }) => {
   const nodeRef = useRef<HTMLDivElement | null>(null);
 
   const [activeTab, setActiveTab] = useState(folders[0].id);
-  const prevActiveTab = usePrevious(activeTab);
 
   return (
     <CSSTransition
@@ -34,7 +32,7 @@ const Chats = ({ isActive }: { isActive: boolean }) => {
             <Tab key={folder.id} value={folder.id} title={folder.title} />
           ))}
         </TabList>
-        <div className="list">
+        <div className="list list-chats">
           <div
             style={{
               transform: `translateX(calc(${-activeTab} * calc(100% + 0.8rem)))`,

@@ -13,9 +13,9 @@
   position: relative;
   overflow: hidden;
   border-radius: var(--br-default);
-  padding: 0.5rem;
+  padding: 0.8rem 1.6rem;
   transition: 0.1s;
-  width: 4rem;
+  min-width: 4rem;
   height: 100%;
   font-weight: 500;
   @include mixins.active-styles {
@@ -38,5 +38,9 @@
     @include mixins.active-styles {
       background-color: var(--color-error-shade);
     }
+  }
+
+  &--full-width {
+    width: 100%;
   }
 }

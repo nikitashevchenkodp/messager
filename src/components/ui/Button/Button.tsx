@@ -12,6 +12,7 @@ type ButtonProps<Type extends ButtonTypes | React.ComponentType<any>> = {
   color: 'primary' | 'secondary' | 'error' | 'transparent';
   width?: string;
   height?: string;
+  fullWidth?: boolean;
 } & ButtonAditionalPropsType<Type>;
 
 type ButtonAditionalPropsType<T extends ButtonTypes | React.ComponentType> =
@@ -31,6 +32,7 @@ const Button = forwardRef(
       height,
       round = false,
       color = 'transparent',
+      fullWidth = false,
       hasRipple = true,
       ...rest
     } = props;
@@ -39,7 +41,8 @@ const Button = forwardRef(
       btn: true,
       'btn--round': round,
       'btn--primary': color === 'primary',
-      'btn--error': color === 'error'
+      'btn--error': color === 'error',
+      'btn--full-width': fullWidth
     });
 
     return (

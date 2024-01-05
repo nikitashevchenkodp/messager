@@ -1,11 +1,15 @@
 import Avatar from 'components/ui/Avatar';
 import Menu from 'components/ui/Menu';
+import Modal from 'components/ui/Modal';
 import Ripple from 'components/ui/Ripple';
+import { useChatListItemMenuActions } from 'hooks/useChatListItemMenuActions';
+import { useFlag } from 'hooks/useFlag';
 import useMediaQuery from 'hooks/useMediaQwery';
 import { FC, forwardRef, useMemo, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'store/hooks';
 import { IChat } from 'store/interfaces';
 import { uiActions } from 'store/slices';
+import AddToFolderModal from '../AddToFolderModal/AddToFolderModal';
 import ChatMenu from '../ChatMenu/MessageMenu';
 import './ChatItem.scss';
 
@@ -52,6 +56,13 @@ const ChatItem = forwardRef<any, IChatItemProps>(({ chat }, ref) => {
     const lastMessageId = state.entities.messages.byChatId[chat.id]?.messagesIds[l - 1];
     const lastMessage = state.entities.messages.byChatId[chat.id]?.byId[lastMessageId];
     return lastMessage;
+  });
+
+  const [isFolderModalOpen, closeFolderModal, openFolderModal] = useFlag();
+
+  const menuActions = useChatListItemMenuActions({
+    chat,
+    handleFolderAction: openFolderModal
   });
 
   const handleChatClick = () => {
@@ -155,8 +166,16 @@ const ChatItem = forwardRef<any, IChatItemProps>(({ chat }, ref) => {
         onClose={() => setIsOpen(false)}
         cordX={coordinates.x}
         cordY={coordinates.y}>
-        <ChatMenu chat={chat} />
+        <div className="menu">
+          {Object.values(menuActions).map((action) => (
+            <div key={action.title} className="menu-item" onClick={action.handler}>
+              <span className="material-symbols-outlined">{action.icon}</span>
+              {action.title}
+            </div>
+          ))}
+        </div>
       </Menu>
+      <AddToFolderModal isOpen={isFolderModalOpen} onClose={closeFolderModal} chatId={chat.id} />
     </>
   );
 });

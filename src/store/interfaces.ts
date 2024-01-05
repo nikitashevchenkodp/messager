@@ -42,3 +42,9 @@ export enum LeftContent {
   UsersList = 'users-list',
   Search = 'search'
 }
+
+export interface IFolder {
+  id: string;
+  name: string;
+  includedChatIds: string[];
+}

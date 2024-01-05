@@ -1,7 +1,11 @@
 @use 'src/styles/mixins' as mixins;
 
 .list {
+  &-chats {
+    flex-direction: row;
+  }
   display: flex;
+  flex-direction: column;
   position: relative;
   padding: 0.8rem;
   overflow-y: auto;
